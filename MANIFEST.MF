@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: Main
+Class-Path: /mnt/c/Users/Asus Tuf Gaming/Desktop/Edbert Geek/tubes_kuliah/Algeo01-22039
