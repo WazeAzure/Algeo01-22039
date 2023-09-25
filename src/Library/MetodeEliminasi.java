@@ -2,7 +2,7 @@ package Library;
 // import ...
 
 public class MetodeEliminasi {
-    /* *** Helper Functions *** */
+    /* *** HELPER FUNCTIONS *** */
     public static boolean isRowAllZero(Matrix m, int idxRow){
         /* Mengecek apakah sebuah baris dari suatu matrix seluruh elemennya nol */
         boolean all0 = true;
@@ -114,14 +114,14 @@ public class MetodeEliminasi {
         return isEselonRed;
     }
 
-    public static void rowTimesConst(Matrix m, int idxRow, int k){
+    public void rowTimesConst(Matrix m, int idxRow, int k){
         /* Mengalikan sebuah baris dengan konstanta tidak nol */
         for (int i = 0; i < m.get_COL_EFF(); i++){
             m[idxRow][i] *= k;
         }
     }
 
-    public static void swapRows(Matrix m, int idxRow1, int idxRow2){
+    public void swapRows(Matrix m, int idxRow1, int idxRow2){
         /* Menukar dua buah baris di suatu matrix */
         for (int i = 0; i < m.get_COL_EFF(); i++){
             int temp = m[idxRow1][i];
@@ -130,7 +130,7 @@ public class MetodeEliminasi {
         }
     }
 
-    public static void addMultiplyOfOtherRow(Matrix m, int idxRow1, int idxRow2, int k){
+    public void addMultiplyOfOtherRow(Matrix m, int idxRow1, int idxRow2, int k){
         /* Menambahkan sebuah baris dengan kelipatan baris lainnnya */
         // Row1 + k(Row2)
         rowTimesConst(m, idxRow2, k);
@@ -139,9 +139,12 @@ public class MetodeEliminasi {
         }
     }
 
-    public static void OBE(Matrix m){
+    public void OBE(Matrix m){ 
         /* Melakukan Operasi Baris Elementer terhadap suatu matriks augmented */
     }
+    // perlu buat fungsi toEselon() & toEselonRed() gak ya?
+
+    /* *** PRIMARY FUNCTIONS *** */
 
     
 }
