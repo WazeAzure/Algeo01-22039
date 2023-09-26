@@ -28,7 +28,7 @@ public class Matrix {
         return this.colEff;
     }
 
-    int get_ELMT(int i, int j){
+    float get_ELMT(int i, int j){
         return this.mem[i][j];
     }
 
@@ -40,7 +40,7 @@ public class Matrix {
         this.colEff = nCol;
     }
 
-    void set_ELMT(int i, int j, int x){
+    void set_ELMT(int i, int j, float x){
         this.mem[i][j] = x;
     }
 
