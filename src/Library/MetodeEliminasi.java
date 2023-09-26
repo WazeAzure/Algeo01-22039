@@ -157,5 +157,4 @@ public class MetodeEliminasi {
     public Matrix GaussJordan(Matrix m){
         /* Menghasilkan solusi dari SPL dengan Metode Eliminasi Gauss-Jordan */
     }
-    
 }
