@@ -14,5 +14,6 @@ public class BicubicSplineInterpolation {
         ODM.createMatrix(m1, 2, 2);
         ODM.readMatrix(m1, 2, 2);
         ODM.displayMatrix(m1);
+        System.out.println(ODM.determinant(m1));
     }
 }
