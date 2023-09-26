@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class OperasiDasarMatrix {
     // constructor
-    public void createMatrix(Matrix m, int nRows, int nCols){
+    public static void createMatrix(Matrix m, int nRows, int nCols){
         // inisiasi array bernilai 0;
         System.out.println("called");
         m.set_COL_EFF(nCols);
@@ -14,7 +14,7 @@ public class OperasiDasarMatrix {
 
     
     // Read & Write
-    public void readMatrix(Matrix m, int nRow, int nCol){
+    public static void readMatrix(Matrix m, int nRow, int nCol){
 
         // define for scanner. Di java untuk input harus pake scanner.
         Scanner sc = new Scanner(System.in);

@@ -150,9 +150,11 @@ public class MetodeEliminasi {
 
     public Matrix Gauss(Matrix m){
         /* Menghasilkan solusi dari SPL dengan Metode Eliminasi Gauss */
+        return m;
     }
 
     public Matrix GaussJordan(Matrix m){
         /* Menghasilkan solusi dari SPL dengan Metode Eliminasi Gauss-Jordan */
+        return m;
     }
 }
