@@ -1,5 +1,6 @@
 package Library;
-// import ...
+import Library.Matrix;
+import Library.OperasiDasarMatrix;
 
 public class MetodeEliminasi {
     /* *** HELPER FUNCTIONS *** */
@@ -139,12 +140,22 @@ public class MetodeEliminasi {
         }
     }
 
-    public void OBE(Matrix m){ 
-        /* Melakukan Operasi Baris Elementer terhadap suatu matriks augmented */
-    }
-    // perlu buat fungsi toEselon() & toEselonRed() gak ya?
-
     /* *** PRIMARY FUNCTIONS *** */
 
+    public void toEselon(Matrix m){
+        /* Melakukan OBE terhadap suatu matrix augmented hingga terbentuk matrix eselon baris */
+    }
+
+    public void toEselonRed(Matrix m){
+        /* Melakukan OBE terhadap suatu matrix augmented hingga terbentuk matrix eselon baris tereduksi */
+    }
+
+    public Matrix Gauss(Matrix m){
+        /* Menghasilkan solusi dari SPL dengan Metode Eliminasi Gauss */
+    }
+
+    public Matrix GaussJordan(Matrix m){
+        /* Menghasilkan solusi dari SPL dengan Metode Eliminasi Gauss-Jordan */
+    }
     
 }
