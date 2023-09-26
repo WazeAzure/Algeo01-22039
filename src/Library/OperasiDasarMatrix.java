@@ -2,6 +2,9 @@ package Library;
 import java.util.Scanner;
 
 public class OperasiDasarMatrix {
+    static final int ROW_CAP = 100;
+    static final int COL_CAP = 100;
+
     // constructor
     public static void createMatrix(Matrix m, int nRows, int nCols){
         // inisiasi array bernilai 0;
@@ -33,6 +36,234 @@ public class OperasiDasarMatrix {
             }
             System.out.printf("%d\n", m.get_ELMT(i, m.get_COL_EFF()-1));
         }
+    }
+
+    // boolean stuff
+    public boolean isMatrixIdxValid(int i, int j){
+        return ((i >= 0 && i < ROW_CAP) && (j >= 0 && j < COL_CAP));
+    }
+
+    public int getLastIdxRow(Matrix m){
+        return m.get_ROW_EFF() - 1;
+    }
+
+    public int getLastIdxCol(Matrix m){
+        return m.get_COL_EFF() - 1;
+    }
+
+    public boolean isIdxEff(Matrix m, int i, int j){
+        return (i >= 0 && i <= getLastIdxRow(m)) && (j >= 0 && j <= getLastIdxCol(m));
+    }
+
+    public float getElmtDiagonal(Matrix m, int i){
+        return m.get_ELMT(i, i);
+    }
+
+    public Matrix copyMatrix(Matrix mIn){
+        Matrix mOut = new Matrix();
+        createMatrix(mOut, mIn.get_ROW_EFF(), mIn.get_COL_EFF());
+
+        int i=0, j=0;
+        for(i=0; i<mIn.get_ROW_EFF(); i++){
+            for(j=0; j<mIn.get_COL_EFF(); j++){
+                mOut.set_ELMT(i, j, mIn.get_ELMT(i, j));
+            }
+        }
+
+        return mOut;
+    }
+
+    public Matrix addMatrix(Matrix m1, Matrix m2){
+        Matrix m3 = new Matrix();
+        createMatrix(m3, m1.get_ROW_EFF(), m1.get_COL_EFF());
+
+        int i, j;
+        for(i=0;i<m1.get_ROW_EFF();i++){
+            for(j=0;j<m1.get_COL_EFF();j++){
+                m3.set_ELMT(i, j, m1.get_ELMT(i, j) + m2.get_ELMT(i, j));
+            }
+        }
+        return m3;
+    }
+
+    // section-10
+    public Matrix subtractMatrix(Matrix m1, Matrix m2){
+        Matrix m3 = new Matrix();
+        createMatrix(m3, m1.get_ROW_EFF(), m1.get_COL_EFF());
+
+        int i, j;
+        for(i=0;i<m1.get_ROW_EFF();i++){
+            for(j=0;j<m1.get_COL_EFF();j++){
+                m3.set_ELMT(i, j, m1.get_ELMT(i, j) - m2.get_ELMT(i, j));
+            }
+        }
+        return m3;
+    }
+    // section 11
+
+    public Matrix multiplyMatrix(Matrix m1, Matrix m2){
+        Matrix m3 = new Matrix();
+        createMatrix(m3, m1.get_ROW_EFF(), m2.get_COL_EFF());
+
+        int i;
+        for(i=0;i<m1.get_ROW_EFF();i++){
+            int j;
+            for(j=0;j<m1.get_COL_EFF();j++){
+                int k;
+                float temp = 0;
+                for(k=0;k<m2.get_ROW_EFF();k++){
+                    temp += (m1.get_ELMT(i, k) * m2.get_ELMT(k, j));
+                }
+                m3.set_ELMT(i, j, temp);
+            }
+        }
+        return m3;
+    }
+    // section-12
+
+    public Matrix multiplyMatrixWithMod(Matrix m1, Matrix m2, int mod){
+        Matrix m3 = new Matrix();
+        createMatrix(m3, m1.get_ROW_EFF(), m2.get_COL_EFF());
+
+        int i;
+        for(i=0;i<m1.get_ROW_EFF();i++){
+            int j;
+            for(j=0;j<m1.get_COL_EFF();j++){
+                int k;
+                int temp = 0;
+                for(k=0;k<m2.get_ROW_EFF();k++){
+                    temp += (m1.get_ELMT(i, k) * m2.get_ELMT(k, j));
+                }
+                m3.set_ELMT(i, j, temp % mod);
+            }
+        }
+        return m3;
+    }
+    // section-13
+
+    public Matrix multiplyByConst(Matrix m, float x){
+        Matrix m3 = new Matrix();
+        createMatrix(m3, m.get_ROW_EFF(), m.get_COL_EFF());
+
+        int i, j;
+        for(i=0;i<m.get_ROW_EFF();i++){
+            for(j=0;j<m.get_COL_EFF();j++){
+                m3.set_ELMT(i, j, m.get_ELMT(i, j) * x);
+            }
+        }
+        return m3;
+    }
+
+    public void pMultiplyByConst(Matrix m, float k){
+        int i, j;
+        for(i=0;i<m.get_ROW_EFF();i++){
+            for(j=0;j<m.get_COL_EFF();j++){
+                m.set_ELMT(i, j, m.get_ELMT(i, j) * k);
+            }
+        }
+    }
+
+    public boolean isMatrixEqual(Matrix m1, Matrix m2){
+        if(m1.get_COL_EFF() == m2.get_COL_EFF() && m1.get_ROW_EFF() == m2.get_ROW_EFF() && getLastIdxCol(m1) == getLastIdxCol(m2) && countElmt(m1) == countElmt(m2)){
+            int i, j;
+            for(i=0;i<m1.get_ROW_EFF();i++){
+                for(j=0;j<m1.get_COL_EFF();j++){
+                    if(m1.get_ELMT(i, j) != m2.get_ELMT(i, j)){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+    // section-16
+
+    public boolean isMatrixNotEqual(Matrix m1, Matrix m2){
+        return !isMatrixEqual(m1, m2);
+    }
+    // section-17
+
+    public boolean isMatrixSizeEqual(Matrix m1, Matrix m2){
+        return (m1.get_ROW_EFF() == m2.get_ROW_EFF()) && (m1.get_COL_EFF() == m2.get_COL_EFF());
+    }
+
+    public int countElmt(Matrix m){
+        return m.get_ROW_EFF() * m.get_COL_EFF();
+    }
+
+    public boolean isSquare(Matrix m){
+        return m.get_COL_EFF() == m.get_ROW_EFF();
+    }
+
+    public boolean isSymmetric(Matrix m){
+        if(isSquare(m)){
+            int i, j;
+            for(i=0;i<m.get_ROW_EFF();i++){
+                for(j=0;j<m.get_COL_EFF();j++){
+                    if(m.get_ELMT(i, j) != m.get_ELMT(j, i)){
+                        //printf("%d %d\n", i, j);
+                        //printf("%d %d\n", ELMT(m, i, j), ELMT(m, j, i));
+                        //printf("called1\n");
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        //printf("called\n");
+        return false;
+    }
+    // section-20
+
+    public boolean isIdentity(Matrix m){
+        if(isSquare(m)){
+            // cek diagonal
+            int i, j;
+            for(i=0;i<m.get_ROW_EFF();i++){
+                if(m.get_ELMT(i, i) != 1) return false;
+            }
+
+            // cek kanan atas
+            for(i=0; i<m.get_ROW_EFF()-1; i++){
+                for(j=i+1;j<m.get_COL_EFF();j++){
+                    if(m.get_ELMT(i, j) != 0) return false;
+                }
+            }
+
+            // cek kiri bawah
+            for(i=1;i<m.get_ROW_EFF();i++){
+                for(j=0;j<i;j++){
+                    if(m.get_ELMT(i, j) != 0) return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isSparse(Matrix m){
+        int i, j;
+        float num = 0, zero = 0;
+
+        for(i=0; i<m.get_ROW_EFF(); i++){
+            for(j=0;j<m.get_COL_EFF();j++){
+                if(m.get_ELMT(i, j) != 0) num++;
+                else zero++;
+            }
+        }
+        
+        float result = num*100 / (num+zero);
+        if(result <= 5) return true;
+        return false;
+    }
+
+    public Matrix negation(Matrix m){
+        return multiplyByConst(m, -1);
+    }
+
+    public void Negation(Matrix m){
+        pMultiplyByConst(m, -1);
     }
 
     public float determinant(Matrix m){

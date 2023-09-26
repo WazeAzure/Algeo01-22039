@@ -123,7 +123,7 @@ public class MetodeEliminasi {
     public void swapRows(Matrix m, int idxRow1, int idxRow2){
         /* Menukar dua buah baris di suatu matrix */
         for (int i = 0; i < m.get_COL_EFF(); i++){
-            int temp = m.get_ELMT(idxRow1, i);
+            float temp = m.get_ELMT(idxRow1, i);
             m.set_ELMT(idxRow1, i, m.get_ELMT(idxRow2, i));
             m.set_ELMT(idxRow2, i, temp);
         }
