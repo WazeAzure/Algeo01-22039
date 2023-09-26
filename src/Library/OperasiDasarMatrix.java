@@ -34,4 +34,6 @@ public class OperasiDasarMatrix {
             System.out.printf("%d\n", m.get_ELMT(i, m.get_COL_EFF()-1));
         }
     }
+
+    
 }
