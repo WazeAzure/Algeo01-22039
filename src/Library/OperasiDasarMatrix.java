@@ -35,5 +35,37 @@ public class OperasiDasarMatrix {
         }
     }
 
-    
+    public float determinant(Matrix m){
+        if(m.get_ROW_EFF() == 2){
+            return (m.get_ELMT(0, 0) * m.get_ELMT(1, 1)) - (m.get_ELMT(0, 1) * m.get_ELMT(1, 0));
+        }
+        
+        float temp = 0;
+        int x;
+        for(x=0; x< m.get_COL_EFF(); x++){
+            Matrix m2 = new Matrix();
+            createMatrix(m2, m.get_ROW_EFF()-1, m.get_COL_EFF()-1);
+
+            int r=0, c=0;
+            int i, j;
+            for(i=0;i<m.get_ROW_EFF();i++){
+                for(j=0;j<m.get_COL_EFF();j++){
+                    if(i == 0 || j == x){
+                        continue;
+                    } else {
+                        m2.set_ELMT(r, c, m.get_ELMT(i, j));
+                        c++;
+                        if(c == m2.get_COL_EFF()){
+                            c = 0;
+                            r++;
+                        }
+                    }
+                }
+            }
+            float det = (m.get_ELMT(0, x) * determinant(m2));
+            if(x%2 == 1) det *= -1;
+            temp += det;
+        }
+        return temp;
+    }
 }
