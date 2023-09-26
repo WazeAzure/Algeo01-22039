@@ -1,6 +1,4 @@
 package Library;
-import Library.Matrix;
-import Library.OperasiDasarMatrix;
 
 public class MetodeEliminasi {
     /* *** HELPER FUNCTIONS *** */
@@ -118,16 +116,16 @@ public class MetodeEliminasi {
     public void rowTimesConst(Matrix m, int idxRow, int k){
         /* Mengalikan sebuah baris dengan konstanta tidak nol */
         for (int i = 0; i < m.get_COL_EFF(); i++){
-            m[idxRow][i] *= k;
+            m.set_ELMT(idxRow, i, m.get_ELMT(idxRow, i) * k);
         }
     }
 
     public void swapRows(Matrix m, int idxRow1, int idxRow2){
         /* Menukar dua buah baris di suatu matrix */
         for (int i = 0; i < m.get_COL_EFF(); i++){
-            int temp = m[idxRow1][i];
-            m[idxRow1][i] = m[idxRow2][i];
-            m[idxRow2][i] = temp;
+            int temp = m.get_ELMT(idxRow1, i);
+            m.set_ELMT(idxRow1, i, m.get_ELMT(idxRow2, i));
+            m.set_ELMT(idxRow2, i, temp);
         }
     }
 
@@ -136,7 +134,7 @@ public class MetodeEliminasi {
         // Row1 + k(Row2)
         rowTimesConst(m, idxRow2, k);
         for (int i = 0; i < m.get_COL_EFF(); i++){
-            m[idxRow1][i] += m[idxRow2][i];
+            m.set_ELMT(idxRow1, i, m.get_ELMT(idxRow1, i) + m.get_ELMT(idxRow2, i));
         }
     }
 

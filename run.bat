@@ -8,3 +8,4 @@ jar cvmf MANIFEST.MF FinalApp.jar bin/*.class
 
 java -jar FinalApp.jar
 :: running file FinalApp.jar
+halohao
