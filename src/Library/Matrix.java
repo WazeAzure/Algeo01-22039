@@ -8,7 +8,7 @@ public class Matrix {
     // main data
     private int rowEff=0;
     private int colEff=0;
-    private int[][] mem = new int[ROW_CAP][COL_CAP];
+    private float[][] mem = new float[ROW_CAP][COL_CAP];
 
     // constructor
     public Matrix(){

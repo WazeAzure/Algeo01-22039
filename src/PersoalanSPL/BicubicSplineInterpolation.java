@@ -8,7 +8,7 @@ public class BicubicSplineInterpolation {
 
         System.out.println("Halo aku bagian ed");
         Matrix m1 = new Matrix();
-
+        
         OperasiDasarMatrix ODM = new OperasiDasarMatrix();
 
         ODM.createMatrix(m1, 2, 2);
