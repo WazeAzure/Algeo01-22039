@@ -8,7 +8,7 @@ public class OperasiDasarMatrix {
     static final int COL_CAP = 100;
 
     // constructor
-    public static void createMatrix(Matrix m, int nRows, int nCols){
+    public void createMatrix(Matrix m, int nRows, int nCols){
         // inisiasi array bernilai 0;
         System.out.println("called");
         m.set_COL_EFF(nCols);
@@ -19,7 +19,7 @@ public class OperasiDasarMatrix {
 
     
     // Read & Write
-    public static void readMatrix(Matrix m, int nRow, int nCol){
+    public void readMatrix(Matrix m, int nRow, int nCol){
 
         // define for scanner. Di java untuk input harus pake scanner.
         Scanner sc = new Scanner(System.in);
@@ -31,29 +31,33 @@ public class OperasiDasarMatrix {
         }
     }
 
-    public static void readMatrixFile(String filename){
+    public void readMatrixFile(String filename, Matrix m){
         try {
-            Matrix m = new Matrix();
 
             filename = "./test/" + filename;
             File myObj = new File(filename);
             Scanner myReader = new Scanner(myObj);
-            int 
+            
+            int nCol = 0;
+            int i = 0;
             int j = 0;
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String[] parts = data.split(" ");
 
-                for(int i=0; i<parts.length; i++){
-                    m.set_ELMT(i, j, parts[i]);
+                nCol = parts.length;
+
+                for( j=0; j<parts.length; j++){
+                    m.set_ELMT(i, j, Float.parseFloat(parts[j]));
                 }
 
-                j++;
-                System.out.println(data);
+                i++;
             }
             myReader.close();
 
-            return m;
+            m.set_COL_EFF(nCol);
+            m.set_ROW_EFF(i);
+
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
