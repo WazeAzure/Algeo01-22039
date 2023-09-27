@@ -1,5 +1,7 @@
 package Library;
 import java.util.Scanner;
+import java.io.File;  // Import the File class
+import java.io.FileNotFoundException;  // Import this class to handle errors
 
 public class OperasiDasarMatrix {
     static final int ROW_CAP = 100;
@@ -24,17 +26,47 @@ public class OperasiDasarMatrix {
 
         for(int i=0; i<nRow; i++){
             for(int j=0;j<nCol;j++){
-                m.set_ELMT(i, j, sc.nextInt());
+                m.set_ELMT(i, j, sc.nextFloat());
             }
         }
     }
 
+    public static void readMatrixFile(String filename){
+        try {
+            Matrix m = new Matrix();
+
+            filename = "./test/" + filename;
+            File myObj = new File(filename);
+            Scanner myReader = new Scanner(myObj);
+            int 
+            int j = 0;
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                String[] parts = data.split(" ");
+
+                for(int i=0; i<parts.length; i++){
+                    m.set_ELMT(i, j, parts[i]);
+                }
+
+                j++;
+                System.out.println(data);
+            }
+            myReader.close();
+
+            return m;
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+
     public void displayMatrix(Matrix m){
         for(int i=0; i<m.get_ROW_EFF(); i++){
             for(int j=0; j<m.get_COL_EFF()-1; j++){
-                System.out.printf("%d ", m.get_ELMT(i, j));
+                System.out.printf("%f ", m.get_ELMT(i, j));
             }
-            System.out.printf("%d\n", m.get_ELMT(i, m.get_COL_EFF()-1));
+            System.out.printf("%f\n", m.get_ELMT(i, m.get_COL_EFF()-1));
         }
     }
 
