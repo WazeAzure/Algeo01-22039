@@ -32,9 +32,9 @@ public class OperasiDasarMatrix {
     public void displayMatrix(Matrix m){
         for(int i=0; i<m.get_ROW_EFF(); i++){
             for(int j=0; j<m.get_COL_EFF()-1; j++){
-                System.out.printf("%d ", m.get_ELMT(i, j));
+                System.out.printf("%.2f ", m.get_ELMT(i, j));
             }
-            System.out.printf("%d\n", m.get_ELMT(i, m.get_COL_EFF()-1));
+            System.out.printf("%.2f\n", m.get_ELMT(i, m.get_COL_EFF()-1));
         }
     }
 

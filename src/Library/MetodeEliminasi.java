@@ -1,4 +1,5 @@
 package Library;
+// import Library.Matrix;
 
 public class MetodeEliminasi {
     /* *** HELPER FUNCTIONS *** */
@@ -113,7 +114,7 @@ public class MetodeEliminasi {
         return isEselonRed;
     }
 
-    public void rowTimesConst(Matrix m, int idxRow, int k){
+    public void rowTimesConst(Matrix m, int idxRow, float k){
         /* Mengalikan sebuah baris dengan konstanta tidak nol */
         for (int i = 0; i < m.get_COL_EFF(); i++){
             m.set_ELMT(idxRow, i, m.get_ELMT(idxRow, i) * k);
@@ -129,7 +130,7 @@ public class MetodeEliminasi {
         }
     }
 
-    public void addMultiplyOfOtherRow(Matrix m, int idxRow1, int idxRow2, int k){
+    public void addMultiplyOfOtherRow(Matrix m, int idxRow1, int idxRow2, float k){
         /* Menambahkan sebuah baris dengan kelipatan baris lainnnya */
         // Row1 + k(Row2)
         rowTimesConst(m, idxRow2, k);
@@ -138,14 +139,158 @@ public class MetodeEliminasi {
         }
     }
 
+    public void elmtTo1(Matrix m, int idxRow){
+        /* Melakukan OBE untuk mencapai m[idxRow][idxRow] = 1 */
+        rowTimesConst(m, idxRow, 1 / m.get_ELMT(idxRow, idxRow));
+    }
+
+    public boolean isMatrixHaveRow0(Matrix m){
+        /* Mengecek apakah matrix memiliki baris yang seluruh elemennya nol */
+        for (int i = 0; i < m.get_ROW_EFF(); i++){
+            if (isRowAllZero(m, i)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int lastIdxNotRow0(Matrix m){
+        /* Mengeluarkan index baris terakhir yang bukan baris nol */
+        for (int i = m.get_ROW_EFF() - 1; i >= 0; i--){
+            if (isRowAllZero(m, i)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int lastIdxDiagonalNot0(Matrix m){
+        /* Mengeluarkan index baris terakhir yang elemen m[i][i] nya bukan 0 */
+        for (int i = m.get_ROW_EFF() - 1; i >= 0; i--){
+            if (m.get_ELMT(i, i) != 0){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void moveRow0toBottom(Matrix m, int idxRow){
+        /* Memindahkan sebuah baris nol ke bagian bawah matrix */
+        if (idxRow < lastIdxNotRow0(m)){
+            swapRows(m, idxRow, lastIdxNotRow0(m));
+        }
+    }
+
+    public void moveRowDiagonal0toBottom(Matrix m, int idxRow){
+        /* Memindahkan sebuah baris yang elemen m[i][i] = 0 ke bagian bawah matriks */
+        int idx = idxRow;
+        for (int i = idxRow + 1; i <= lastIdxNotRow0(m); i++){
+            if (m.get_ELMT(i, idxRow) != 0){
+                idx = i;   
+            }
+        }
+        swapRows(m, idxRow, idx);
+    }
+
+    public boolean isAllBeforeIdxis0(Matrix m, int idxRow, int i){
+        /* Mengecek apakah semua elemen sebuah baris sebelum m[idxRow][i] adalah 0 */
+        for (int j = 0; j < i; j++){
+            if (m.get_ELMT(idxRow, j) != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
     /* *** PRIMARY FUNCTIONS *** */
 
     public void toEselon(Matrix m){
         /* Melakukan OBE terhadap suatu matrix augmented hingga terbentuk matrix eselon baris */
+        
+        // Steps:
+        // 1. Jika ada baris nol, pindahkan ke bagian bawah matrix
+        // 2. Jika di suatu baris M[i][i] = 0, tukar baris tersebut dengan baris lebih bawah yang M[i][i] nya bukan 0
+        // 3. Di tiap baris, cek M[i][i] != 0, lalu jadikan M[i][i] = 1, dan M[i+1][i] sampai M[lastIdxNotRow0(m)][i] = 0
+        // 4. Ulangi step 3 untuk setiap kolom sampai idx kolom = lastIdxNotRow0(m)
+        // 5. Udah sih kayaknya
+
+        // Cek apakah matrix punya baris 0
+        if (isMatrixHaveRow0(m)){
+            // Pindahkan semua baris nol ke bagian bawah
+            for (int i = 0; i < m.get_ROW_EFF(); i++){
+                if (isRowAllZero(m, i)){
+                    moveRow0toBottom(m, i);
+                }
+            }
+        }
+
+        // Pindahkan baris yang elemen m[i][i] = 0 ke bawah
+        for (int i = 0; i <= lastIdxNotRow0(m); i++){
+            if (m.get_ELMT(i, i) == 0){
+                moveRowDiagonal0toBottom(m, i);
+            }
+        }
+
+        for (int i = 0; i <= lastIdxNotRow0(m); i++){
+            // Menjadikan m[i][i] = 1
+            if (i <= lastIdxDiagonalNot0(m)){
+                rowTimesConst(m, i, 1 / m.get_ELMT(i, i));
+            }
+            // Menjadikan m[i+1][i] sampai M[lastIdxNotRow0(m)][i] = 0
+            for (int j = i + 1; j <= lastIdxNotRow0(m); j++){
+                if (m.get_ELMT(j, i) != 0){
+                    // Mencari baris untuk melakukan operasi addMultiplyOfOtherRow(m, j, idxRow, k)
+                    // Cari yang elmt(row, 0) sampai elmt(row, i-1) = 0 dan elmt(row, i) != 0
+                    int idxRow = 0;
+                    float k = 0;
+                    if (i == 0){
+                        if (m.get_ELMT(idxRow, i) != 0){
+                            k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
+                        }
+                        else{
+                            while (idxRow < m.get_ROW_EFF() && m.get_ELMT(idxRow, i) == 0){
+                                idxRow++;
+                                if (m.get_ELMT(idxRow, i) != 0){
+                                    k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        if (isAllBeforeIdxis0(m, idxRow, i) && m.get_ELMT(idxRow, i) != 0){
+                            k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
+                        } 
+                        else{
+                            while (idxRow < m.get_ROW_EFF() && !(isAllBeforeIdxis0(m, idxRow, i) && m.get_ELMT(idxRow, i) != 0)){
+                                idxRow++;
+                                if (isAllBeforeIdxis0(m, idxRow, i) && m.get_ELMT(idxRow, i) != 0){
+                                    k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
+                                } 
+                            }
+                        }
+                    }
+                    addMultiplyOfOtherRow(m, j, idxRow, k);
+                }
+            }
+        }
     }
 
     public void toEselonRed(Matrix m){
         /* Melakukan OBE terhadap suatu matrix augmented hingga terbentuk matrix eselon baris tereduksi */
+
+        // Steps:
+        // 1. Jadikan ke bentuk matrix eselon baris
+        // 2. Lakukan operasi addMultiplyOfOtherRow hingga nilai m[j-1][j] sampai m[0][j] = 0
+        
+        toEselon(m);
+        for (int j = lastIdxDiagonalNot0(m); j >= 1; j--){
+            for (int i = j - 1; i >= 0; i--){
+                if (m.get_ELMT(i, j) != 0){
+                    float k = - m.get_ELMT(i, j) / m.get_ELMT(j, j);
+                    addMultiplyOfOtherRow(m, i, j, k);
+                }
+            }
+        }
     }
 
     public Matrix Gauss(Matrix m){
