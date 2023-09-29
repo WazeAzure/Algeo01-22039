@@ -1,5 +1,7 @@
 package Library;
 import java.util.Scanner;
+import java.io.File;  // Import the File class
+import java.io.FileNotFoundException;  // Import this class to handle errors
 
 public class OperasiDasarMatrix {
     static final int ROW_CAP = 100;
@@ -24,10 +26,44 @@ public class OperasiDasarMatrix {
 
         for(int i=0; i<nRow; i++){
             for(int j=0;j<nCol;j++){
-                m.set_ELMT(i, j, sc.nextInt());
+                m.set_ELMT(i, j, sc.nextFloat());
             }
         }
     }
+
+    public void readMatrixFile(String filename, Matrix m){
+        try {
+
+            filename = "./test/" + filename;
+            File myObj = new File(filename);
+            Scanner myReader = new Scanner(myObj);
+            
+            int nCol = 0;
+            int i = 0;
+            int j = 0;
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                String[] parts = data.split(" ");
+
+                nCol = parts.length;
+
+                for( j=0; j<parts.length; j++){
+                    m.set_ELMT(i, j, Float.parseFloat(parts[j]));
+                }
+
+                i++;
+            }
+            myReader.close();
+
+            m.set_COL_EFF(nCol);
+            m.set_ROW_EFF(i);
+
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
 
     public void displayMatrix(Matrix m){
         for(int i=0; i<m.get_ROW_EFF(); i++){
