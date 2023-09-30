@@ -2,22 +2,18 @@ package PersoalanSPL;
 
 import Library.Matrix;
 import Library.OperasiDasarMatrix;
+import Library.OperasiDasarGambar;
 
 public class BicubicSplineInterpolation {
     public BicubicSplineInterpolation(){
 
-        System.out.println("Halo aku bagian ed");
-        Matrix m1 = new Matrix();
-
         OperasiDasarMatrix ODM = new OperasiDasarMatrix();
+        OperasiDasarGambar ODG = new OperasiDasarGambar();
 
-        ODM.createMatrix(m1, 2, 2);
-        ODM.readMatrix(m1, 2, 2);
-        ODM.displayMatrix(m1);
-        System.out.println(ODM.determinant(m1));
-
-        Matrix m2 = new Matrix();
-        ODM.readMatrixFile("1a.txt", m2);
-        ODM.displayMatrix(m2);
+        System.out.println("Halo aku bagian ed");
+        
+        Matrix m = new Matrix();
+        m = ODG.readImage("lena.png");
+        // ODG.writeImage("result_lena.png", m);
     }
 }
