@@ -6,6 +6,7 @@ import Library.MetodeEliminasi;
 
 
 public class MatriksBalikan {
+
     /* *** CREATE OBJECTS *** */
     OperasiDasarMatrix ODM = new OperasiDasarMatrix();
     Determinan DET = new Determinan();
@@ -36,22 +37,28 @@ public class MatriksBalikan {
     }
 
     public Matrix mergeSidetoSideMatrix(Matrix m1, Matrix m2){
-        /* Mengembalikan gabungan 2 matrix yang diletakkan bersampingan */
+        /* Mengembalikan gabungan 2 matrix ukuran sama yang diletakkan bersampingan */
         Matrix m = new Matrix();
-        ODM.createMatrix(m, (m1.get_ROW_EFF() + m2.get_ROW_EFF()), (m1.get_COL_EFF() + m2.get_COL_EFF()));
+        ODM.createMatrix(m, m1.get_ROW_EFF(), 2 * m1.get_COL_EFF());
         for (int i = 0; i < m1.get_ROW_EFF(); i++){
             for (int j = 0; j < m1.get_COL_EFF(); j++){
                 m.set_ELMT(i, j, m1.get_ELMT(i, j));
-                m.set_ELMT(i + m1.get_ROW_EFF(), j, m2.get_ELMT(i, j));
+                m.set_ELMT(i, j + m1.get_COL_EFF(), m2.get_ELMT(i, j));
             }
         }
         return m;
     }
 
-    public Matrix toMatrixIdentity(Matrix m, Matrix m1){
-        /* Gatau masih bingung fungsi ini perlu dibuat 
-        atau langsung di inverseWithGaussJordan aja */
-        return m; // nanti hapus
+    public Matrix cropMatrix(Matrix m){
+        /* Memotong matrix ukuran n x 2n menjadi n x n */
+        Matrix m1 = new Matrix();
+        ODM.createMatrix(m1, m.get_ROW_EFF(), m.get_COL_EFF() / 2);
+        for (int i = 0; i < m1.get_ROW_EFF(); i++){
+            for (int j = 0; j < m1.get_COL_EFF(); j++){
+                m1.set_ELMT(i, j, m.get_ELMT(i, j + m.get_COL_EFF()));
+            }
+        }
+        return m1;
     }
 
     /* *** PRIMARY FUNCTIONS *** */
@@ -70,18 +77,35 @@ public class MatriksBalikan {
 
     public Matrix inverseWithGaussJordan(Matrix m){
         /* Mancari inverse sebuah matrix n x n menggunakan eliminasi Gauss-Jordan dan mengeluarkannya */
-        Matrix mIdentity, mergeMatrix = new Matrix();
+        Matrix mIdentity, mergeMatrix, inverse = new Matrix();
         mIdentity = createIdentityMatrix(m.get_ROW_EFF());
+
+        // Buat matrix [m|I]
         mergeMatrix = mergeSidetoSideMatrix(m, mIdentity);
-        // Belum selesai
-        // if ada baris bernilai 0, matrix tidak punya balikan
-        return m; // nanti hapus
+
+        // Jadikan [I|m^-1]
+        ME.toEselonRed(mergeMatrix);
+
+        for (int i = 0; i < m.get_COL_EFF(); i++){
+            if (m.get_ELMT(m.get_ROW_EFF() - 1, i) != 0){
+                // Jika tidak ada baris bernilai 0, matrix m punya balikan
+                inverse = cropMatrix(mergeMatrix);
+                return inverse;
+            }
+        }
+        // Jika ada baris bernilai 0, matrix m tidak punya balikan
+        return null;
     }
 
-    // to-do
-    // if A punya balikan, SPL punya solusi unik
-    // SPL homogen (perlu?)
-    // menghitung inverse dengan eliminasi gauss-jordan
-    // penyelesaian SPL dengan inverse
+    public Matrix solveSPLwithInverse(Matrix A, Matrix b){
+        /* Mencari solusi SPL Ax = B dengan menggunakan metode matrix balikan */
+        Matrix inverse, solution = new Matrix();
+        // Bebas metode apa
+        // inverse = inverseWithAdjoin(m);
+        inverse = inverseWithGaussJordan(A);
 
+        // Solusinya adalah x = (A^-1)b
+        solution = ODM.multiplyMatrix(inverse, b);
+        return solution;
+    }
 }
