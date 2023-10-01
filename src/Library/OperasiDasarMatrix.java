@@ -91,7 +91,7 @@ public class OperasiDasarMatrix {
         return (i >= 0 && i <= getLastIdxRow(m)) && (j >= 0 && j <= getLastIdxCol(m));
     }
 
-    public float getElmtDiagonal(Matrix m, int i){
+    public double getElmtDiagonal(Matrix m, int i){
         return m.get_ELMT(i, i);
     }
 
@@ -146,7 +146,7 @@ public class OperasiDasarMatrix {
             int j;
             for(j=0;j<m1.get_COL_EFF();j++){
                 int k;
-                float temp = 0;
+                double temp = 0;
                 for(k=0;k<m2.get_ROW_EFF();k++){
                     temp += (m1.get_ELMT(i, k) * m2.get_ELMT(k, j));
                 }
@@ -177,7 +177,7 @@ public class OperasiDasarMatrix {
     }
     // section-13
 
-    public Matrix multiplyByConst(Matrix m, float x){
+    public Matrix multiplyByConst(Matrix m, double x){
         Matrix m3 = new Matrix();
         createMatrix(m3, m.get_ROW_EFF(), m.get_COL_EFF());
 
@@ -302,12 +302,12 @@ public class OperasiDasarMatrix {
         pMultiplyByConst(m, -1);
     }
 
-    public float determinant(Matrix m){
+    public double determinant(Matrix m){
         if(m.get_ROW_EFF() == 2){
             return (m.get_ELMT(0, 0) * m.get_ELMT(1, 1)) - (m.get_ELMT(0, 1) * m.get_ELMT(1, 0));
         }
         
-        float temp = 0;
+        double temp = 0;
         int x;
         for(x=0; x< m.get_COL_EFF(); x++){
             Matrix m2 = new Matrix();
@@ -329,7 +329,7 @@ public class OperasiDasarMatrix {
                     }
                 }
             }
-            float det = (m.get_ELMT(0, x) * determinant(m2));
+            double det = (m.get_ELMT(0, x) * determinant(m2));
             if(x%2 == 1) det *= -1;
             temp += det;
         }
