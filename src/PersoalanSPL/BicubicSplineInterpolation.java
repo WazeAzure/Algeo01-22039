@@ -3,9 +3,13 @@ package PersoalanSPL;
 import Library.Matrix;
 import Library.OperasiDasarMatrix;
 import Library.OperasiDasarGambar;
+import Library.MetodeEliminasi;
+import PersoalanSPL.Gauss;
 import java.lang.Math;
 
 import java.util.Scanner;
+
+
 
 public class BicubicSplineInterpolation {
     Matrix MBesar = new Matrix();
@@ -21,7 +25,7 @@ public class BicubicSplineInterpolation {
                 for(int j=0;j<4;j++){
                     for(int i=0;i<4;i++){
                         double temp = Math.pow(x, i) * Math.pow(y, j);
-                        m.set_ELMT(row, col, (float)temp);
+                        m.set_ELMT(row, col, (double)temp);
                         col++;
                     }
                 }
@@ -41,7 +45,7 @@ public class BicubicSplineInterpolation {
                              m.set_ELMT(row, col, 0);
                         } else {
                             double temp = i * Math.pow(x, i-1) * Math.pow(y, j);
-                            m.set_ELMT(row, col, (float)temp);
+                            m.set_ELMT(row, col, (double)temp);
                         }
                         col++;
                     }
@@ -62,7 +66,7 @@ public class BicubicSplineInterpolation {
                              m.set_ELMT(row, col, 0);
                         } else {
                             double temp = j * Math.pow(x, i) * Math.pow(y, j-1);
-                            m.set_ELMT(row, col, (float)temp);
+                            m.set_ELMT(row, col, (double)temp);
                         }
                         col++;
                     }
@@ -83,7 +87,7 @@ public class BicubicSplineInterpolation {
                             m.set_ELMT(row, col, 0);
                         } else {
                             double temp = i * j * Math.pow(x, i-1) * Math.pow(y, j-1);
-                            m.set_ELMT(row, col, (float)temp);
+                            m.set_ELMT(row, col, (double)temp);
                         }
                         col++;
                     }
@@ -103,7 +107,7 @@ public class BicubicSplineInterpolation {
     //             for(int j=0;j<4;j++){
     //                 for(int i=0;i<4;i++){
     //                     double temp = Math.pow(x, i) * Math.pow(y, j);
-    //                     m.set_ELMT(row, col, (float)temp);
+    //                     m.set_ELMT(row, col, (double)temp);
     //                     col++;
     //                 }
     //             }
@@ -115,6 +119,7 @@ public class BicubicSplineInterpolation {
     public BicubicSplineInterpolation(){
         OperasiDasarMatrix ODM = new OperasiDasarMatrix();
         OperasiDasarGambar ODG = new OperasiDasarGambar();
+        MetodeEliminasi ME = new MetodeEliminasi();
         ODM.createMatrix(MBesar, 16, 16);
         ODM.createMatrix(MSoal, 16, 1);
         createInitialMatrix(MBesar);
@@ -123,13 +128,17 @@ public class BicubicSplineInterpolation {
         ODM.readMatrix(MSoal, 16, 1);
 
         Scanner sc = new Scanner(System.in);
-        float a = sc.nextFloat();
-        float b = sc.nextFloat();
+        double a = sc.nextFloat();
+        double b = sc.nextFloat();
 
         Matrix MHasil = ODM.mergeMatrix(MBesar, MSoal);
 
         ODM.displayMatrix(MHasil);
+        
         // createSoalMatrix(MSoal);
+        System.out.println("------------------------------------");
+        Gauss.eliminasiGauss(MHasil, true);
+        ODM.displayMatrix(MHasil);
 
         System.out.println("Halo aku bagian ed");
 

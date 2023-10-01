@@ -9,10 +9,10 @@ public class MetodeEliminasi {
         boolean all0 = true;
         for (int i = 0; i < m.get_COL_EFF(); i++){
             if (m.get_ELMT(idxRow, i) != 0){
-                all0 = false;
+                return false;
             }
         }
-        return all0;
+        return true;
     }
 
     public static boolean isRowHaveOne(Matrix m, int idxRow){
@@ -115,7 +115,7 @@ public class MetodeEliminasi {
         return isEselonRed;
     }
 
-    public void rowTimesConst(Matrix m, int idxRow, float k){
+    public void rowTimesConst(Matrix m, int idxRow, double k){
         /* Mengalikan sebuah baris dengan konstanta tidak nol */
         for (int i = 0; i < m.get_COL_EFF(); i++){
             m.set_ELMT(idxRow, i, m.get_ELMT(idxRow, i) * k);
@@ -125,13 +125,13 @@ public class MetodeEliminasi {
     public void swapRows(Matrix m, int idxRow1, int idxRow2){
         /* Menukar dua buah baris di suatu matrix */
         for (int i = 0; i < m.get_COL_EFF(); i++){
-            float temp = m.get_ELMT(idxRow1, i);
+            double temp = m.get_ELMT(idxRow1, i);
             m.set_ELMT(idxRow1, i, m.get_ELMT(idxRow2, i));
             m.set_ELMT(idxRow2, i, temp);
         }
     }
 
-    public void addMultiplyOfOtherRow(Matrix m, int idxRow1, int idxRow2, float k){
+    public void addMultiplyOfOtherRow(Matrix m, int idxRow1, int idxRow2, double k){
         /* Menambahkan sebuah baris dengan kelipatan baris lainnnya */
         // Row1 + k(Row2)
         rowTimesConst(m, idxRow2, k);
@@ -243,7 +243,7 @@ public class MetodeEliminasi {
                     // Mencari baris untuk melakukan operasi addMultiplyOfOtherRow(m, j, idxRow, k)
                     // Cari yang elmt(row, 0) sampai elmt(row, i-1) = 0 dan elmt(row, i) != 0
                     int idxRow = 0;
-                    float k = 0;
+                    double k = 0;
                     if (i == 0){
                         if (m.get_ELMT(idxRow, i) != 0){
                             k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
@@ -287,7 +287,7 @@ public class MetodeEliminasi {
         for (int j = lastIdxDiagonalNot0(m); j >= 1; j--){
             for (int i = j - 1; i >= 0; i--){
                 if (m.get_ELMT(i, j) != 0){
-                    float k = - m.get_ELMT(i, j) / m.get_ELMT(j, j);
+                    double k = - m.get_ELMT(i, j) / m.get_ELMT(j, j);
                     addMultiplyOfOtherRow(m, i, j, k);
                 }
             }

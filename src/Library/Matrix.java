@@ -6,9 +6,10 @@ public class Matrix {
     static final int COL_CAP = 100;
 
     // main data
+
     private int rowEff=0;
     private int colEff=0;
-    private float[][] mem = new float[ROW_CAP][COL_CAP];
+    private double[][] mem = new double[ROW_CAP][COL_CAP];
 
     // constructor
     public Matrix(){
@@ -28,7 +29,7 @@ public class Matrix {
         return this.colEff;
     }
 
-    public float get_ELMT(int i, int j){
+    public double get_ELMT(int i, int j){
         return this.mem[i][j];
     }
 
@@ -40,7 +41,7 @@ public class Matrix {
         this.colEff = nCol;
     }
 
-    public void set_ELMT(int i, int j, float x){
+    public void set_ELMT(int i, int j, double x){
         this.mem[i][j] = x;
     }
 
