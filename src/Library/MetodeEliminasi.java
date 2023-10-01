@@ -2,6 +2,7 @@ package Library;
 // import Library.Matrix;
 
 public class MetodeEliminasi {
+
     /* *** HELPER FUNCTIONS *** */
     public static boolean isRowAllZero(Matrix m, int idxRow){
         /* Mengecek apakah sebuah baris dari suatu matrix seluruh elemennya nol */
@@ -302,4 +303,12 @@ public class MetodeEliminasi {
         /* Menghasilkan solusi dari SPL dengan Metode Eliminasi Gauss-Jordan */
         return m;
     }
+
+    /*
+    NOTES:
+    - Kalau baris terakhir adalah baris 0, solusi banyak (dalam berntuk parameter)
+    - Kalau baris terakhir 0 semua selain elemen terakhir, solusi tidak ada
+    - Kalau toEselon berbentuk segitiga sampai baris terakhir, solusi unik
+    - isGaussUnik (bentuk segitiga), isGaussJordanUnik (identity)
+    */
 }
