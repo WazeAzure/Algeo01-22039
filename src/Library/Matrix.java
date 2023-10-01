@@ -6,9 +6,10 @@ public class Matrix {
     static final int COL_CAP = 100;
 
     // main data
-    public int rowEff=0;
-    public int colEff=0;
-    public double[][] mem = new double[ROW_CAP][COL_CAP];
+
+    private int rowEff=0;
+    private int colEff=0;
+    private double[][] mem = new double[ROW_CAP][COL_CAP];
 
     // constructor
     public Matrix(){

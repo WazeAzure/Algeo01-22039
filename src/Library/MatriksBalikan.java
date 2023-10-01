@@ -69,11 +69,12 @@ public class MatriksBalikan {
         return (ODM.multiplyByConst(m, (1 / determinan)));
     }
 
-    // public Matrix inverseWithAdjoin(Matrix m){
-    //     /* Mancari inverse sebuah matrix n x n menggunakan adjoin dan mengeluarkannya */
-    //     double determinan = ODM.determinant(m);
-    //     return (ODM.multiplyByConst(DET.adjoinMatrix(m), (1 / determinan)));
-    // }    
+
+    public Matrix inverseWithAdjoin(Matrix m){
+        /* Mancari inverse sebuah matrix n x n menggunakan adjoin dan mengeluarkannya */
+        double determinan = ODM.determinant(m);
+        return (ODM.multiplyByConst(DET.adjoinMatrix(m), (1 / determinan)));
+    }    
 
     public Matrix inverseWithGaussJordan(Matrix m){
         /* Mancari inverse sebuah matrix n x n menggunakan eliminasi Gauss-Jordan dan mengeluarkannya */
