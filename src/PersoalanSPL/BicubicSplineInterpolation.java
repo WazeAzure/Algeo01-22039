@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class BicubicSplineInterpolation {
     Matrix MBesar = new Matrix();
     Matrix MSoal = new Matrix();
-
+  
     public void createInitialMatrix(Matrix m){
         // biasa
         int row = 0;
