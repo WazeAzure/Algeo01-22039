@@ -14,6 +14,7 @@ public class InterpolasiPolinomial {
     public Matrix InputtoMatrix (int n){
         // n adalah banyaknya titik yang diketahui
         Matrix m = new Matrix();
+        System.out.println("Masukkan titik-titik yang diketahui:");
         Operate.readMatrix(m, n, 2);
         return m;
     }
@@ -50,6 +51,7 @@ public class InterpolasiPolinomial {
         Matrix m = InputtoMatrix(n);
         MatrixtoMatrixInt(m);
         Scanner sc = new Scanner(System.in);
+        System.out.println("Masukkan nilai x yang ingin diketahui:");
         double x = sc.nextDouble();
         double y = Interpolasi(m, x);
         System.out.println("nilai interpolasi x = " + x + " menghasilkan nilai y = " + y);

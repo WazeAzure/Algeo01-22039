@@ -2,8 +2,8 @@ import java.util.*;
 
 import PersoalanSPL.*;
 
-public class MyApp{
-	public static void main(String[] args){
+public class MyApp {
+	public static void main(String[] args) {
 		System.out.println("Hello World");
 
 		Scanner sc = new Scanner(System.in);
@@ -13,14 +13,19 @@ public class MyApp{
 
 		int choose = sc.nextInt();
 
-		if(choose == 1){
-			// 
+		if (choose == 1) {
+			// jawabannya masih salah karena function gaussnya blum jadi
+			// masih handle input yang dari keyboard
 			InterpolasiPolinomial ip = new InterpolasiPolinomial();
-		} else if(choose == 2){
+			System.out.println("Berapa titik yang Anda ketahui?");
+			int n = sc.nextInt();
+			ip.InterPolinomial(n);
+
+		} else if (choose == 2) {
 			//
 			RegresiLinearBerganda rlb = new RegresiLinearBerganda();
-		} else if(choose == 3){
-			// 
+		} else if (choose == 3) {
+			//
 			BicubicSplineInterpolation bsi = new BicubicSplineInterpolation();
 
 		}
