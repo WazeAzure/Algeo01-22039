@@ -8,10 +8,10 @@ public class MetodeEliminasi {
         boolean all0 = true;
         for (int i = 0; i < m.get_COL_EFF(); i++){
             if (m.get_ELMT(idxRow, i) != 0){
-                all0 = false;
+                return false;
             }
         }
-        return all0;
+        return true;
     }
 
     public static boolean isRowHaveOne(Matrix m, int idxRow){

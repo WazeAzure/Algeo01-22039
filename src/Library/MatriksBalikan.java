@@ -69,6 +69,7 @@ public class MatriksBalikan {
         return (ODM.multiplyByConst(m, (1 / determinan)));
     }
 
+
     public Matrix inverseWithAdjoin(Matrix m){
         /* Mancari inverse sebuah matrix n x n menggunakan adjoin dan mengeluarkannya */
         double determinan = ODM.determinant(m);

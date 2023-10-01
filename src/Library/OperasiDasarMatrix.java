@@ -48,7 +48,7 @@ public class OperasiDasarMatrix {
                 nCol = parts.length;
 
                 for( j=0; j<parts.length; j++){
-                    m.set_ELMT(i, j, Float.parseFloat(parts[j]));
+                    m.set_ELMT(i, j, Double.parseDouble(parts[j]));
                 }
 
                 i++;
@@ -190,7 +190,7 @@ public class OperasiDasarMatrix {
         return m3;
     }
 
-    public void pMultiplyByConst(Matrix m, float k){
+    public void pMultiplyByConst(Matrix m, double k){
         int i, j;
         for(i=0;i<m.get_ROW_EFF();i++){
             for(j=0;j<m.get_COL_EFF();j++){
@@ -280,7 +280,7 @@ public class OperasiDasarMatrix {
 
     public boolean isSparse(Matrix m){
         int i, j;
-        float num = 0, zero = 0;
+        double num = 0, zero = 0;
 
         for(i=0; i<m.get_ROW_EFF(); i++){
             for(j=0;j<m.get_COL_EFF();j++){
@@ -289,7 +289,7 @@ public class OperasiDasarMatrix {
             }
         }
         
-        float result = num*100 / (num+zero);
+        double result = num*100 / (num+zero);
         if(result <= 5) return true;
         return false;
     }

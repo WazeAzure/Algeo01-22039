@@ -6,6 +6,7 @@ public class Matrix {
     static final int COL_CAP = 100;
 
     // main data
+
     private int rowEff=0;
     private int colEff=0;
     private double[][] mem = new double[ROW_CAP][COL_CAP];
