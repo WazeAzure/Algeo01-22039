@@ -4,6 +4,7 @@ import Library.Matrix;
 import Library.MetodeEliminasi;
 import Library.OperasiDasarMatrix;
 import java.lang.Math;
+import java.util.Scanner;
 
 public class InterpolasiPolinomial {
     OperasiDasarMatrix Operate = new OperasiDasarMatrix();
@@ -41,5 +42,16 @@ public class InterpolasiPolinomial {
             y += Math.pow(x, i) * SPL.get_ELMT(i, 0);
         }
         return y;
+    }
+
+    public void InterPolinomial (int n){
+        // sebelum ke prosedur ini harus menerima input berapa banyak baris matriksnya
+        // matrix m memiliki baris sebanyak n dan dicari nilai interpolasi x
+        Matrix m = InputtoMatrix(n);
+        MatrixtoMatrixInt(m);
+        Scanner sc = new Scanner(System.in);
+        double x = sc.nextDouble();
+        double y = Interpolasi(m, x);
+        System.out.println("nilai interpolasi x = " + x + " menghasilkan nilai y = " + y);
     }
 }
