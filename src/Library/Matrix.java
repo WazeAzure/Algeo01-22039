@@ -20,27 +20,27 @@ public class Matrix {
     }
 
     // selector
-    int get_ROW_EFF(){
+    public int get_ROW_EFF(){
         return this.rowEff;
     }
 
-    int get_COL_EFF(){
+    public int get_COL_EFF(){
         return this.colEff;
     }
 
-    float get_ELMT(int i, int j){
+    public float get_ELMT(int i, int j){
         return this.mem[i][j];
     }
 
-    void set_ROW_EFF(int nRow){
+    public void set_ROW_EFF(int nRow){
         this.rowEff = nRow;
     }
 
-    void set_COL_EFF(int nCol){
+    public void set_COL_EFF(int nCol){
         this.colEff = nCol;
     }
 
-    void set_ELMT(int i, int j, float x){
+    public void set_ELMT(int i, int j, float x){
         this.mem[i][j] = x;
     }
 

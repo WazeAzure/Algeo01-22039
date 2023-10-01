@@ -335,4 +335,21 @@ public class OperasiDasarMatrix {
         }
         return temp;
     }
+
+    public Matrix mergeMatrix(Matrix m1, Matrix m2){
+        // merge m2 to m1;
+        Matrix m3 = new Matrix();
+        // createMatrix(m3, m1.get_ROW_EFF(), m1.get_COL_EFF() + m2.get_COL_EFF())
+        
+
+        m3 = copyMatrix(m1);
+        m3.set_COL_EFF(m1.get_COL_EFF() + m2.get_COL_EFF());
+
+        for(int i=0; i<m3.get_ROW_EFF();i++){
+            for(int j=m1.get_COL_EFF(); j<m1.get_COL_EFF() + m2.get_COL_EFF(); j++){
+                m3.set_ELMT(i, j, m2.get_ELMT(i, j - m1.get_COL_EFF()));
+            }
+        }
+        return m3;
+    }
 }
