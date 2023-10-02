@@ -1,5 +1,7 @@
 package Library;
 
+import java.lang.Math;
+
 public class Determinan {
     // Buat punya Diana (determinan, kaidah cramer)
 
@@ -33,28 +35,30 @@ public class Determinan {
         Operate.createMatrix(m2, m.get_ROW_EFF() - 1, m.get_COL_EFF() - 1);
         int row, col;
         int x = 0, y = 0;
-        for (row = 0; row < m2.get_ROW_EFF(); row++) {
-            if (row == i) {
-                x++;
-                continue;
-            }
-            for (col = 0; col < m2.get_COL_EFF(); row++) {
-                if (col == j) {
-                    y++;
+        // System.out.println("kofaktor func called");
+        for (row = 0; row < m.get_ROW_EFF(); row++) {
+            // System.out.println(row);
+            for (col = 0; col < m.get_COL_EFF(); col++) {
+                if (row == i || col == j) {
                     continue;
                 } else {
-                    m2.set_ELMT(row, col, m.get_ELMT(x, y));
+                    m2.set_ELMT(x, y, m.get_ELMT(row, col));
                     y++;
+                    if (y == m2.get_COL_EFF()){
+                        y = 0;
+                        x++;
+                    }
                 }
             }
-            x++;
         }
+        Operate.displayMatrix(m2);
         // kondisi m2 adalah submatrix yang tidak memiliki elemen baris i dan kolom j
         if ((m2.get_ROW_EFF() == 2) && (m2.get_COL_EFF() == 2)) {
-            Cij = determinan2x2(m2) * ((-1) ^ (i + j));
+            Cij = determinan2x2(m2) * Math.pow((-1), (i + j));
         } else {
             DetEkspansiKofaktor(m2); // rekursif
         }
+        System.out.println(Cij);
         return Cij;
     }
 
@@ -62,7 +66,7 @@ public class Determinan {
         if (Operate.isSquare(m)) {
             int n = m.get_COL_EFF();
             int i, j;
-            det = 1;
+            det = 0;
             i = 0;
             for (j = 0; j < n; j++) {
                 det += m.get_ELMT(i, j) * Kofaktor(m, i, j); // menambahkan setiap perkalian kofaktor dari baris pertama
