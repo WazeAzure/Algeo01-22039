@@ -165,8 +165,10 @@ public class MetodeEliminasi {
     public int lastIdxDiagonalNot0(Matrix m){
         /* Mengeluarkan index baris terakhir yang elemen m[i][i] nya bukan 0 */
         for (int i = m.get_ROW_EFF() - 1; i >= 0; i--){
-            if (m.get_ELMT(i, i) != 0){
-                return i;
+            if (i < m.get_COL_EFF()){
+                if (m.get_ELMT(i, i) != 0){
+                    return i;
+                }
             }
         }
         return -1;
@@ -231,11 +233,10 @@ public class MetodeEliminasi {
             }
         }
 
-        for (int i = 0; i <= lastIdxNotRow0(m); i++){
+        for (int i = 0; i <= lastIdxDiagonalNot0(m); i++){
             // Menjadikan m[i][i] = 1
-            if (i <= lastIdxDiagonalNot0(m)){
-                rowTimesConst(m, i, 1 / m.get_ELMT(i, i));
-            }
+            rowTimesConst(m, i, 1 / m.get_ELMT(i, i));
+
             // Menjadikan m[i+1][i] sampai M[lastIdxNotRow0(m)][i] = 0
             for (int j = i + 1; j <= lastIdxNotRow0(m); j++){
                 if (m.get_ELMT(j, i) != 0){
@@ -248,7 +249,7 @@ public class MetodeEliminasi {
                             k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
                         }
                         else{
-                            while (idxRow < m.get_ROW_EFF() && m.get_ELMT(idxRow, i) == 0){
+                            while (idxRow <= lastIdxNotRow0(m) && m.get_ELMT(idxRow, i) == 0){
                                 idxRow++;
                                 if (m.get_ELMT(idxRow, i) != 0){
                                     k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
@@ -261,7 +262,7 @@ public class MetodeEliminasi {
                             k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
                         } 
                         else{
-                            while (idxRow < m.get_ROW_EFF() && !(isAllBeforeIdxis0(m, idxRow, i) && m.get_ELMT(idxRow, i) != 0)){
+                            while (idxRow <= lastIdxNotRow0(m) && !(isAllBeforeIdxis0(m, idxRow, i) && m.get_ELMT(idxRow, i) != 0)){
                                 idxRow++;
                                 if (isAllBeforeIdxis0(m, idxRow, i) && m.get_ELMT(idxRow, i) != 0){
                                     k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
