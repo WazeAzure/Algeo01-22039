@@ -4,39 +4,65 @@ import PersoalanSPL.*;
 import Library.*;
 
 public class MyApp{
+	public static int jenis_input(){
+		System.out.println("Jenis pilihan input:");
+		System.out.println("1. Input dari keyboard");
+		System.out.println("2. Input dari file");
+		Scanner sc = new Scanner(System.in);
+		int x = sc.nextInt;
+		return int;
+	}
+
 	public static void main(String[] args){
 		System.out.println("Hello World");
 
 		Scanner sc = new Scanner(System.in);
 		OperasiDasarMatrix ODM = new OperasiDasarMatrix();
 
-		System.out.println("Halo Silahkan pilih ke bagian mana aja");
-		System.out.println("1. Interpolasi Polinom (Mbakdi)\n2. Regresi Linear Berganda (novel)\n3. Bicubic (ed)");
+		System.out.println("MENU");
+		System.out.println("1. Sistem Persamaan Linier");
+		System.out.println("2. Determinan");
+		System.out.println("3. Matriks Balikan");
+		System.out.println("4. Interpolasi Polinom");
+		System.out.println("5. Interpolasi Bicubic Spline");
+		System.out.println("6. Regresi Linier Berganda");
+		System.out.println("7. Keluar");
 
 		int choose = sc.nextInt();
 
 		if(choose == 1){
+			// SPL
+		} else if(choose == 2){
+			int n = jenis_input();
+			if (n == 1){
+				Matrix m = new Matrix();
+				ODM.createMatrix(m, 3, 3);
+				ODM.readMatrix(m, 3, 3);
+				ODM.displayMatrix(m);
+			} else {
+				Matrix m = new Matrix();
+				sc.nextLine();
+				String filename = sc.nextLine();
+				ODM.readMatrixFile(filename, m);
+				ODM.displayMatrix(m);
+			}
+			Determinan det = new Determinan();
+			double n;
+			n = det.DetEkspansiKofaktor(m);
+			System.out.println(n);
+		} else if(choose == 3){
+			// Matriks balikan
+		} else if(choose == 4){
 			// 
 			InterpolasiPolinomial ip = new InterpolasiPolinomial();
 			int n = sc.nextInt();
 			ip.InterPolinomial(n);
-
-		} else if(choose == 2){
-			//
-			RegresiLinearBerganda rlb = new RegresiLinearBerganda();
-		} else if(choose == 3){
+		} else if(choose == 5){
 			// 
 			BicubicSplineInterpolation bsi = new BicubicSplineInterpolation();
-
-		} else if(choose == 4){
-			Matrix m = new Matrix();
-			ODM.createMatrix(m, 3, 3);
-			Determinan det = new Determinan();
-			ODM.readMatrix(m, 3, 3);
-			ODM.displayMatrix(m);
-			double n;
-			n = det.DetEkspansiKofaktor(m);
-			System.out.println(n);
+		} else if(choose == 6) {
+			//
+			RegresiLinearBerganda rlb = new RegresiLinearBerganda();
 		}
 	}
 }
