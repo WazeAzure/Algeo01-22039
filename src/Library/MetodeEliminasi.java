@@ -1,7 +1,8 @@
 package Library;
-// import Library.Matrix;
 
 public class MetodeEliminasi {
+
+    OperasiDasarMatrix ODM = new OperasiDasarMatrix();
 
     /* *** HELPER FUNCTIONS *** */
     public static boolean isRowAllZero(Matrix m, int idxRow){
@@ -131,9 +132,11 @@ public class MetodeEliminasi {
     public void addMultiplyOfOtherRow(Matrix m, int idxRow1, int idxRow2, double k){
         /* Menambahkan sebuah baris dengan kelipatan baris lainnnya */
         // Row1 + k(Row2)
-        rowTimesConst(m, idxRow2, k);
+        Matrix temp = new Matrix();
+        temp = ODM.copyMatrix(m);
+        rowTimesConst(temp, idxRow2, k);
         for (int i = 0; i < m.get_COL_EFF(); i++){
-            m.set_ELMT(idxRow1, i, m.get_ELMT(idxRow1, i) + m.get_ELMT(idxRow2, i));
+            m.set_ELMT(idxRow1, i, temp.get_ELMT(idxRow1, i) + temp.get_ELMT(idxRow2, i));
         }
     }
 
