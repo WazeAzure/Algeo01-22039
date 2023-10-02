@@ -167,14 +167,20 @@ public class MetodeEliminasi {
 
     public int lastIdxDiagonalNot0(Matrix m){
         /* Mengeluarkan index baris terakhir yang elemen m[i][i] nya bukan 0 */
-        for (int i = m.get_ROW_EFF() - 1; i >= 0; i--){
-            if (i < m.get_COL_EFF()){
-                if (m.get_ELMT(i, i) != 0){
-                    return i;
-                }
+        // for (int i = m.get_ROW_EFF() - 1; i >= 0; i--){
+        //     if (i < m.get_COL_EFF()){
+        //         if (m.get_ELMT(i, i) != 0){
+        //             return i;
+        //         }
+        //     }
+        // }
+        // return -1;
+        for (int i = -1; i < m.get_ROW_EFF() - 1; i++){
+            if (m.get_ELMT(i + 1, i + 1) == 0){
+                return i;
             }
         }
-        return -1;
+        return (m.get_ROW_EFF() - 1);
     }
 
     public void moveRow0toBottom(Matrix m, int idxRow){
@@ -187,10 +193,13 @@ public class MetodeEliminasi {
     public void moveRowDiagonal0toBottom(Matrix m, int idxRow){
         /* Memindahkan sebuah baris yang elemen m[i][i] = 0 ke bagian bawah matriks */
         int idx = idxRow;
-        for (int i = idxRow + 1; i <= lastIdxNotRow0(m); i++){
-            if (m.get_ELMT(i, idxRow) != 0){
-                idx = i;   
-            }
+        // for (int i = idxRow + 1; i <= lastIdxNotRow0(m); i++){
+        //     if (m.get_ELMT(i, idxRow) != 0){
+        //         idx = i;   
+        //     }
+        // }
+        while (m.get_ELMT(idx, idxRow) == 0){
+            idx++;
         }
         swapRows(m, idxRow, idx);
     }
@@ -203,6 +212,15 @@ public class MetodeEliminasi {
             }
         }
         return true;
+    }
+    public int idxFirstNot0inRow(Matrix m, int idxRow){
+        /* Mengeluarkan index elemen bukan 0 pertama di sebuah baris */
+        for (int i = 0; i < m.get_COL_EFF(); i++){
+            if (m.get_ELMT(idxRow, i) != 0){
+                return i;
+            }
+        }
+        return -1;
     }
 
     /* *** PRIMARY FUNCTIONS *** */
@@ -238,8 +256,10 @@ public class MetodeEliminasi {
 
         for (int i = 0; i <= lastIdxDiagonalNot0(m); i++){
             // Menjadikan m[i][i] = 1
-            rowTimesConst(m, i, 1 / m.get_ELMT(i, i));
-
+            ODM.displayMatrix(m);
+            elmtTo1(m, i);
+            // rowTimesConst(m, i, 1 / m.get_ELMT(i, i));
+            
             // Menjadikan m[i+1][i] sampai M[lastIdxNotRow0(m)][i] = 0
             for (int j = i + 1; j <= lastIdxNotRow0(m); j++){
                 if (m.get_ELMT(j, i) != 0){
@@ -273,9 +293,23 @@ public class MetodeEliminasi {
                             }
                         }
                     }
+                    System.out.println("-------------------before-------------");
+                    ODM.displayMatrix(m);
                     addMultiplyOfOtherRow(m, j, idxRow, k);
+                    System.out.println("-------------------After-------------");
+                    ODM.displayMatrix(m);
+
+                    
                 }
             }
+            System.out.println(i);
+            ODM.displayMatrix(m);
+            System.out.println("ini nilai idx diagonal -- " + lastIdxDiagonalNot0(m));
+        }
+        ODM.displayMatrix(m);
+        // Tiap baris punya 1 utama
+        for (int i = lastIdxDiagonalNot0(m) + 1; i <= lastIdxNotRow0(m); i++){
+            rowTimesConst(m, i, 1 / m.get_ELMT(i, idxFirstNot0inRow(m, i)));
         }
     }
 
@@ -287,11 +321,33 @@ public class MetodeEliminasi {
         // 2. Lakukan operasi addMultiplyOfOtherRow hingga nilai m[j-1][j] sampai m[0][j] = 0
         
         toEselon(m);
-        for (int j = lastIdxDiagonalNot0(m); j >= 1; j--){
-            for (int i = j - 1; i >= 0; i--){
-                if (m.get_ELMT(i, j) != 0){
-                    double k = - m.get_ELMT(i, j) / m.get_ELMT(j, j);
-                    addMultiplyOfOtherRow(m, i, j, k);
+        if (lastIdxDiagonalNot0(m) > 0){
+            for (int j = lastIdxDiagonalNot0(m); j >= 1; j--){
+                for (int i = j - 1; i >= 0; i--){
+                    if (m.get_ELMT(i, j) != 0){
+                        double k = - m.get_ELMT(i, j) / m.get_ELMT(j, j);
+                        addMultiplyOfOtherRow(m, i, j, k);
+                    }
+                }
+            }
+        }
+
+        System.out.println("-------------------Eselon Red -------------");
+        ODM.displayMatrix(m);
+
+        
+        if (lastIdxDiagonalNot0(m) != lastIdxNotRow0(m)){
+            for (int i = lastIdxDiagonalNot0(m) + 1; i <= lastIdxNotRow0(m); i++){
+                if (!isRowAllZero(m, i)){
+                    rowTimesConst(m, i, 1 / m.get_ELMT(i, idxFirstNot0inRow(m, i)));
+                    for (int j = 0; j <= lastIdxNotRow0(m); j++){
+                        if (j != i){
+                            addMultiplyOfOtherRow(m, j, i, - m.get_ELMT(j, idxSatuUtama(m, i)));
+                        }
+                    }
+                    // for (int k = lastIdxDiagonalNot0(m) + 1; k <= lastIdxNotRow0(m); i++){
+                    //     rowTimesConst(m, k, 1 / m.get_ELMT(k, idxFirstNot0inRow(m, k)));
+                    // }
                 }
             }
         }
