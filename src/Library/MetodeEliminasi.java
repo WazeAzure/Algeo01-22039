@@ -6,7 +6,6 @@ public class MetodeEliminasi {
     /* *** HELPER FUNCTIONS *** */
     public static boolean isRowAllZero(Matrix m, int idxRow){
         /* Mengecek apakah sebuah baris dari suatu matrix seluruh elemennya nol */
-        boolean all0 = true;
         for (int i = 0; i < m.get_COL_EFF(); i++){
             if (m.get_ELMT(idxRow, i) != 0){
                 return false;
@@ -17,13 +16,12 @@ public class MetodeEliminasi {
 
     public static boolean isRowHaveOne(Matrix m, int idxRow){
         /* Mengecek apakah sebuah baris dari suatu matrix memiliki elemen 1 atau tidak */
-        boolean have1 = false;
         for (int i = 0; i < m.get_COL_EFF(); i++){
             if (m.get_ELMT(idxRow, i) == 1){
-                have1 = true;
+                return true;
             }
         }
-        return have1;
+        return false;
     }
 
     public static int idxSatuUtama(Matrix m, int idxRow){
@@ -45,13 +43,12 @@ public class MetodeEliminasi {
 
     public static boolean isColHaveZero(Matrix m, int idxCol){
         /* Mengecek apakah suatu kolom memiliki elemen 0 */
-        boolean have0 = false;
         for (int i = 0; i < m.get_ROW_EFF(); i++){
             if (m.get_ELMT(i, idxCol) == 0){
-                have0 = true;
+                return true;
             }
         }
-        return have0;
+        return false;
     }
 
     public static boolean isEselon(Matrix m){
@@ -158,7 +155,7 @@ public class MetodeEliminasi {
     public int lastIdxNotRow0(Matrix m){
         /* Mengeluarkan index baris terakhir yang bukan baris nol */
         for (int i = m.get_ROW_EFF() - 1; i >= 0; i--){
-            if (isRowAllZero(m, i)){
+            if (!isRowAllZero(m, i)){
                 return i;
             }
         }
@@ -227,8 +224,10 @@ public class MetodeEliminasi {
 
         // Pindahkan baris yang elemen m[i][i] = 0 ke bawah
         for (int i = 0; i <= lastIdxNotRow0(m); i++){
-            if (m.get_ELMT(i, i) == 0){
-                moveRowDiagonal0toBottom(m, i);
+            if (i < m.get_COL_EFF()){
+                if (m.get_ELMT(i, i) == 0){
+                    moveRowDiagonal0toBottom(m, i);
+                }
             }
         }
 
