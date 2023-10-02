@@ -1,11 +1,12 @@
 package Library;
-// import Library.Matrix;
 
 public class MetodeEliminasi {
+
+    OperasiDasarMatrix ODM = new OperasiDasarMatrix();
+
     /* *** HELPER FUNCTIONS *** */
     public static boolean isRowAllZero(Matrix m, int idxRow){
         /* Mengecek apakah sebuah baris dari suatu matrix seluruh elemennya nol */
-        boolean all0 = true;
         for (int i = 0; i < m.get_COL_EFF(); i++){
             if (m.get_ELMT(idxRow, i) != 0){
                 return false;
@@ -16,13 +17,12 @@ public class MetodeEliminasi {
 
     public static boolean isRowHaveOne(Matrix m, int idxRow){
         /* Mengecek apakah sebuah baris dari suatu matrix memiliki elemen 1 atau tidak */
-        boolean have1 = false;
         for (int i = 0; i < m.get_COL_EFF(); i++){
             if (m.get_ELMT(idxRow, i) == 1){
-                have1 = true;
+                return true;
             }
         }
-        return have1;
+        return false;
     }
 
     public static int idxSatuUtama(Matrix m, int idxRow){
@@ -44,13 +44,12 @@ public class MetodeEliminasi {
 
     public static boolean isColHaveZero(Matrix m, int idxCol){
         /* Mengecek apakah suatu kolom memiliki elemen 0 */
-        boolean have0 = false;
         for (int i = 0; i < m.get_ROW_EFF(); i++){
             if (m.get_ELMT(i, idxCol) == 0){
-                have0 = true;
+                return true;
             }
         }
-        return have0;
+        return false;
     }
 
     public static boolean isEselon(Matrix m){
@@ -133,9 +132,11 @@ public class MetodeEliminasi {
     public void addMultiplyOfOtherRow(Matrix m, int idxRow1, int idxRow2, double k){
         /* Menambahkan sebuah baris dengan kelipatan baris lainnnya */
         // Row1 + k(Row2)
-        rowTimesConst(m, idxRow2, k);
+        Matrix temp = new Matrix();
+        temp = ODM.copyMatrix(m);
+        rowTimesConst(temp, idxRow2, k);
         for (int i = 0; i < m.get_COL_EFF(); i++){
-            m.set_ELMT(idxRow1, i, m.get_ELMT(idxRow1, i) + m.get_ELMT(idxRow2, i));
+            m.set_ELMT(idxRow1, i, temp.get_ELMT(idxRow1, i) + temp.get_ELMT(idxRow2, i));
         }
     }
 
@@ -157,7 +158,7 @@ public class MetodeEliminasi {
     public int lastIdxNotRow0(Matrix m){
         /* Mengeluarkan index baris terakhir yang bukan baris nol */
         for (int i = m.get_ROW_EFF() - 1; i >= 0; i--){
-            if (isRowAllZero(m, i)){
+            if (!isRowAllZero(m, i)){
                 return i;
             }
         }
@@ -166,12 +167,20 @@ public class MetodeEliminasi {
 
     public int lastIdxDiagonalNot0(Matrix m){
         /* Mengeluarkan index baris terakhir yang elemen m[i][i] nya bukan 0 */
-        for (int i = m.get_ROW_EFF() - 1; i >= 0; i--){
-            if (m.get_ELMT(i, i) != 0){
+        // for (int i = m.get_ROW_EFF() - 1; i >= 0; i--){
+        //     if (i < m.get_COL_EFF()){
+        //         if (m.get_ELMT(i, i) != 0){
+        //             return i;
+        //         }
+        //     }
+        // }
+        // return -1;
+        for (int i = -1; i < m.get_ROW_EFF() - 1; i++){
+            if (m.get_ELMT(i + 1, i + 1) == 0){
                 return i;
             }
         }
-        return -1;
+        return (m.get_ROW_EFF() - 1);
     }
 
     public void moveRow0toBottom(Matrix m, int idxRow){
@@ -184,10 +193,13 @@ public class MetodeEliminasi {
     public void moveRowDiagonal0toBottom(Matrix m, int idxRow){
         /* Memindahkan sebuah baris yang elemen m[i][i] = 0 ke bagian bawah matriks */
         int idx = idxRow;
-        for (int i = idxRow + 1; i <= lastIdxNotRow0(m); i++){
-            if (m.get_ELMT(i, idxRow) != 0){
-                idx = i;   
-            }
+        // for (int i = idxRow + 1; i <= lastIdxNotRow0(m); i++){
+        //     if (m.get_ELMT(i, idxRow) != 0){
+        //         idx = i;   
+        //     }
+        // }
+        while (m.get_ELMT(idx, idxRow) == 0){
+            idx++;
         }
         swapRows(m, idxRow, idx);
     }
@@ -200,6 +212,15 @@ public class MetodeEliminasi {
             }
         }
         return true;
+    }
+    public int idxFirstNot0inRow(Matrix m, int idxRow){
+        /* Mengeluarkan index elemen bukan 0 pertama di sebuah baris */
+        for (int i = 0; i < m.get_COL_EFF(); i++){
+            if (m.get_ELMT(idxRow, i) != 0){
+                return i;
+            }
+        }
+        return -1;
     }
 
     /* *** PRIMARY FUNCTIONS *** */
@@ -226,16 +247,19 @@ public class MetodeEliminasi {
 
         // Pindahkan baris yang elemen m[i][i] = 0 ke bawah
         for (int i = 0; i <= lastIdxNotRow0(m); i++){
-            if (m.get_ELMT(i, i) == 0){
-                moveRowDiagonal0toBottom(m, i);
+            if (i < m.get_COL_EFF()){
+                if (m.get_ELMT(i, i) == 0){
+                    moveRowDiagonal0toBottom(m, i);
+                }
             }
         }
 
-        for (int i = 0; i <= lastIdxNotRow0(m); i++){
+        for (int i = 0; i <= lastIdxDiagonalNot0(m); i++){
             // Menjadikan m[i][i] = 1
-            if (i <= lastIdxDiagonalNot0(m)){
-                rowTimesConst(m, i, 1 / m.get_ELMT(i, i));
-            }
+            ODM.displayMatrix(m);
+            elmtTo1(m, i);
+            // rowTimesConst(m, i, 1 / m.get_ELMT(i, i));
+            
             // Menjadikan m[i+1][i] sampai M[lastIdxNotRow0(m)][i] = 0
             for (int j = i + 1; j <= lastIdxNotRow0(m); j++){
                 if (m.get_ELMT(j, i) != 0){
@@ -248,7 +272,7 @@ public class MetodeEliminasi {
                             k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
                         }
                         else{
-                            while (idxRow < m.get_ROW_EFF() && m.get_ELMT(idxRow, i) == 0){
+                            while (idxRow <= lastIdxNotRow0(m) && m.get_ELMT(idxRow, i) == 0){
                                 idxRow++;
                                 if (m.get_ELMT(idxRow, i) != 0){
                                     k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
@@ -261,7 +285,7 @@ public class MetodeEliminasi {
                             k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
                         } 
                         else{
-                            while (idxRow < m.get_ROW_EFF() && !(isAllBeforeIdxis0(m, idxRow, i) && m.get_ELMT(idxRow, i) != 0)){
+                            while (idxRow <= lastIdxNotRow0(m) && !(isAllBeforeIdxis0(m, idxRow, i) && m.get_ELMT(idxRow, i) != 0)){
                                 idxRow++;
                                 if (isAllBeforeIdxis0(m, idxRow, i) && m.get_ELMT(idxRow, i) != 0){
                                     k = - m.get_ELMT(j, i) / m.get_ELMT(idxRow, i);
@@ -269,9 +293,23 @@ public class MetodeEliminasi {
                             }
                         }
                     }
+                    System.out.println("-------------------before-------------");
+                    ODM.displayMatrix(m);
                     addMultiplyOfOtherRow(m, j, idxRow, k);
+                    System.out.println("-------------------After-------------");
+                    ODM.displayMatrix(m);
+
+                    
                 }
             }
+            System.out.println(i);
+            ODM.displayMatrix(m);
+            System.out.println("ini nilai idx diagonal -- " + lastIdxDiagonalNot0(m));
+        }
+        ODM.displayMatrix(m);
+        // Tiap baris punya 1 utama
+        for (int i = lastIdxDiagonalNot0(m) + 1; i <= lastIdxNotRow0(m); i++){
+            rowTimesConst(m, i, 1 / m.get_ELMT(i, idxFirstNot0inRow(m, i)));
         }
     }
 
@@ -283,11 +321,33 @@ public class MetodeEliminasi {
         // 2. Lakukan operasi addMultiplyOfOtherRow hingga nilai m[j-1][j] sampai m[0][j] = 0
         
         toEselon(m);
-        for (int j = lastIdxDiagonalNot0(m); j >= 1; j--){
-            for (int i = j - 1; i >= 0; i--){
-                if (m.get_ELMT(i, j) != 0){
-                    double k = - m.get_ELMT(i, j) / m.get_ELMT(j, j);
-                    addMultiplyOfOtherRow(m, i, j, k);
+        if (lastIdxDiagonalNot0(m) > 0){
+            for (int j = lastIdxDiagonalNot0(m); j >= 1; j--){
+                for (int i = j - 1; i >= 0; i--){
+                    if (m.get_ELMT(i, j) != 0){
+                        double k = - m.get_ELMT(i, j) / m.get_ELMT(j, j);
+                        addMultiplyOfOtherRow(m, i, j, k);
+                    }
+                }
+            }
+        }
+
+        System.out.println("-------------------Eselon Red -------------");
+        ODM.displayMatrix(m);
+
+        
+        if (lastIdxDiagonalNot0(m) != lastIdxNotRow0(m)){
+            for (int i = lastIdxDiagonalNot0(m) + 1; i <= lastIdxNotRow0(m); i++){
+                if (!isRowAllZero(m, i)){
+                    rowTimesConst(m, i, 1 / m.get_ELMT(i, idxFirstNot0inRow(m, i)));
+                    for (int j = 0; j <= lastIdxNotRow0(m); j++){
+                        if (j != i){
+                            addMultiplyOfOtherRow(m, j, i, - m.get_ELMT(j, idxSatuUtama(m, i)));
+                        }
+                    }
+                    // for (int k = lastIdxDiagonalNot0(m) + 1; k <= lastIdxNotRow0(m); i++){
+                    //     rowTimesConst(m, k, 1 / m.get_ELMT(k, idxFirstNot0inRow(m, k)));
+                    // }
                 }
             }
         }
@@ -302,4 +362,12 @@ public class MetodeEliminasi {
         /* Menghasilkan solusi dari SPL dengan Metode Eliminasi Gauss-Jordan */
         return m;
     }
+
+    /*
+    NOTES:
+    - Kalau baris terakhir adalah baris 0, solusi banyak (dalam berntuk parameter)
+    - Kalau baris terakhir 0 semua selain elemen terakhir, solusi tidak ada
+    - Kalau toEselon berbentuk segitiga sampai baris terakhir, solusi unik
+    - isGaussUnik (bentuk segitiga), isGaussJordanUnik (identity)
+    */
 }
