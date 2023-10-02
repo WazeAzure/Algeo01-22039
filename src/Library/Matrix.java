@@ -7,9 +7,9 @@ public class Matrix {
 
     // main data
 
-    private int rowEff=0;
-    private int colEff=0;
-    private double[][] mem = new double[ROW_CAP][COL_CAP];
+    public int rowEff=0;
+    public int colEff=0;
+    public double[][] mem = new double[ROW_CAP][COL_CAP];
 
     // constructor
     public Matrix(){
