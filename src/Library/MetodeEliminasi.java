@@ -185,6 +185,8 @@ public class MetodeEliminasi {
     public void moveRowDiagonal0toBottom(Matrix m, int idxRow){
         /* Memindahkan sebuah baris yang elemen m[i][i] = 0 ke bagian bawah matriks */
         int idx = idxRow;
+
+        System.out.println(idx + " | " + idxRow);
         while (m.get_ELMT(idx, idxRow) == 0 && idx < m.get_ROW_EFF() - 1){
             idx++;
             if (idx == m.get_ROW_EFF() - 1 && m.get_ELMT(idx, idxRow) == 0){

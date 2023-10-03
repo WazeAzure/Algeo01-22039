@@ -132,14 +132,17 @@ public class BicubicSplineInterpolation {
         double b = sc.nextFloat();
 
         Matrix MHasil = ODM.mergeMatrix(MBesar, MSoal);
-
+        Matrix MHasil2 = ODM.copyMatrix(MHasil);
+        System.out.println(MHasil.get_ROW_EFF());
         ODM.displayMatrix(MHasil);
         
         // createSoalMatrix(MSoal);
-        System.out.println("------------------------------------");
+        System.out.println("------------------fungsi gonza------------");
         Gauss.eliminasiGauss(MHasil, true);
         ODM.displayMatrix(MHasil);
-
+        System.out.println("------------------fungsi novel------------");
+        ME.toEselon(MHasil2);
+        ODM.displayMatrix(MHasil);
         System.out.println("Halo aku bagian ed");
 
 

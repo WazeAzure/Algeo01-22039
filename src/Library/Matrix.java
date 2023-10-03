@@ -2,8 +2,8 @@ package Library;
 
 public class Matrix {
 
-    static final int ROW_CAP = 100;
-    static final int COL_CAP = 100;
+    static final int ROW_CAP = 1000;
+    static final int COL_CAP = 1000;
 
     // main data
 
