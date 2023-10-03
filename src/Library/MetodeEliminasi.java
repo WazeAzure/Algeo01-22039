@@ -167,14 +167,6 @@ public class MetodeEliminasi {
 
     public int lastIdxDiagonalNot0(Matrix m){
         /* Mengeluarkan index baris terakhir yang elemen m[i][i] nya bukan 0 */
-        // for (int i = m.get_ROW_EFF() - 1; i >= 0; i--){
-        //     if (i < m.get_COL_EFF()){
-        //         if (m.get_ELMT(i, i) != 0){
-        //             return i;
-        //         }
-        //     }
-        // }
-        // return -1;
         for (int i = -1; i < m.get_ROW_EFF() - 1; i++){
             if (m.get_ELMT(i + 1, i + 1) == 0){
                 return i;
@@ -193,13 +185,11 @@ public class MetodeEliminasi {
     public void moveRowDiagonal0toBottom(Matrix m, int idxRow){
         /* Memindahkan sebuah baris yang elemen m[i][i] = 0 ke bagian bawah matriks */
         int idx = idxRow;
-        // for (int i = idxRow + 1; i <= lastIdxNotRow0(m); i++){
-        //     if (m.get_ELMT(i, idxRow) != 0){
-        //         idx = i;   
-        //     }
-        // }
-        while (m.get_ELMT(idx, idxRow) == 0){
+        while (m.get_ELMT(idx, idxRow) == 0 && idx < m.get_ROW_EFF() - 1){
             idx++;
+            if (idx == m.get_ROW_EFF() - 1 && m.get_ELMT(idx, idxRow) == 0){
+                idx = idxRow;
+            }
         }
         swapRows(m, idxRow, idx);
     }
@@ -213,6 +203,7 @@ public class MetodeEliminasi {
         }
         return true;
     }
+
     public int idxFirstNot0inRow(Matrix m, int idxRow){
         /* Mengeluarkan index elemen bukan 0 pertama di sebuah baris */
         for (int i = 0; i < m.get_COL_EFF(); i++){
@@ -221,6 +212,17 @@ public class MetodeEliminasi {
             }
         }
         return -1;
+    }
+
+    public void atur1Utama(Matrix m){
+        /* Mengatur agar 1 utama pada baris yang lebih rendah berada lebih kanan dari 1 utama baris atasnya */
+        for (int i = lastIdxDiagonalNot0(m) + 1; i <= lastIdxNotRow0(m) - 1; i++){
+            for (int j = i + 1; j <= lastIdxNotRow0(m); j++){
+                if (!isRowAllZero(m, i)){
+                    rowTimesConst(m, i, 1 / m.get_ELMT(i, idxFirstNot0inRow(m, i)));
+                }
+            }
+        }
     }
 
     /* *** PRIMARY FUNCTIONS *** */
@@ -252,13 +254,12 @@ public class MetodeEliminasi {
                     moveRowDiagonal0toBottom(m, i);
                 }
             }
-        }
+        } 
 
         for (int i = 0; i <= lastIdxDiagonalNot0(m); i++){
             // Menjadikan m[i][i] = 1
-            ODM.displayMatrix(m);
+            // ODM.displayMatrix(m);
             elmtTo1(m, i);
-            // rowTimesConst(m, i, 1 / m.get_ELMT(i, i));
             
             // Menjadikan m[i+1][i] sampai M[lastIdxNotRow0(m)][i] = 0
             for (int j = i + 1; j <= lastIdxNotRow0(m); j++){
@@ -293,24 +294,28 @@ public class MetodeEliminasi {
                             }
                         }
                     }
-                    System.out.println("-------------------before-------------");
-                    ODM.displayMatrix(m);
+                    // System.out.println("-------------------before-------------");
+                    // ODM.displayMatrix(m);
                     addMultiplyOfOtherRow(m, j, idxRow, k);
-                    System.out.println("-------------------After-------------");
-                    ODM.displayMatrix(m);
-
-                    
+                    // System.out.println("-------------------After-------------");
+                    // ODM.displayMatrix(m);
                 }
             }
-            System.out.println(i);
-            ODM.displayMatrix(m);
-            System.out.println("ini nilai idx diagonal -- " + lastIdxDiagonalNot0(m));
+            // System.out.println(i);
+            // ODM.displayMatrix(m);
+            // System.out.println("ini nilai idx diagonal -- " + lastIdxDiagonalNot0(m));
         }
-        ODM.displayMatrix(m);
-        // Tiap baris punya 1 utama
-        for (int i = lastIdxDiagonalNot0(m) + 1; i <= lastIdxNotRow0(m); i++){
-            rowTimesConst(m, i, 1 / m.get_ELMT(i, idxFirstNot0inRow(m, i)));
+        // ODM.displayMatrix(m);
+
+        // Membuat tiap baris selain baris 0 mempunyai 1 utama
+        if (lastIdxDiagonalNot0(m) != lastIdxNotRow0(m)){
+            for (int i = lastIdxDiagonalNot0(m) + 1; i <= lastIdxNotRow0(m); i++){
+                rowTimesConst(m, i, 1 / m.get_ELMT(i, idxFirstNot0inRow(m, i)));
+            }
         }
+
+        // Atur 1 utama di baris-baris setelah index baris lastIdxDiagonalNot0(m)
+
     }
 
     public void toEselonRed(Matrix m){
@@ -335,12 +340,13 @@ public class MetodeEliminasi {
         System.out.println("-------------------Eselon Red -------------");
         ODM.displayMatrix(m);
 
-        
+        // Setiap elemen di kolom yang memuat 1 utama dijadikan 0
         if (lastIdxDiagonalNot0(m) != lastIdxNotRow0(m)){
-            for (int i = lastIdxDiagonalNot0(m) + 1; i <= lastIdxNotRow0(m); i++){
+            int idxCol = lastIdxNotRow0(m);
+            for (int i = lastIdxDiagonalNot0(m) + 1; i <= idxCol; i++){
                 if (!isRowAllZero(m, i)){
                     rowTimesConst(m, i, 1 / m.get_ELMT(i, idxFirstNot0inRow(m, i)));
-                    for (int j = 0; j <= lastIdxNotRow0(m); j++){
+                    for (int j = 0; j <= idxCol; j++){
                         if (j != i){
                             addMultiplyOfOtherRow(m, j, i, - m.get_ELMT(j, idxSatuUtama(m, i)));
                         }
@@ -348,6 +354,16 @@ public class MetodeEliminasi {
                     // for (int k = lastIdxDiagonalNot0(m) + 1; k <= lastIdxNotRow0(m); i++){
                     //     rowTimesConst(m, k, 1 / m.get_ELMT(k, idxFirstNot0inRow(m, k)));
                     // }
+                }
+            }
+        }
+        
+        // Memindahkan lagi semua baris nol yang mungkin terbentuk selama operasi ke bawah
+        if (isMatrixHaveRow0(m)){
+            // Pindahkan semua baris nol ke bagian bawah
+            for (int i = lastIdxDiagonalNot0(m) + 1; i < idxCol; i++){
+                if (isRowAllZero(m, i)){
+                    moveRow0toBottom(m, i);
                 }
             }
         }
