@@ -141,17 +141,21 @@ public class BicubicSplineInterpolation {
     // }
 
     public BicubicSplineInterpolation(){
-        ODM.createMatrix(MBesar, 16, 16);
-        createInitialMatrix(MBesar);
-        // Matrix m = new Matrix();
-        // ODM.readMatrixFile("test.txt", m);
-        // ODM.displayMatrix(m);
+        // ODM.createMatrix(MBesar, 16, 16);
+        // createInitialMatrix(MBesar);
+        Matrix m = new Matrix();
+        ODM.readMatrixFile("test.txt", m);
+        ODM.displayMatrix(m);
         System.out.println("---------------------------");
-        ME.toEselon(MBesar);
-        ODM.displayMatrix(MBesar);
+        Matrix m2 = new Matrix();
+        m2 = ODM.copyMatrix(m);
+        ME.toEselon(m2);
+        ODM.displayMatrix(m2);
         System.out.println("---------------------------");
-        
-        Gauss.eliminasiGauss(MBesar, true);
-        ODM.displayMatrix(MBesar);
+        ME.toEselonRed(m);
+        ODM.displayMatrix(m);
+        // System.out.println("---------------------------");
+        // Gauss.eliminasiGauss(MBesar, true);
+        // ODM.displayMatrix(MBesar);
     }
 }

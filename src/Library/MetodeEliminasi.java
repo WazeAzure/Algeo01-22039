@@ -30,7 +30,7 @@ public class MetodeEliminasi {
             // System.out.printf("%f - %f = %f\n", m.get_ELMT(a, j),div * m.get_ELMT(pivot, j), temp);
             m.set_ELMT(a, j, temp);
         }
-        System.out.println();
+        // System.out.println();
     }
 
     public void toEselon(Matrix m){
@@ -85,6 +85,37 @@ public class MetodeEliminasi {
     }
 
     public void toEselonRed(Matrix m){
+        // System.out.println("Hello world");
+        toEselon(m);
+        
+        for(int i=m.get_ROW_EFF()-1; i>=0; i--){
+            // find satu utama
+            int foundFirst = -1;
+            for(int j=0; j<m.get_COL_EFF(); j++){
+                if(m.get_ELMT(i, j) == 1){
+                    foundFirst = j;
+                    break;
+                }
+            }
+            // System.out.printf("foundFirst -- %d\n", foundFirst);
+            if(foundFirst == -1){
+                continue;
+            }
 
+            // clear to up
+            double k = m.get_ELMT(i, foundFirst);
+            for(int row=i-1; row>=0; row--){
+                // System.out.printf("row foundFirst --- %d %d\n", row, foundFirst);
+                double div = m.get_ELMT(row, foundFirst) / k;
+                // System.out.println("div -- " + div);
+                if(m.get_ELMT(row, foundFirst) != 0){
+                    
+                    // System.out.printf("i row foundFirst---%d %d %d\n", i, row, foundFirst);
+                    substractRows(m, row, i, div);
+                    // ODM.displayMatrix(m);
+                }
+            }
+            // ODM.displayMatrix(m);
+        }
     }
 }
