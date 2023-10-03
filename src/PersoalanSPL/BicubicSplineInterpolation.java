@@ -4,7 +4,7 @@ import Library.Matrix;
 import Library.OperasiDasarMatrix;
 import Library.OperasiDasarGambar;
 import Library.MetodeEliminasi;
-import PersoalanSPL.Gauss;
+// import PersoalanSPL.Gauss;
 import java.lang.Math;
 
 import java.util.Scanner;
@@ -14,7 +14,6 @@ import java.util.Scanner;
 public class BicubicSplineInterpolation {
     Matrix MBesar = new Matrix();
     Matrix MSoal = new Matrix();
-  
     public void createInitialMatrix(Matrix m){
         // biasa
         int row = 0;
@@ -42,7 +41,7 @@ public class BicubicSplineInterpolation {
                 for(int j=0;j<4;j++){
                     for(int i=0;i<4;i++){
                         if(i==0){
-                             m.set_ELMT(row, col, 0);
+                            m.set_ELMT(row, col, 0);
                         } else {
                             double temp = i * Math.pow(x, i-1) * Math.pow(y, j);
                             m.set_ELMT(row, col, (double)temp);
@@ -63,7 +62,7 @@ public class BicubicSplineInterpolation {
                 for(int j=0;j<4;j++){
                     for(int i=0;i<4;i++){
                         if(j==0){
-                             m.set_ELMT(row, col, 0);
+                            m.set_ELMT(row, col, 0);
                         } else {
                             double temp = j * Math.pow(x, i) * Math.pow(y, j-1);
                             m.set_ELMT(row, col, (double)temp);
@@ -137,7 +136,7 @@ public class BicubicSplineInterpolation {
         
         // createSoalMatrix(MSoal);
         System.out.println("------------------------------------");
-        Gauss.eliminasiGauss(MHasil, true);
+        // Gauss.eliminasiGauss(MHasil, true);
         ODM.displayMatrix(MHasil);
 
         System.out.println("Halo aku bagian ed");
