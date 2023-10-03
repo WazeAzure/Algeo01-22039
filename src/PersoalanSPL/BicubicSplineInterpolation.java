@@ -14,6 +14,20 @@ import java.util.Scanner;
 public class BicubicSplineInterpolation {
     Matrix MBesar = new Matrix();
     Matrix MSoal = new Matrix();
+
+    OperasiDasarMatrix ODM = new OperasiDasarMatrix();
+    MetodeEliminasi ME = new MetodeEliminasi();
+
+    // public Matrix f(int a, int b){
+    //     Matrix temp = new Matrix();
+    //     ODM.createMatrix(temp, 1, 16);
+        
+    //     for(int col=0; col < temp.get_COL_EFF(); col++){
+    //         double ab = Math.pow(a, 0) * Math.pow(b, col);
+    //         m.set_ELMT(0, col, ab);
+    //     }
+    //     return temp;
+    // }
   
     public void createInitialMatrix(Matrix m){
         // biasa
@@ -32,6 +46,16 @@ public class BicubicSplineInterpolation {
                 row++;
             }
         }
+
+        // int row = 0;
+        // for(int i=0; i<=1; i++){
+        //     for(int j=0; j<=1;j++){
+        //         Matrix x = new Matrix();
+        //         x = f(i, j);
+        //         MBesar.mem[row] = x.mem[0];
+        //         row++;
+        //     }
+        // }
 
         // Turunan terhadap x;
         row = 4;
@@ -117,46 +141,17 @@ public class BicubicSplineInterpolation {
     // }
 
     public BicubicSplineInterpolation(){
-        OperasiDasarMatrix ODM = new OperasiDasarMatrix();
-        OperasiDasarGambar ODG = new OperasiDasarGambar();
-        MetodeEliminasi ME = new MetodeEliminasi();
-        // ODM.createMatrix(MBesar, 16, 16);
-        // ODM.createMatrix(MSoal, 16, 1);
-        // createInitialMatrix(MBesar);
-        // ODM.displayMatrix(MBesar);
-
-        // ODM.readMatrix(MSoal, 16, 1);
-
-        // Scanner sc = new Scanner(System.in);
-        // double a = sc.nextFloat();
-        // double b = sc.nextFloat();
-
-        // Matrix MHasil = ODM.mergeMatrix(MBesar, MSoal);
-        // Matrix MHasil2 = ODM.copyMatrix(MHasil);
-        // System.out.println(MHasil.get_ROW_EFF());
-        // ODM.displayMatrix(MHasil);
-        
-        // createSoalMatrix(MSoal);
-        System.out.println("------------------fungsi gonza------------");
-        // Gauss.eliminasiGauss(MHasil, true);
-        // ODM.displayMatrix(MHasil);
-        System.out.println("------------------fungsi novel------------");
-        // ME.toEselon(MHasil2);
-        // ODM.displayMatrix(MHasil2);
-        System.out.println("Halo aku bagian ed");
-
-        // testcase new OBE
-        Matrix tc = new Matrix();
-        ODM.createMatrix(tc, 4, 5);
-        ODM.readMatrix(tc, 4, 5);
-
-        ME.toEselon(tc);
-        ODM.displayMatrix(tc);
-
-
-        
+        ODM.createMatrix(MBesar, 16, 16);
+        createInitialMatrix(MBesar);
         // Matrix m = new Matrix();
-        // m = ODG.readImage("lena.png");
-        // ODG.writeImage("result_lena.png", m);
+        // ODM.readMatrixFile("test.txt", m);
+        // ODM.displayMatrix(m);
+        System.out.println("---------------------------");
+        ME.toEselon(MBesar);
+        ODM.displayMatrix(MBesar);
+        System.out.println("---------------------------");
+        
+        Gauss.eliminasiGauss(MBesar, true);
+        ODM.displayMatrix(MBesar);
     }
 }
