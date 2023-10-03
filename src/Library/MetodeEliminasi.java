@@ -118,4 +118,36 @@ public class MetodeEliminasi {
             // ODM.displayMatrix(m);
         }
     }
+
+    public boolean isSegitiga(Matrix m){
+        for(int i=0; i<m.get_ROW_EFF(); i++){
+                if(m.get_ELMT(i, i) != 1){
+                    return false;
+                }
+            }
+        return true;
+    }
+
+    public String Gauss(Matrix m){
+        // prasyarat matriks harus eselon / eselon terduksi
+        // 0 --> not solvable
+        // 1 --> unik
+        // 2 --> parametrik
+
+        // check if solveable
+        if(m.get_ELMT(m.get_ROW_EFF()-1, m.get_COL_EFF()-2) == 0 && m.get_ELMT(m.get_ROW_EFF()-1, m.get_COL_EFF()-1)  != 0){
+            return 0;
+        } else {
+            if(isSegitiga(m)){
+                // solusi unik
+                m = SolvesSPL(Matrix m);
+            } else {
+                // solusi parametrik
+            }
+        }
+    }
+
+    public Matrix SolveSPL(Matrix m){
+
+    }
 }
