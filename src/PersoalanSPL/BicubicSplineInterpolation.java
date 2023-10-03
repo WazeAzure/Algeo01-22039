@@ -120,30 +120,38 @@ public class BicubicSplineInterpolation {
         OperasiDasarMatrix ODM = new OperasiDasarMatrix();
         OperasiDasarGambar ODG = new OperasiDasarGambar();
         MetodeEliminasi ME = new MetodeEliminasi();
-        ODM.createMatrix(MBesar, 16, 16);
-        ODM.createMatrix(MSoal, 16, 1);
-        createInitialMatrix(MBesar);
-        ODM.displayMatrix(MBesar);
+        // ODM.createMatrix(MBesar, 16, 16);
+        // ODM.createMatrix(MSoal, 16, 1);
+        // createInitialMatrix(MBesar);
+        // ODM.displayMatrix(MBesar);
 
-        ODM.readMatrix(MSoal, 16, 1);
+        // ODM.readMatrix(MSoal, 16, 1);
 
-        Scanner sc = new Scanner(System.in);
-        double a = sc.nextFloat();
-        double b = sc.nextFloat();
+        // Scanner sc = new Scanner(System.in);
+        // double a = sc.nextFloat();
+        // double b = sc.nextFloat();
 
-        Matrix MHasil = ODM.mergeMatrix(MBesar, MSoal);
-        Matrix MHasil2 = ODM.copyMatrix(MHasil);
-        System.out.println(MHasil.get_ROW_EFF());
-        ODM.displayMatrix(MHasil);
+        // Matrix MHasil = ODM.mergeMatrix(MBesar, MSoal);
+        // Matrix MHasil2 = ODM.copyMatrix(MHasil);
+        // System.out.println(MHasil.get_ROW_EFF());
+        // ODM.displayMatrix(MHasil);
         
         // createSoalMatrix(MSoal);
         System.out.println("------------------fungsi gonza------------");
-        Gauss.eliminasiGauss(MHasil, true);
-        ODM.displayMatrix(MHasil);
+        // Gauss.eliminasiGauss(MHasil, true);
+        // ODM.displayMatrix(MHasil);
         System.out.println("------------------fungsi novel------------");
-        ME.toEselon(MHasil2);
-        ODM.displayMatrix(MHasil);
+        // ME.toEselon(MHasil2);
+        // ODM.displayMatrix(MHasil2);
         System.out.println("Halo aku bagian ed");
+
+        // testcase new OBE
+        Matrix tc = new Matrix();
+        ODM.createMatrix(tc, 4, 5);
+        ODM.readMatrix(tc, 4, 5);
+
+        ME.toEselon(tc);
+        ODM.displayMatrix(tc);
 
 
         
