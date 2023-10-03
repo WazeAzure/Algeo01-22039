@@ -9,8 +9,8 @@ public class MyApp{
 		System.out.println("1. Input dari keyboard");
 		System.out.println("2. Input dari file");
 		Scanner sc = new Scanner(System.in);
-		int x = sc.nextInt;
-		return int;
+		int x = sc.nextInt();
+		return x;
 	}
 
 	public static void main(String[] args){
@@ -33,14 +33,13 @@ public class MyApp{
 		if(choose == 1){
 			// SPL
 		} else if(choose == 2){
-			int n = jenis_input();
-			if (n == 1){
-				Matrix m = new Matrix();
+			Matrix m = new Matrix();
+			int input_type = jenis_input();
+			if (input_type == 1){
 				ODM.createMatrix(m, 3, 3);
 				ODM.readMatrix(m, 3, 3);
 				ODM.displayMatrix(m);
 			} else {
-				Matrix m = new Matrix();
 				sc.nextLine();
 				String filename = sc.nextLine();
 				ODM.readMatrixFile(filename, m);

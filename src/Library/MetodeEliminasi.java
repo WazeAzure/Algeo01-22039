@@ -198,8 +198,10 @@ public class MetodeEliminasi {
         //         idx = i;   
         //     }
         // }
-        while (m.get_ELMT(idx, idxRow) == 0){
+        System.out.println(idx + " | " + idxRow);
+        while (m.get_ELMT(idx, idxRow) == 0 && idx < m.get_COL_EFF()){
             idx++;
+            System.out.println("called -- " + idx + " | " + idxRow);
         }
         swapRows(m, idxRow, idx);
     }
