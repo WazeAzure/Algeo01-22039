@@ -92,11 +92,41 @@ public class OperasiDasarMatrix {
             x = m.get_ELMT(i, 0);
             m.set_ELMT(i, 0, 0);
             m.set_COL_EFF(nCol);
-            m.set_ROW_EFF(i-1);
+            m.set_ROW_EFF(i - 1);
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+    }
+
+    public Matrix readSPL() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Masukkan ukuran matriks A (baris): ");
+        int m = sc.nextInt();
+        System.out.println("Masukkan ukuran matriks A (kolom): ");
+        int n = sc.nextInt();
+        Matrix a = new Matrix();
+        createMatrix(a, m, n);
+        System.out.println("Masukkan matriks A: ");
+        readMatrix(a, m, n);
+        System.out.println("Masukkan matriks b: ");
+        Matrix b = new Matrix();
+        createMatrix(b, m, 1);
+        readMatrix(b, m, 1);
+        // Gabungkan matrix a dan b untuk mendapatkan matriks augmented dalam matrix SPL
+        Matrix SPL = new Matrix();
+        createMatrix(SPL, m, n + 1);
+        int i = 0, j = 0;
+        for (i = 0; i < a.get_ROW_EFF(); i++) {
+            for (j = 0; j < a.get_COL_EFF(); j++) {
+                SPL.set_ELMT(i, j, a.get_ELMT(i, j));
+            }
+        }
+        for (i = 0; i < a.get_ROW_EFF(); i++) {
+            SPL.set_ELMT(i, SPL.get_COL_EFF() - 1, b.get_ELMT(i, 0));
+        }
+        return SPL;
+
     }
 
     public Matrix readSPLCramer() {
@@ -105,7 +135,7 @@ public class OperasiDasarMatrix {
         int m = sc.nextInt();
         System.out.println("Masukkan ukuran matriks A (kolom): ");
         int n = sc.nextInt();
-        if (m != n){
+        if (m != n) {
             Matrix SPL = new Matrix();
             createMatrix(SPL, 0, 0);
             return SPL;
@@ -132,7 +162,7 @@ public class OperasiDasarMatrix {
             }
             return SPL;
         }
-        
+
     }
 
     public void displayMatrix(Matrix m) {

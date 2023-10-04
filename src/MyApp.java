@@ -61,6 +61,7 @@ public class MyApp {
 
 		Scanner sc = new Scanner(System.in);
 		OperasiDasarMatrix ODM = new OperasiDasarMatrix();
+		MetodeEliminasi ME = new MetodeEliminasi();
 
 		int choose = menu();
 
@@ -72,21 +73,51 @@ public class MyApp {
 					// Gauss
 					int input_type = jenis_input();
 					if (input_type == 1) { // keyboard
-
+						Matrix m = new Matrix();
+						m = ODM.readSPL();
+						ME.toEselon(m);
+						int n = ME.Gauss(m);
+						if (n == 1) {
+							Matrix result = new Matrix();
+							result = ME.SolveSPLUnik(m);
+							int i;
+							for (i = 0; i < result.get_COL_EFF(); i++) {
+								System.out.println("x" + (i + 1) + " = " + result.get_ELMT(i, 0));
+							}
+						} else if (n == 2) {
+							ME.SolvesSPLParametrik(m);
+						}
+						choose = menu();
 					} else if (input_type == 2) { // file
 
 					} else {
-						// System.out.println("Masukan input salah");
+						System.out.println("Masukan input salah");
+						choose = menu();
 					}
 				} else if (input_SPL == 2) {
 					// Gauss Jordan
 					int input_type = jenis_input();
-					if (input_type == 1) { // keyaboard
-
+					if (input_type == 1) { // keyboard
+						Matrix m = new Matrix();
+						m = ODM.readSPL();
+						ME.toEselonRed(m);
+						int n = ME.Gauss(m);
+						if (n == 1) {
+							Matrix result = new Matrix();
+							result = ME.SolveSPLUnik(m);
+							int i;
+							for (i = 0; i < result.get_COL_EFF(); i++) {
+								System.out.println("x" + (i + 1) + " = " + result.get_ELMT(i, 0));
+							}
+						} else if (n == 2) {
+							ME.SolvesSPLParametrik(m);
+						}
+						choose = menu();
 					} else if (input_type == 2) { // file
 
 					} else {
-						// System.out.println("Masukan input salah");
+						System.out.println("Masukan input salah");
+						choose = menu();
 					}
 				} else if (input_SPL == 3) {
 					// Matriks balikan
@@ -100,26 +131,41 @@ public class MyApp {
 					}
 				} else if (input_SPL == 4) {
 					// Kaidah Cramer
+					Determinan det = new Determinan();
 					int input_type = jenis_input();
 					if (input_type == 1) { // keyboard
-						Determinan det = new Determinan();
 						Matrix m = new Matrix();
 						m = ODM.readSPLCramer();
-						if (m.get_ROW_EFF() == 0) {
+						if (m.get_ROW_EFF() + 1 != m.get_COL_EFF()) {
 							System.out.println("Matrix tersebut tidak dapat diselesaikan menggunakan Kaidah Cramer.");
 							System.out.println("Banyaknya persamaan harus sama dengan banyaknya variabel.");
 						} else {
+							System.out.println("------------------------------");
 							det.KaidahCramer(m);
 							choose = menu();
 						}
 					} else if (input_type == 2) { // file
-
+						Matrix m = new Matrix();
+						System.out.println("Masukkan nama file: ");
+						String filename = sc.nextLine();
+						System.out.println("------------------------------");
+						ODM.readMatrixFile(filename, m);
+						ODM.displayMatrix(m);
+						if (m.get_ROW_EFF() + 1 != m.get_COL_EFF()) {
+							System.out.println("Matrix tersebut tidak dapat diselesaikan menggunakan Kaidah Cramer.");
+							System.out.println("Banyaknya persamaan harus sama dengan banyaknya variabel.");
+						} else {
+							System.out.println("------------------------------");
+							det.KaidahCramer(m);
+							choose = menu();
+						}
 					} else {
-						// System.out.println("Masukan input salah");
+						System.out.println("Masukan input salah");
+						choose = menu();
 					}
-
 				} else {
-					// System.out.println("Masukan input salah");
+					System.out.println("Masukan input salah");
+					choose = menu();
 				}
 			} else if (choose == 2) { // DETERMINAN
 				Matrix m = new Matrix();
@@ -134,29 +180,36 @@ public class MyApp {
 					System.out.println("------------------------------");
 					ODM.displayMatrix(m);
 				} else {
-					sc.nextLine();
 					System.out.println("Masukkan nama file: ");
 					String filename = sc.nextLine();
+					System.out.println("------------------------------");
 					ODM.readMatrixFile(filename, m);
 					ODM.displayMatrix(m);
 				}
 				Determinan det = new Determinan();
-				double n;
-				System.out.println("------------------------------");
-				System.out.println("Pilihan Metode: ");
-				System.out.println("1. Reduksi Baris");
-				System.out.println("2. Ekspansi Kofaktor");
-				System.out.println("\n");
-				System.out.print("Masukkan pilihan: ");
-				int metode = sc.nextInt();
-				System.out.println("------------------------------");
-				if (metode == 1) {
-					n = det.DetReduksiBaris(m);
+				double n = -999.999;
+				if (ODM.isSquare(m)) {
+					System.out.println("------------------------------");
+					System.out.println("Pilihan Metode: ");
+					System.out.println("1. Reduksi Baris");
+					System.out.println("2. Ekspansi Kofaktor");
+					System.out.println("\n");
+					System.out.print("Masukkan pilihan: ");
+					int metode = sc.nextInt();
+					System.out.println("------------------------------");
+					if (metode == 1) {
+						n = det.DetReduksiBaris(m);
+					} else {
+						n = det.DetEkspansiKofaktor(m);
+					}
+					System.out.println("Hasil determinan dari matriks tersebut adalah " + n);
+					System.out.println("------------------------------");
 				} else {
-					n = det.DetEkspansiKofaktor(m);
+					System.out.println("------------------------------");
+					System.out.println("Determinan tidak dapat ditentukan karena bukan matriks persegi");
+					System.out.println("------------------------------");
 				}
-				System.out.println("Hasil determinan dari matriks tersebut adalah " + n);
-				System.out.println("------------------------------");
+
 				choose = menu();
 			} else if (choose == 3) {
 				// Matriks balikan
