@@ -136,34 +136,36 @@ public class BicubicSplineInterpolation {
 
         Matrix MBesarInverse = new Matrix();
         MBesarInverse = MB.inverseWithGaussJordan(MBesar);
-        ODM.displayMatrix(MBesarInverse);
 
-        ODM.createMatrix(MSoal, 16, 1);
-        ODM.readMatrix(MSoal, 16, 1);
+        ODM.displayMatrixtoFile(MBesarInverse, "Matriks_Invers.txt");
+        // ODM.displayMatrix(MBesarInverse);
 
-        System.out.println("---------------------------");
-        Matrix merged = ODM.multiplyMatrix(MBesarInverse, MSoal);
-        ODM.displayMatrix(merged);
+        // ODM.createMatrix(MSoal, 16, 1);
+        // ODM.readMatrix(MSoal, 16, 1);
 
-        System.out.println("---------------------------");
+        // System.out.println("---------------------------");
+        // Matrix merged = ODM.multiplyMatrix(MBesarInverse, MSoal);
+        // ODM.displayMatrix(merged);
 
-        Matrix ans = new Matrix();
-        ODM.createMatrix(ans, 1, 16);
+        // System.out.println("---------------------------");
 
-        double pointX = sc.nextDouble();
-        double pointY = sc.nextDouble();
+        // Matrix ans = new Matrix();
+        // ODM.createMatrix(ans, 1, 16);
 
-        int col = 0;
-        for(int j=0;j<4;j++){
-            for(int i=0;i<4;i++){
-                double temp = Math.pow(pointX, i) * Math.pow(pointY, j);
-                ans.set_ELMT(0, col, (double)temp);
-                col++;
-            }
-        }
+        // double pointX = sc.nextDouble();
+        // double pointY = sc.nextDouble();
 
-        ans = ODM.multiplyMatrix(ans, merged);
-        System.out.println("FINAL SUBMISSION ----- " + ans.get_ELMT(0, 0));
+        // int col = 0;
+        // for(int j=0;j<4;j++){
+        //     for(int i=0;i<4;i++){
+        //         double temp = Math.pow(pointX, i) * Math.pow(pointY, j);
+        //         ans.set_ELMT(0, col, (double)temp);
+        //         col++;
+        //     }
+        // }
+
+        // ans = ODM.multiplyMatrix(ans, merged);
+        // System.out.println("FINAL SUBMISSION ----- " + ans.get_ELMT(0, 0));
 
         // Matrix m = new Matrix();
         // ODM.readMatrixFile("test.txt", m);

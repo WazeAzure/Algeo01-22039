@@ -2,6 +2,8 @@ package Library;
 
 import java.util.Scanner;
 import java.io.File; // Import the File class
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.FileNotFoundException; // Import this class to handle errors
 
 public class OperasiDasarMatrix {
@@ -174,8 +176,31 @@ public class OperasiDasarMatrix {
         }
     }
 
-    public void displayMatrixtoFile(Matrix m) {
+    public void displayMatrixtoFile(Matrix m, String filename) {
+        System.out.println(filename);
+        try {
+            filename = "test/" + filename;
+            File myObj = new File(filename);
+            if(!(myObj.exists() && !myObj.isDirectory())){
+                myObj.createNewFile();
+            }
 
+            FileWriter myWriter = new FileWriter(filename);
+            String s = "";
+            for(int i=0; i<m.get_ROW_EFF(); i++){
+                for(int j=0;j<m.get_COL_EFF()-1; j++){
+                    s += Double.toString(m.get_ELMT(i, j)) + " ";
+                }
+                s += "\n";
+            }
+            myWriter.write(s);
+            myWriter.close();
+
+            
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
     // boolean stuff
