@@ -163,9 +163,7 @@ public class MetodeEliminasi {
         if(isSolveable(m)){
             if(isSegitiga(m) && m.get_COL_EFF() - 1 == m.get_ROW_EFF()){
                 System.out.println("Solusi Unik");
-                // solusi unik
-                m = SolveSPLUnik(m);
-                ODM.displayMatrix(m);
+                // solusi uniks
                 return 1;
             } else {
                 System.out.println("Solusi Parametrik");
@@ -177,6 +175,8 @@ public class MetodeEliminasi {
             return 0;
         }
     }
+
+    
 
     public Matrix SolveSPLUnik(Matrix m){
         Matrix result = new Matrix();
@@ -196,7 +196,7 @@ public class MetodeEliminasi {
         return result;
     }
 
-    public Matrix SolvesSPLUnikRed(Matrix m){
+    public Matrix SolveSPLUnikRed(Matrix m){
         Matrix result = new Matrix();
         ODM.createMatrix(result, m.get_ROW_EFF(), 1);
 
@@ -205,5 +205,13 @@ public class MetodeEliminasi {
             result.set_ELMT(i, 0, m.get_ELMT(i, m.get_COL_EFF()-1));
         }
         return result;
+    }
+
+    public String SolveParametrik(Matrix m){
+
+        // create arr
+        string arr_char[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't'};
+
+        
     }
 }
