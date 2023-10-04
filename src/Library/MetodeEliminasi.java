@@ -169,11 +169,122 @@ public class MetodeEliminasi {
             } else {
                 System.out.println("Solusi Parametrik");
                 // solusi parametrik
+                SolvesSPLParametrik(m);
                 return 2;
             }
         } else {
             System.out.println("Tidak Memiliki Solusi");
             return 0;
+        }
+    }
+
+    public void SolvesSPLParametrik(Matrix m){
+        // input berupa matrix augmented hasil gauss / gauss jordan.
+
+        Matrix koefisien = new Matrix();
+        ODM.createMatrix(koefisien, m.get_COL_EFF() - 1, m.get_COL_EFF() - 1);
+
+        double hasil[] = new double[m.get_COL_EFF()-1]; // simpan koefisien x1 x2 x3 ...
+        String solusi[] = new String[m.get_COL_EFF()-1];
+
+        for (int i = 0 ; i < m.get_COL_EFF()-1 ; i++) {
+            solusi[i] = "" ;
+        }
+        // Double solusi2[] = new Double[m.get_COL_EFF() - 1];
+        
+        // for loop dari bawah
+        for(int i=m.get_ROW_EFF()-1; i>= 0; i--){
+            // find pivot
+            int pivotIdx = -1;
+            for(int j=0; j<m.get_COL_EFF()-2; j++){
+                if(m.get_ELMT(i, j) != 0){
+                    pivotIdx = j;
+                    break;
+                }
+            }
+
+            if(pivotIdx == -1){
+                continue;
+            }
+
+            // cek kanannya dari 1.
+            for(int j=m.get_COL_EFF()-2; j>pivotIdx; j--){
+                boolean all0 = true;
+                for(int row = i; row <= m.get_ROW_EFF()-1; row++){
+                    if(row != i){
+                        if(m.get_ELMT(row, j) != 0){
+                            all0 = false;
+                            // break;
+                        }
+                    }
+                    
+                }
+
+                if(all0){
+                    // check if it is exist in solution
+                    solusi[j] = "X" + Integer.toString(j+1);
+                    koefisien.set_ELMT(j, j, 1);
+                }
+            }
+
+            // urus 1 utama
+            hasil[pivotIdx] = m.get_ELMT(i, m.get_COL_EFF()-1) / m.get_ELMT(i, pivotIdx);
+            for(int col=pivotIdx+1; col < m.get_COL_EFF()-1; col++){
+                hasil[pivotIdx] -= m.get_ELMT(i, col) * hasil[col];
+                for(int j=0; j < m.get_COL_EFF()-1; j++){
+                    if(koefisien.get_ELMT(col, j) != 0){
+                        koefisien.set_ELMT(pivotIdx, j, koefisien.get_ELMT(pivotIdx, j) + -koefisien.get_ELMT(col, j) * m.get_ELMT(i, col));
+                    }
+                }
+            }
+
+            // masukin solusi dari pivot
+            if(hasil[pivotIdx] != 0){
+                solusi[pivotIdx] += Double.toString(hasil[pivotIdx]);
+            } 
+            for(int col=0; col < m.get_COL_EFF()-1; col++){
+                if(koefisien.get_ELMT(pivotIdx, col) != 0){
+                    if(koefisien.get_ELMT(pivotIdx, col) > 0){
+                        if(solusi[pivotIdx] == ""){
+                            if(koefisien.get_ELMT(pivotIdx, col) == 1){
+                                solusi[pivotIdx] += "X" + Integer.toString(col + 1);
+                            } else {
+                                solusi[pivotIdx] += Double.toString(koefisien.get_ELMT(pivotIdx, col)) + " X" + Integer.toString(col + 1);
+                            }
+                        } else {
+                            if(koefisien.get_ELMT(pivotIdx, col) == 1){
+                                solusi[pivotIdx] += " + " + "X" + Integer.toString(col + 1);
+                            } else {
+                                solusi[pivotIdx] += " + " + Double.toString(koefisien.get_ELMT(pivotIdx, col)) + " X" + Integer.toString(col + 1);
+                            }
+                        }
+                    } else {
+                        if(solusi[pivotIdx] == ""){
+                            if(koefisien.get_ELMT(pivotIdx, col) == 1){
+                                solusi[pivotIdx] += "X" + Integer.toString(col+1);
+                            } else {
+                                solusi[pivotIdx] += Double.toString(Math.abs(koefisien.get_ELMT(pivotIdx, col))) + " X" + Integer.toString(col + 1);
+                            }
+                        } else {
+                            if(koefisien.get_ELMT(pivotIdx, col) == 1){
+                                solusi[pivotIdx] += " - " + "X" + Integer.toString(col + 1);
+                            } else {
+                                solusi[pivotIdx] += " - " + Double.toString(Math.abs(koefisien.get_ELMT(pivotIdx, col))) + " X" + Integer.toString(col + 1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (int j = 0 ; j < m.get_COL_EFF()-1 ; j++) {
+            if (solusi[j] == "") {
+                solusi[j] = "0.0" ;
+            }
+        }
+        for (int j = 0 ; j < m.get_COL_EFF()-1 ; j++) {
+            System.out.printf("X%d = " , j+1) ;
+            System.out.printf("%s" , solusi[j]) ;
+            System.out.println() ;
         }
     }
 
@@ -204,14 +315,6 @@ public class MetodeEliminasi {
             result.set_ELMT(i, 0, m.get_ELMT(i, m.get_COL_EFF() - 1));
         }
         return result;
-    }
-
-    public String SolveParametrik(Matrix m){
-
-        // create arr
-        // String arr_char[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't'};
-
-        return "hello";
     }
 
     public double toSegitiga(Matrix m){
