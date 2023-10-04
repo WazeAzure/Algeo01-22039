@@ -12,13 +12,18 @@ public class Determinan {
 
     public double DetReduksiBaris(Matrix m) {
         if (Operate.isSquare(m)) {
-            MetodeEliminasi mEselon = new MetodeEliminasi();
-            mEselon.toEselon(m);
-            if (MetodeEliminasi.isEselon(m)) {
-                int n = m.get_COL_EFF();
-                for (int i = 0; i < n; i++) {
-                    det = 1;
-                    det *= m.get_ELMT(i, i);
+            int x = m.get_COL_EFF();
+            if (x == 2) {
+                det = determinan2x2(m);
+            } else {
+                MetodeEliminasi mEselon = new MetodeEliminasi();
+                mEselon.toEselon(m);
+                if (MetodeEliminasi.isEselon(m)) {
+                    int n = m.get_COL_EFF();
+                    for (int i = 0; i < n; i++) {
+                        det = 1;
+                        det *= m.get_ELMT(i, i);
+                    }
                 }
             }
         }
@@ -44,14 +49,13 @@ public class Determinan {
                 } else {
                     m2.set_ELMT(x, y, m.get_ELMT(row, col));
                     y++;
-                    if (y == m2.get_COL_EFF()){
+                    if (y == m2.get_COL_EFF()) {
                         y = 0;
                         x++;
                     }
                 }
             }
         }
-        Operate.displayMatrix(m2);
         // kondisi m2 adalah submatrix yang tidak memiliki elemen baris i dan kolom j
         if ((m2.get_ROW_EFF() == 2) && (m2.get_COL_EFF() == 2)) {
             Cij = determinan2x2(m2) * Math.pow((-1), (i + j));
@@ -65,13 +69,19 @@ public class Determinan {
     public double DetEkspansiKofaktor(Matrix m) {
         if (Operate.isSquare(m)) {
             int n = m.get_COL_EFF();
+            if (n == 2) {
+                det = determinan2x2(m);
+            }
             int i, j;
             det = 0;
             i = 0;
-            for (j = 0; j < n; j++) {
-                det += m.get_ELMT(i, j) * Kofaktor(m, i, j); // menambahkan setiap perkalian kofaktor dari baris pertama
-                                                             // matriks dengan element terkait untuk mendapatkan
-                                                             // determinan.
+            if (n > 2) {
+                for (j = 0; j < n; j++) {
+                    det += m.get_ELMT(i, j) * Kofaktor(m, i, j); // menambahkan setiap perkalian kofaktor dari baris
+                                                                 // pertama
+                                                                 // matriks dengan element terkait untuk mendapatkan
+                                                                 // determinan.
+                }
             }
         }
         return det;
@@ -116,13 +126,37 @@ public class Determinan {
 
     public Matrix MatrixAj(Matrix a, int j, Matrix b) {
         Matrix Aj = new Matrix();
-        Aj = Operate.copyMatrix(Aj);
+        Operate.createMatrix(Aj, a.get_ROW_EFF(), a.get_COL_EFF());
+        Aj = Operate.copyMatrix(a);
+        Operate.displayMatrix(Aj);
+        System.out.println("kopi bang");
         // mengganti kolom j dengan matrix b
-        int rowAj;
+        int rowAj, colAj;
         for (rowAj = 0; rowAj < a.get_ROW_EFF(); rowAj++) {
-            Aj.set_ELMT(rowAj, j, b.get_ELMT(0, j));
+            for (colAj = 0; colAj < a.get_COL_EFF(); colAj++)
+                if (colAj == j) {
+                    Aj.set_ELMT(rowAj, colAj, b.get_ELMT(rowAj, 0));
+                } else {
+                    Aj.set_ELMT(rowAj, colAj, a.get_ELMT(rowAj, colAj));
+                }
+            Operate.displayMatrix(Aj);
         }
         return Aj;
+        // for (row = 0; row < m.get_ROW_EFF(); row++) {
+        // // System.out.println(row);
+        // for (col = 0; col < m.get_COL_EFF(); col++) {
+        // if (row == i || col == j) {
+        // continue;
+        // } else {
+        // m2.set_ELMT(x, y, m.get_ELMT(row, col));
+        // y++;
+        // if (y == m2.get_COL_EFF()) {
+        // y = 0;
+        // x++;
+        // }
+        // }
+        // }
+        // }
     }
 
     public void KaidahCramer(Matrix m) {
@@ -131,6 +165,8 @@ public class Determinan {
         Operate.createMatrix(a, m.get_ROW_EFF(), m.get_COL_EFF() - 1);
         Operate.createMatrix(b, m.get_ROW_EFF(), 1);
         splitMatrixSPL(m, a, b);
+        Operate.displayMatrix(a);
+        Operate.displayMatrix(b);
 
         // asumsi banyaknya persamaan memenuhi persayaratan agar dapat diselesaikan
         double detA = DetReduksiBaris(a);
@@ -140,7 +176,12 @@ public class Determinan {
             int i = 0;
             double[] listX = new double[a.get_ROW_EFF()];
             for (i = 0; i < a.get_ROW_EFF(); i++) {
-                Matrix Aj = MatrixAj(a, i, b);
+                Matrix Aj = new Matrix();
+                Aj = MatrixAj(a, i, b);
+                System.out.println("WOY");
+                Operate.displayMatrix(Aj);
+                System.out.println(detA);
+                System.out.println(DetReduksiBaris(Aj));
                 listX[i] = (DetReduksiBaris(Aj)) / detA;
                 System.out.println("x" + (i + 1) + " = " + listX[i]);
             }
