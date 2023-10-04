@@ -8,7 +8,7 @@ public class MyApp {
 
 	public static int jenis_input() {
 
-		System.out.println("Jenis pilihan input:");
+		System.out.println("Pilihan input:");
 		System.out.println("1. Input dari keyboard");
 		System.out.println("2. Input dari file");
 		Scanner sc = new Scanner(System.in);
@@ -21,7 +21,7 @@ public class MyApp {
 	}
 
 	public static int jenis_SPL() {
-		System.out.println("Jenis pilihan input:");
+		System.out.println("Pilihan metode SPL:");
 		System.out.println("1. Metode eliminasi Gauss");
 		System.out.println("2. Metode eliminasi Gauss-Jordan");
 		System.out.println("3. Metode matriks balikan");
@@ -31,6 +31,19 @@ public class MyApp {
 		System.out.print("Masukkan pilihan: ");
 		int x = sc.nextInt();
 		System.out.println("\n");
+		return x;
+	}
+
+	public static int jenis_inverse() {
+		System.out.println("Pilihan metode inverse:");
+		System.out.println("1. Gauss-Jordan");
+		System.out.println("2. Adjoin Matriks");
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("\n");
+		System.out.print("Masukkan pilihan: ");
+		int x = sc.nextInt();
+		System.out.println("------------------------------");
 		return x;
 	}
 
@@ -62,6 +75,7 @@ public class MyApp {
 		Scanner sc = new Scanner(System.in);
 		OperasiDasarMatrix ODM = new OperasiDasarMatrix();
 		MetodeEliminasi ME = new MetodeEliminasi();
+		MatriksBalikan MB = new MatriksBalikan();
 
 		int choose = menu();
 
@@ -89,7 +103,22 @@ public class MyApp {
 						}
 						choose = menu();
 					} else if (input_type == 2) { // file
-
+						Matrix m = new Matrix();
+						System.out.println("Masukkan nama file: ");
+						String filename = sc.nextLine();
+						System.out.println("------------------------------");
+						ODM.readMatrixFile(filename, m);
+						ODM.displayMatrix(m);
+						ME.toEselon(m);
+						int n = ME.Gauss(m);
+						if (n == 1) {
+							Matrix result = new Matrix();
+							result = ME.SolveSPLUnik(m);
+							ODM.displayMatrixtoFile(result, "sol" + filename);
+							System.out.println("Hasil terdapat pada file sol" + filename);
+						} else if (n == 2) {
+							ME.SolvesSPLParametrik(m);
+						}
 					} else {
 						System.out.println("Masukan input salah");
 						choose = menu();
@@ -114,7 +143,22 @@ public class MyApp {
 						}
 						choose = menu();
 					} else if (input_type == 2) { // file
-
+						Matrix m = new Matrix();
+						System.out.println("Masukkan nama file: ");
+						String filename = sc.nextLine();
+						System.out.println("------------------------------");
+						ODM.readMatrixFile(filename, m);
+						ODM.displayMatrix(m);
+						ME.toEselon(m);
+						int n = ME.Gauss(m);
+						if (n == 1) {
+							Matrix result = new Matrix();
+							result = ME.SolveSPLUnik(m);
+							ODM.displayMatrixtoFile(result, "sol" + filename);
+							System.out.println("Hasil terdapat pada file sol" + filename);
+						} else if (n == 2) {
+							ME.SolvesSPLParametrik(m);
+						}
 					} else {
 						System.out.println("Masukan input salah");
 						choose = menu();
@@ -123,12 +167,40 @@ public class MyApp {
 					// Matriks balikan
 					int input_type = jenis_input();
 					if (input_type == 1) { // keyboard
-
+						Matrix m = new Matrix();
+						m = ODM.readSPL();
+						if (m.get_ROW_EFF() + 1 != m.get_COL_EFF()) {
+							System.out.println("Matrix tersebut tidak dapat diselesaikan menggunakan matriks balikan.");
+							System.out.println(
+									"Banyaknya persamaan harus sama dengan banyaknya variabel (matriks A bukan matriks persegi).");
+						} else {
+							m = MB.solveSPLwithInverse(m);
+							int i;
+							for (i = 0; i < m.get_ROW_EFF(); i++) {
+								System.out.println("x" + (i + 1) + " = " + m.get_ELMT(i, 0));
+							}
+						}
 					} else if (input_type == 2) { // file
-
+						Matrix m = new Matrix();
+						System.out.println("Masukkan nama file: ");
+						String filename = sc.nextLine();
+						System.out.println("------------------------------");
+						ODM.readMatrixFile(filename, m);
+						ODM.displayMatrix(m);
+						if (m.get_ROW_EFF() + 1 != m.get_COL_EFF()) {
+							System.out.println("Matrix tersebut tidak dapat diselesaikan menggunakan matriks balikan.");
+							System.out.println(
+									"Banyaknya persamaan harus sama dengan banyaknya variabel (matriks A bukan matriks persegi).");
+						} else {
+							m = MB.solveSPLwithInverse(m);
+							ODM.displayMatrixtoFile(m, "sol" + filename);
+							System.out.println("Hasil terdapat pada file sol" + filename);
+						}
 					} else {
-						// System.out.println("Masukan input salah");
+						System.out.println("Masukan input salah");
+						choose = menu();
 					}
+					choose = menu();
 				} else if (input_SPL == 4) {
 					// Kaidah Cramer
 					Determinan det = new Determinan();
@@ -179,6 +251,18 @@ public class MyApp {
 					ODM.readMatrix(m, n, n);
 					System.out.println("------------------------------");
 					ODM.displayMatrix(m);
+					int jenis_inverse = jenis_inverse();
+					if (jenis_inverse == 1){
+						m = MB.inverseWithGaussJordan(m);
+						System.out.println("Hasil matriks balikan: ");
+						ODM.displayMatrix(m);
+						System.out.println("------------------------------");
+					} else if (jenis_inverse == 2){
+						m = MB.inverseWithAdjoin(m);
+						System.out.println("Hasil matriks balikan: ");
+						ODM.displayMatrix(m);
+						System.out.println("------------------------------");
+					}
 				} else {
 					System.out.println("Masukkan nama file: ");
 					String filename = sc.nextLine();
@@ -213,6 +297,24 @@ public class MyApp {
 				choose = menu();
 			} else if (choose == 3) {
 				// Matriks balikan
+				Matrix m = new Matrix();
+				int input_type = jenis_input();
+				if (input_type == 1) {
+					System.out.print("Masukkan ukuran matriks: ");
+					int n = sc.nextInt();
+					System.out.println("------------------------------");
+					ODM.createMatrix(m, n, n);
+					System.out.println("Masukkan matriks: ");
+					ODM.readMatrix(m, n, n);
+					System.out.println("------------------------------");
+					ODM.displayMatrix(m);
+				} else {
+					System.out.println("Masukkan nama file: ");
+					String filename = sc.nextLine();
+					System.out.println("------------------------------");
+					ODM.readMatrixFile(filename, m);
+					ODM.displayMatrix(m);
+				}
 			} else if (choose == 4) {
 				//
 				InterpolasiPolinomial ip = new InterpolasiPolinomial();
