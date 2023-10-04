@@ -3,9 +3,9 @@ package Library;
 public class MatriksBalikan {
 
     /* *** CREATE OBJECTS *** */
-    OperasiDasarMatrix ODM = new OperasiDasarMatrix();
     Determinan DET = new Determinan();
     MetodeEliminasi ME = new MetodeEliminasi();
+    OperasiDasarMatrix ODM = new OperasiDasarMatrix();
 
     /* *** HELPER FUNCTIONS *** */
 
