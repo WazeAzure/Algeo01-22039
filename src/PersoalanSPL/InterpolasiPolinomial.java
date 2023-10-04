@@ -14,16 +14,17 @@ public class InterpolasiPolinomial {
     // Jika input dari keyboard:
     public Matrix InputtoMatrix(int n, int input) {
         // n adalah banyaknya titik yang diketahui
+        double x = 0;
         Matrix m = new Matrix();
         ODM.createMatrix(m, n, 2);
         if (input == 1) {
             System.out.println("Masukkan titik: ");
             ODM.readMatrix(m, n, 2);
         } else {
-            System.out.println("Masukkan nama file: ");
-            sc.nextLine();
-            String filename = sc.nextLine();
-            ODM.readMatrixFile(filename, m);
+            // System.out.println("Masukkan nama file: ");
+            // sc.nextLine();
+            // String filename = sc.nextLine();
+            // ODM.readMatrixFileInterpolate(filename, m, x);
         }
 
         return m;
@@ -49,16 +50,18 @@ public class InterpolasiPolinomial {
     public double Interpolasi(Matrix m, double x) {
         // memperkirakan nilai pada titik x
         Matrix SPL = new Matrix();
-        ME.toEselonRed(m);
+        ME.toEselon(m);
+        double y;
         int n = ME.Gauss(m);
         if (n == 1) {
-            SPL = ME.SolvesSPLUnikRed(m);
-        }
-        ODM.displayMatrix(m);
-        int i;
-        double y = 0;
-        for (i = 0; i < SPL.get_ROW_EFF(); i++) {
-            y += Math.pow(x, i) * SPL.get_ELMT(i, 0);
+            SPL = ME.SolveSPLUnik(m);
+            int i;
+            y = 0;
+            for (i = 0; i < SPL.get_ROW_EFF(); i++) {
+                y += Math.pow(x, i) * SPL.get_ELMT(i, 0);
+            }
+        } else {
+            y = -9999.9999;
         }
         return y;
     }

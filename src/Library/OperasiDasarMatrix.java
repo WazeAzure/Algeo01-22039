@@ -181,14 +181,14 @@ public class OperasiDasarMatrix {
         try {
             filename = "test/" + filename;
             File myObj = new File(filename);
-            if(!(myObj.exists() && !myObj.isDirectory())){
+            if (!(myObj.exists() && !myObj.isDirectory())) {
                 myObj.createNewFile();
             }
 
             FileWriter myWriter = new FileWriter(filename);
             String s = "";
-            for(int i=0; i<m.get_ROW_EFF(); i++){
-                for(int j=0;j<m.get_COL_EFF()-1; j++){
+            for (int i = 0; i < m.get_ROW_EFF(); i++) {
+                for (int j = 0; j < m.get_COL_EFF(); j++) {
                     s += Double.toString(m.get_ELMT(i, j)) + " ";
                 }
                 s += "\n";
@@ -196,7 +196,6 @@ public class OperasiDasarMatrix {
             myWriter.write(s);
             myWriter.close();
 
-            
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();

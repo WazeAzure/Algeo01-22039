@@ -70,7 +70,6 @@ public class MyApp {
 	public static void main(String[] args) {
 		System.out.println("------------------------------");
 		System.out.println("Selamat datang aslab tercintah");
-		System.out.println("------------------------------");
 
 		Scanner sc = new Scanner(System.in);
 		OperasiDasarMatrix ODM = new OperasiDasarMatrix();
@@ -81,10 +80,12 @@ public class MyApp {
 
 		while (state == true) {
 			if (choose == 1) {
-				// SPL
+				// ---------------------------------------------------------------------------------------------------------------------------------
+				// ---------------------------------------- SPL ------------------------------------------------------------------------------------
+				// ---------------------------------------------------------------------------------------------------------------------------------
 				int input_SPL = jenis_SPL();
 				if (input_SPL == 1) {
-					// Gauss
+					// ---------------------------------------- METODE GAUSS ---------------------------------------------------------------------------
 					int input_type = jenis_input();
 					if (input_type == 1) { // keyboard
 						Matrix m = new Matrix();
@@ -124,7 +125,7 @@ public class MyApp {
 						choose = menu();
 					}
 				} else if (input_SPL == 2) {
-					// Gauss Jordan
+					// ---------------------------------------- METODE GAUSS JORDAN ----------------------------------------------------------------------
 					int input_type = jenis_input();
 					if (input_type == 1) { // keyboard
 						Matrix m = new Matrix();
@@ -164,7 +165,7 @@ public class MyApp {
 						choose = menu();
 					}
 				} else if (input_SPL == 3) {
-					// Matriks balikan
+					// ---------------------------------------- METODE MATRIKS BALIKAN ---------------------------------------------------------------------------
 					int input_type = jenis_input();
 					if (input_type == 1) { // keyboard
 						Matrix m = new Matrix();
@@ -202,7 +203,7 @@ public class MyApp {
 					}
 					choose = menu();
 				} else if (input_SPL == 4) {
-					// Kaidah Cramer
+					// ---------------------------------------- METODE KAIDAH CRAMER ---------------------------------------------------------------------------
 					Determinan det = new Determinan();
 					int input_type = jenis_input();
 					if (input_type == 1) { // keyboard
@@ -239,7 +240,10 @@ public class MyApp {
 					System.out.println("Masukan input salah");
 					choose = menu();
 				}
-			} else if (choose == 2) { // DETERMINAN
+			} else if (choose == 2) {
+				// ---------------------------------------------------------------------------------------------------------------------------------
+				// ---------------------------------------- DETERMINAN -----------------------------------------------------------------------------
+				// ---------------------------------------------------------------------------------------------------------------------------------
 				Matrix m = new Matrix();
 				int input_type = jenis_input();
 				if (input_type == 1) {
@@ -251,18 +255,6 @@ public class MyApp {
 					ODM.readMatrix(m, n, n);
 					System.out.println("------------------------------");
 					ODM.displayMatrix(m);
-					int jenis_inverse = jenis_inverse();
-					if (jenis_inverse == 1){
-						m = MB.inverseWithGaussJordan(m);
-						System.out.println("Hasil matriks balikan: ");
-						ODM.displayMatrix(m);
-						System.out.println("------------------------------");
-					} else if (jenis_inverse == 2){
-						m = MB.inverseWithAdjoin(m);
-						System.out.println("Hasil matriks balikan: ");
-						ODM.displayMatrix(m);
-						System.out.println("------------------------------");
-					}
 				} else {
 					System.out.println("Masukkan nama file: ");
 					String filename = sc.nextLine();
@@ -296,7 +288,9 @@ public class MyApp {
 
 				choose = menu();
 			} else if (choose == 3) {
-				// Matriks balikan
+				// ---------------------------------------------------------------------------------------------------------------------------------
+				// ---------------------------------------- MATRIKS BALIKAN ------------------------------------------------------------------------
+				// ---------------------------------------------------------------------------------------------------------------------------------
 				Matrix m = new Matrix();
 				int input_type = jenis_input();
 				if (input_type == 1) {
@@ -308,41 +302,85 @@ public class MyApp {
 					ODM.readMatrix(m, n, n);
 					System.out.println("------------------------------");
 					ODM.displayMatrix(m);
+					int jenis_inverse = jenis_inverse();
+					if (jenis_inverse == 1) {
+						m = MB.inverseWithGaussJordan(m);
+						System.out.println("Hasil matriks balikan: ");
+						ODM.displayMatrix(m);
+						System.out.println("------------------------------");
+					} else if (jenis_inverse == 2) {
+						m = MB.inverseWithAdjoin(m);
+						System.out.println("Hasil matriks balikan: ");
+						ODM.displayMatrix(m);
+						System.out.println("------------------------------");
+					}
 				} else {
 					System.out.println("Masukkan nama file: ");
 					String filename = sc.nextLine();
 					System.out.println("------------------------------");
 					ODM.readMatrixFile(filename, m);
 					ODM.displayMatrix(m);
+					int jenis_inverse = jenis_inverse();
+					if (jenis_inverse == 1) {
+						m = MB.inverseWithGaussJordan(m);
+						System.out.println("Hasil matriks balikan: ");
+						ODM.displayMatrixtoFile(m, "sol" + filename);
+						System.out.println("Hasil terdapat pada file sol" + filename);
+						System.out.println("------------------------------");
+					} else if (jenis_inverse == 2) {
+						m = MB.inverseWithAdjoin(m);
+						System.out.println("Hasil matriks balikan: ");
+						ODM.displayMatrixtoFile(m, "sol" + filename);
+						System.out.println("Hasil terdapat pada file sol" + filename);
+						System.out.println("------------------------------");
+					}
 				}
+				choose = menu();
 			} else if (choose == 4) {
-				//
+				// ---------------------------------------------------------------------------------------------------------------------------------
+				// ---------------------------------------- INTERPOLASI POLINOMIAL -----------------------------------------------------------------
+				// ---------------------------------------------------------------------------------------------------------------------------------
 				InterpolasiPolinomial ip = new InterpolasiPolinomial();
 				Matrix m = new Matrix();
+				double x = 0;
 				int input_type = jenis_input();
-				System.out.println("Masukkan ukuran matriks: ");
-				int n = sc.nextInt();
 				if (input_type == 1) {
+					System.out.println("Masukkan ukuran matriks: ");
+					int n = sc.nextInt();
 					m = ip.InputtoMatrix(n, 1);
+					System.out.print("Masukkan nilai x yang ingin diinterpolasi: ");
+					x = sc.nextDouble();
+					System.out.println("\n");
 				} else {
-					m = ip.InputtoMatrix(n, 2);
+					System.out.println("Masukkan nama file: ");
+					String filename = sc.nextLine();
+					System.out.println("------------------------------");
+					ODM.readMatrixFileInterpolate(filename, m, x);
+					ODM.displayMatrix(m);
+					System.out.println("------------------------------");
 				}
 
 				m = ip.MatrixtoMatrixInt(m);
-				ODM.displayMatrix(m);
 
-				System.out.print("Masukkan nilai x ang ingin diinterpolasi: ");
-				double x = sc.nextDouble();
-				System.out.println("\n");
 				double y = ip.Interpolasi(m, x);
-				System.out.println("Nilai interpolasi x = " + x + " menghasilkan nilai y = " + y);
-
+				if (y == -9999.9999) {
+					System.out.println("Matriks tidak menghasilkan SPL unik, nilai interpolasi tidak didapatkan.");
+				} else {
+					System.out.println("Nilai interpolasi x = " + x + " menghasilkan nilai y = " + y);
+				}
+				choose = menu();
 			} else if (choose == 5) {
-				//
+				// ---------------------------------------------------------------------------------------------------------------------------------
+				// ---------------------------------------- BICUBIC SPLINE
+				// -------------------------------------------------------------------------
+				// ---------------------------------------------------------------------------------------------------------------------------------
 				BicubicSplineInterpolation bsi = new BicubicSplineInterpolation();
 				state = false;
 			} else if (choose == 6) {
-				//
+				// ---------------------------------------------------------------------------------------------------------------------------------
+				// ---------------------------------------- REGRESI LINIER
+				// ------------------------------------------------------------------------------------
+				// ---------------------------------------------------------------------------------------------------------------------------------
 				RegresiLinearBerganda rlb = new RegresiLinearBerganda();
 			} else if (choose == 7) {
 				// Keluar
