@@ -4,7 +4,7 @@ import Library.Matrix;
 import Library.OperasiDasarMatrix;
 import Library.OperasiDasarGambar;
 import Library.MetodeEliminasi;
-import PersoalanSPL.Gauss;
+// import PersoalanSPL.Gauss;
 import java.lang.Math;
 
 import java.util.Scanner;
