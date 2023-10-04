@@ -154,6 +154,15 @@ public class BicubicSplineInterpolation {
         System.out.println("---------------------------");
         ME.toEselonRed(m);
         ODM.displayMatrix(m);
+        System.out.println("---------------------------");
+        int solve = ME.Gauss(m2);
+        System.out.println(solve);
+
+        if(solve == 1){ // solusi unik gauss
+            m2 = ME.SolveSPLUnik(m2);
+        }
+        
+        ODM.displayMatrix(m2);
         // System.out.println("---------------------------");
         // Gauss.eliminasiGauss(MBesar, true);
         // ODM.displayMatrix(MBesar);

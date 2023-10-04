@@ -128,26 +128,82 @@ public class MetodeEliminasi {
         return true;
     }
 
-    public String Gauss(Matrix m){
+    public boolean isUnik(Matrix m){
+        if(m.get_COL_EFF() - 1 == m.get_ROW_EFF()){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isSolveable(Matrix m){
+        // boolean isSolve = true;
+        for(int i=0; i<m.get_ROW_EFF(); i++){
+            boolean isRow = false;
+            for(int j=0;j<m.get_COL_EFF()-1; j++){
+                if(m.get_ELMT(i, j) != 0){
+                    isRow = true;
+                    break;
+                }
+            }
+            
+            if(!isRow && m.get_ELMT(i, m.get_COL_EFF()) != 0){
+                return false;
+            }
+
+        }
+        return true;
+    }
+    public int Gauss(Matrix m){
         // prasyarat matriks harus eselon / eselon terduksi
         // 0 --> not solvable
         // 1 --> unik
         // 2 --> parametrik
 
         // check if solveable
-        if(m.get_ELMT(m.get_ROW_EFF()-1, m.get_COL_EFF()-2) == 0 && m.get_ELMT(m.get_ROW_EFF()-1, m.get_COL_EFF()-1)  != 0){
-            return 0;
-        } else {
-            if(isSegitiga(m)){
+        if(isSolveable(m)){
+            if(isSegitiga(m) && m.get_COL_EFF() - 1 == m.get_ROW_EFF()){
+                System.out.println("Solusi Unik");
                 // solusi unik
-                m = SolvesSPL(Matrix m);
+                m = SolveSPLUnik(m);
+                ODM.displayMatrix(m);
+                return 1;
             } else {
+                System.out.println("Solusi Parametrik");
                 // solusi parametrik
+                return 2;
             }
+        } else {
+            System.out.println("Tidak Memiliki Solusi");
+            return 0;
         }
     }
 
-    public Matrix SolveSPL(Matrix m){
+    public Matrix SolveSPLUnik(Matrix m){
+        Matrix result = new Matrix();
+        ODM.createMatrix(result, m.get_ROW_EFF(), 1);
 
+        for(int i=m.get_ROW_EFF()-1; i>= 0; i--){
+            result.mem[i][0] = m.get_ELMT(i, m.get_COL_EFF()-1);
+            // System.out.println("result mem - " + result.mem[i][0]);
+            for(int j=m.get_COL_EFF()-2; j>i; j--){
+                result.mem[i][0] -= (m.get_ELMT(i, j) * result.get_ELMT(j, 0));
+            }
+            result.mem[i][0] = result.mem[i][0] / m.get_ELMT(i, i);
+            // System.out.println("====================");
+            // ODM.displayMatrix(m);
+            // ODM.displayMatrix(result);
+        }
+        return result;
+    }
+
+    public Matrix SolvesSPLUnikRed(Matrix m){
+        Matrix result = new Matrix();
+        ODM.createMatrix(result, m.get_ROW_EFF(), 1);
+
+        // copy right most element
+        for(int i=0; i<m.get_ROW_EFF(); i++){
+            result.set_ELMT(i, 0, m.get_ELMT(i, m.get_COL_EFF()-1));
+        }
+        return result;
     }
 }
