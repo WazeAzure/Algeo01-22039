@@ -11,7 +11,7 @@ public class OperasiDasarMatrix {
     // constructor
     public void createMatrix(Matrix m, int nRows, int nCols) {
         // inisiasi array bernilai 0;
-        System.out.println("called");
+        // System.out.println("called");
         m.set_COL_EFF(nCols);
         m.set_ROW_EFF(nRows);
     }
