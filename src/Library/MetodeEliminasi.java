@@ -209,8 +209,64 @@ public class MetodeEliminasi {
     public String SolveParametrik(Matrix m){
 
         // create arr
-        string arr_char[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't'};
+        // String arr_char[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't'};
 
-        
+        return "hello";
+    }
+
+    public double toSegitiga(Matrix m){
+        int i = 0, j = 0;
+        double mul = 1;
+        while (i < m.get_ROW_EFF() && j < m.get_COL_EFF()) {
+            // check first col
+            int pivotIndex = -1;
+            for (int row = i; row < m.get_ROW_EFF(); row++) {
+                if (m.get_ELMT(row, j) != 0) {
+                    pivotIndex = row;
+                    break;
+                }
+            }
+
+            if (pivotIndex == -1) {
+                j++;
+
+                // System.out.printf("dalam --------- %d %d\n", i, j);
+                // ODM.displayMatrix(m);
+                // System.out.printf("\n");
+                continue;
+            }
+
+            // swap with first row;
+            if(pivotIndex != i){
+                mul *= -1;
+            }
+            swapRows(m, pivotIndex, i);
+
+            // make all rows in column 0;
+            mul *= m.get_ELMT(i, j);
+            divideRow(m, i, m.get_ELMT(i, j));
+            // ODM.displayMatrix(m);
+            double k = m.get_ELMT(i, j);
+            
+            // System.out.printf("Nilai k -- %f\n", k);
+
+            for (int row = i + 1; row < m.get_ROW_EFF(); row++) {
+                double div = m.get_ELMT(row, j) / k;
+                // System.out.println(div);
+                if (m.get_ELMT(row, j) == 0) {
+                    continue;
+                }
+
+                substractRows(m, row, i, div);
+            }
+
+            // System.out.printf("--------- %d %d\n", i, j);
+            // ODM.displayMatrix(m);
+            // System.out.printf("\n");
+
+            i++;
+            j++;
+        }
+        return mul;
     }
 }
