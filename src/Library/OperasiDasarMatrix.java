@@ -32,9 +32,10 @@ public class OperasiDasarMatrix {
     }
 
     public void readMatrixFile(String filename, Matrix m){
+        System.out.println(filename);
         try {
 
-            filename = "./test/" + filename;
+            filename = "test/" + filename;
             File myObj = new File(filename);
             Scanner myReader = new Scanner(myObj);
             

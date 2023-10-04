@@ -6,10 +6,12 @@ import Library.*;
 public class MyApp {
 
 	public static int jenis_input() {
+
 		System.out.println("Jenis pilihan input:");
 		System.out.println("1. Input dari keyboard");
 		System.out.println("2. Input dari file");
 		Scanner sc = new Scanner(System.in);
+
 		System.out.println("\n");
 		System.out.print("Masukkan pilihan: ");
 		int x = sc.nextInt();

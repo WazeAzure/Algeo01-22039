@@ -2,14 +2,14 @@ package Library;
 
 public class Matrix {
 
-    static final int ROW_CAP = 100;
-    static final int COL_CAP = 100;
+    static final int ROW_CAP = 1000;
+    static final int COL_CAP = 1000;
 
     // main data
 
-    private int rowEff=0;
-    private int colEff=0;
-    private double[][] mem = new double[ROW_CAP][COL_CAP];
+    public int rowEff=0;
+    public int colEff=0;
+    public double[][] mem = new double[ROW_CAP][COL_CAP];
 
     // constructor
     public Matrix(){
