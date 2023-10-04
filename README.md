@@ -1,6 +1,5 @@
 # Algeo01-22039
-![hare-harelp.gif](https://media.tenor.com/OvaIh3Imo8cAAAAC/harel-harelp.gif)
----
+![totoro](https://github.com/WazeAzure/Algeo01-22039/assets/55005873/cede061e-48be-4a36-8a5f-586691a86a62)
 ## Created By
 ---
 - Edbert Eddyson Gunawan 	(13522039)
