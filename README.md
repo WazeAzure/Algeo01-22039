@@ -1,5 +1,5 @@
 # Algeo01-22039
-![Header](https://media.tenor.com/OvaIh3Imo8cAAAAC/harel-harelp.gif)
+![hare-harelp.gif](https://media.tenor.com/OvaIh3Imo8cAAAAC/harel-harelp.gif)
 ---
 ## Created By
 ---
@@ -9,7 +9,6 @@
 
 ### Usage
 ---
-
 **To Compile & Run**
 - Windows: `./run.bat`
 - ubuntu: `./run.sh`
