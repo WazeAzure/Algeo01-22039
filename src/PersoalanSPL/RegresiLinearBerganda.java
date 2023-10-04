@@ -13,9 +13,9 @@ public class RegresiLinearBerganda{
     OperasiDasarMatrix ODM = new OperasiDasarMatrix();
     // MyApp MENU = new MyApp();
 
-    public int sumOfAllElmtInCol(Matrix m, int idxCol){
+    public double sumOfAllElmtInCol(Matrix m, int idxCol){
         /* M */
-        int sum = 0;
+        double sum = 0;
         for (int i = 0; i < m.get_ROW_EFF(); i++){
             sum += m.get_ELMT(i, idxCol);
         }
@@ -29,7 +29,17 @@ public class RegresiLinearBerganda{
         }
     }
 
+    public double sumOfProductTwoCols(Matrix m, int idxCol1, int idxCol2){
+        /* M */
+        double sum = 0;
+        for (int i = 0; i < m.get_ROW_EFF(); i++){
+            sum += (m.get_ELMT(i, idxCol1) * m.get_ELMT(i, idxCol2));
+        }
+        return sum;
+    }
+
     public RegresiLinearBerganda(){
+    // public static void main(String[] args) {
         System.out.println("Halo aku bagian novel");
         
         // Matrix m = new Matrix();
@@ -48,6 +58,7 @@ public class RegresiLinearBerganda{
         // x0,0 ... x(k-1),0 y0
         // ...
         // x(n-1),0 ... x(n-1),(k-1) y(n-1)
+        
 
 
         // n banyak baris input, k banyak variabel x
@@ -68,21 +79,44 @@ public class RegresiLinearBerganda{
             NormalEqMatrix.set_ELMT(0, j, sumOfAllElmtInCol(m, j-1));
         }
 
-        // Set baris pengali
-        Matrix BarisPengali = new Matrix();
-        ODM.createMatrix(BarisPengali, 1, NormalEqMatrix.get_COL_EFF());
-        BarisPengali.set_ELMT(0, 0, 1);
-        for (int j = 1; j < NormalEqMatrix.get_COL_EFF(); j++){
-            BarisPengali.set_ELMT(0, j, NormalEqMatrix.get_ELMT(0, j));
+        System.out.println("--------CEK Baris 1 -----------");
+        ODM.displayMatrix(NormalEqMatrix);
+
+        // // Set baris pengali
+        // Matrix BarisPengali = new Matrix();
+        // ODM.createMatrix(BarisPengali, 1, NormalEqMatrix.get_COL_EFF());
+        // BarisPengali.set_ELMT(0, 0, 1);
+        // for (int j = 1; j < NormalEqMatrix.get_COL_EFF(); j++){
+        //     BarisPengali.set_ELMT(0, j, NormalEqMatrix.get_ELMT(0, j));
+        // }
+
+        // System.out.println("--------CEK Baris Pengali -----------");
+        // ODM.displayMatrix(BarisPengali);
+
+        // Set kolom 1
+        for (int i = 1; i < m.get_ROW_EFF(); i++){
+            NormalEqMatrix.set_ELMT(i, 0, sumOfAllElmtInCol(m, i - 1));
         }
 
         // Set baris lainnya
         for (int i = 1; i < NormalEqMatrix.get_ROW_EFF(); i++){
-            for (int j = 0; j < NormalEqMatrix.get_COL_EFF(); j++){
-                NormalEqMatrix.set_ELMT(i, j, BarisPengali.get_ELMT(0, j) * sumOfAllElmtInCol(m, i - 1));
+            for (int j = 1; j < NormalEqMatrix.get_COL_EFF(); j++){
+                NormalEqMatrix.set_ELMT(i, j, sumOfProductTwoCols(m, i - 1, j - 1));
             }
         }
+        System.out.println("--------CEK NormalEqMatrix -----------");
         ODM.displayMatrix(NormalEqMatrix);
+
+        ME.toEselonRed(NormalEqMatrix);
+        System.out.println("--------CEK NormalEqMatrix to RED -----------");
+        ODM.displayMatrix(NormalEqMatrix);
+        if (ME.Gauss(NormalEqMatrix) == 1){
+            Matrix allConst = new Matrix();
+            allConst = ME.SolveSPLUnik(NormalEqMatrix);
+
+            System.out.println("--------CEK Solution -----------");
+            ODM.displayMatrix(allConst);
+        }
     }
     // input y, x1, ..., xn
     // k = 20 n = 3
