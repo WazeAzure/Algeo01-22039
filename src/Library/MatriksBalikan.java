@@ -1,9 +1,4 @@
 package Library;
-import Library.Matrix;
-import Library.Determinan;
-import Library.MetodeEliminasi;
-
-
 
 public class MatriksBalikan {
 
@@ -55,7 +50,7 @@ public class MatriksBalikan {
         ODM.createMatrix(m1, m.get_ROW_EFF(), m.get_COL_EFF() / 2);
         for (int i = 0; i < m1.get_ROW_EFF(); i++){
             for (int j = 0; j < m1.get_COL_EFF(); j++){
-                m1.set_ELMT(i, j, m.get_ELMT(i, j + m.get_COL_EFF()));
+                m1.set_ELMT(i, j, m.get_ELMT(i, j + m1.get_COL_EFF()));
             }
         }
         return m1;
@@ -65,7 +60,18 @@ public class MatriksBalikan {
 
     public Matrix inverse2x2(Matrix m){
         /* Mengeluarkan inverse dari sebuah matrix ukuran 2 x 2 */
-        double determinan = ODM.determinant(m);
+        // [a b]
+        // [c d]
+        double determinan = DET.determinan2x2(m);
+        // Matrix dijadikan
+        // [d -b]
+        // [-c a]
+        double temp = m.get_ELMT(0, 0);
+        m.set_ELMT(0, 0, m.get_ELMT(1, 1));
+        m.set_ELMT(1, 1, temp);
+        m.set_ELMT(0, 1, - m.get_ELMT(0, 1));
+        m.set_ELMT(1, 0, - m.get_ELMT(1, 0));
+        
         return (ODM.multiplyByConst(m, (1 / determinan)));
     }
 
@@ -87,10 +93,11 @@ public class MatriksBalikan {
         // Jadikan [I|m^-1]
         ME.toEselonRed(mergeMatrix);
 
-        for (int i = 0; i < m.get_COL_EFF(); i++){
-            if (m.get_ELMT(m.get_ROW_EFF() - 1, i) != 0){
-                // Jika tidak ada baris bernilai 0, matrix m punya balikan
-                inverse = cropMatrix(mergeMatrix);
+        // Ambil inverse
+        inverse = cropMatrix(mergeMatrix);
+
+        for (int j = 0; j < inverse.get_COL_EFF(); j++){
+            if (mergeMatrix.get_ELMT(mergeMatrix.get_ROW_EFF() - 1, j) != 0){
                 return inverse;
             }
         }
@@ -98,9 +105,27 @@ public class MatriksBalikan {
         return null;
     }
 
-    public Matrix solveSPLwithInverse(Matrix A, Matrix b){
+    public Matrix solveSPLwithInverse(Matrix m){
         /* Mencari solusi SPL Ax = B dengan menggunakan metode matrix balikan */
-        Matrix inverse, solution = new Matrix();
+        Matrix inverse = new Matrix();
+        Matrix solution = new Matrix();
+        Matrix A = new Matrix();
+        Matrix b  = new Matrix();
+        
+        // Pisah matrix menjadi A dan b
+        ODM.createMatrix(A, m.get_ROW_EFF(), m.get_COL_EFF() - 1);
+        ODM.createMatrix(b, m.get_ROW_EFF(), 1);
+        for (int i = 0; i < m.get_ROW_EFF(); i++){
+            for (int j = 0; j < m.get_COL_EFF(); j++){
+                if (j < m.get_COL_EFF() - 1){
+                    A.set_ELMT(i, j, m.get_ELMT(i, j));
+                }
+                else{
+                    b.set_ELMT(i, 0, m.get_ELMT(i, j));
+                }
+            }
+        }
+
         // Bebas metode apa
         // inverse = inverseWithAdjoin(m);
         inverse = inverseWithGaussJordan(A);
