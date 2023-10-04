@@ -4,6 +4,7 @@ import Library.Matrix;
 import Library.OperasiDasarMatrix;
 import Library.OperasiDasarGambar;
 import Library.MetodeEliminasi;
+import Library.MatriksBalikan;
 // import PersoalanSPL.Gauss;
 import java.lang.Math;
 
@@ -17,6 +18,7 @@ public class BicubicSplineInterpolation {
 
     OperasiDasarMatrix ODM = new OperasiDasarMatrix();
     MetodeEliminasi ME = new MetodeEliminasi();
+    MatriksBalikan MB = new MatriksBalikan();
 
     Scanner sc = new Scanner(System.in);
 
@@ -123,58 +125,45 @@ public class BicubicSplineInterpolation {
         }
     }
 
-    // public void createSoalMatrix(Matrix m){
-    //     // biasa
-    //     int row = 0;
-    //     for(int y=0;y<=1;y++){
-    //         for(int x=0;x<=1;x++){
-    //             System.out.printf("%d %d\n", x, y);
-    //             int col = 0;
-    //             for(int j=0;j<4;j++){
-    //                 for(int i=0;i<4;i++){
-    //                     double temp = Math.pow(x, i) * Math.pow(y, j);
-    //                     m.set_ELMT(row, col, (double)temp);
-    //                     col++;
-    //                 }
-    //             }
-    //             row++;
-    //         }
-    //     }
-    // }
-
     public BicubicSplineInterpolation(){
-        // ODM.createMatrix(MBesar, 16, 16);
-        // createInitialMatrix(MBesar);
+        ODM.createMatrix(MBesar, 16, 16);
+        createInitialMatrix(MBesar);
+
         
-        // System.out.println("---------------------------");
-        // ME.toEselon(MBesar);
-        // ODM.displayMatrix(MBesar);
+        
+        System.out.println("---------------------------");
+        ODM.displayMatrix(MBesar);
 
-        // ODM.createMatrix(MSoal, 16, 1);
-        // ODM.readMatrix(MSoal, 16, 1);
+        Matrix MBesarInverse = new Matrix();
+        MBesarInverse = MB.inverseWithGaussJordan(MBesar);
+        ODM.displayMatrix(MBesarInverse);
 
-        // Matrix merged = new Matrix();
-        // merged = ODM.mergeMatrix(MBesar, MSoal);
-        // ODM.displayMatrix(merged);
+        ODM.createMatrix(MSoal, 16, 1);
+        ODM.readMatrix(MSoal, 16, 1);
 
-        // double pointX, pointY;
-        // pointX = sc.nextDouble();
-        // pointY = sc.nextDouble();
+        System.out.println("---------------------------");
+        Matrix merged = ODM.multiplyMatrix(MBesarInverse, MSoal);
+        ODM.displayMatrix(merged);
 
-        // Matrix hasilSPL = new Matrix();
-        // ME.toEselon(merged);
-        // hasilSPL = ME.SolveSPLUnik(merged);
-        // ODM.displayMatrix(hasilSPL);
+        System.out.println("---------------------------");
 
-        // double sum = 0;
-        // int idx = 0;
-        // for(int j=0;j<4;j++){
-        //     for(int i=0;i<4;i++){
-        //         sum += (Math.pow(pointX, i) * Math.pow(pointY, j) * hasilSPL.get_ELMT(idx, 0));
-        //         idx++;
-        //     }
-        // }
-        // System.out.println("FINAL SUBMISSION ----- " + sum);
+        Matrix ans = new Matrix();
+        ODM.createMatrix(ans, 1, 16);
+
+        double pointX = sc.nextDouble();
+        double pointY = sc.nextDouble();
+
+        int col = 0;
+        for(int j=0;j<4;j++){
+            for(int i=0;i<4;i++){
+                double temp = Math.pow(pointX, i) * Math.pow(pointY, j);
+                ans.set_ELMT(0, col, (double)temp);
+                col++;
+            }
+        }
+
+        ans = ODM.multiplyMatrix(ans, merged);
+        System.out.println("FINAL SUBMISSION ----- " + ans.get_ELMT(0, 0));
 
         // Matrix m = new Matrix();
         // ODM.readMatrixFile("test.txt", m);
