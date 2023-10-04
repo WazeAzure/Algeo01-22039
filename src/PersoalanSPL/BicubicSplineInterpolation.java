@@ -18,6 +18,8 @@ public class BicubicSplineInterpolation {
     OperasiDasarMatrix ODM = new OperasiDasarMatrix();
     MetodeEliminasi ME = new MetodeEliminasi();
 
+    Scanner sc = new Scanner(System.in);
+
     // public Matrix f(int a, int b){
     //     Matrix temp = new Matrix();
     //     ODM.createMatrix(temp, 1, 16);
@@ -143,28 +145,45 @@ public class BicubicSplineInterpolation {
     public BicubicSplineInterpolation(){
         // ODM.createMatrix(MBesar, 16, 16);
         // createInitialMatrix(MBesar);
-        Matrix m = new Matrix();
-        ODM.readMatrixFile("test.txt", m);
-        ODM.displayMatrix(m);
-        System.out.println("---------------------------");
-        Matrix m2 = new Matrix();
-        m2 = ODM.copyMatrix(m);
-        ME.toEselon(m2);
-        ODM.displayMatrix(m2);
-        System.out.println("---------------------------");
-        ME.toEselonRed(m);
-        ODM.displayMatrix(m);
-        System.out.println("---------------------------");
-        int solve = ME.Gauss(m2);
-        System.out.println(solve);
-
-        if(solve == 1){ // solusi unik gauss
-            m2 = ME.SolveSPLUnik(m2);
-        }
         
-        ODM.displayMatrix(m2);
         // System.out.println("---------------------------");
-        // Gauss.eliminasiGauss(MBesar, true);
+        // ME.toEselon(MBesar);
         // ODM.displayMatrix(MBesar);
+
+        // ODM.createMatrix(MSoal, 16, 1);
+        // ODM.readMatrix(MSoal, 16, 1);
+
+        // Matrix merged = new Matrix();
+        // merged = ODM.mergeMatrix(MBesar, MSoal);
+        // ODM.displayMatrix(merged);
+
+        // double pointX, pointY;
+        // pointX = sc.nextDouble();
+        // pointY = sc.nextDouble();
+
+        // Matrix hasilSPL = new Matrix();
+        // ME.toEselon(merged);
+        // hasilSPL = ME.SolveSPLUnik(merged);
+        // ODM.displayMatrix(hasilSPL);
+
+        // double sum = 0;
+        // int idx = 0;
+        // for(int j=0;j<4;j++){
+        //     for(int i=0;i<4;i++){
+        //         sum += (Math.pow(pointX, i) * Math.pow(pointY, j) * hasilSPL.get_ELMT(idx, 0));
+        //         idx++;
+        //     }
+        // }
+        // System.out.println("FINAL SUBMISSION ----- " + sum);
+
+        // Matrix m = new Matrix();
+        // ODM.readMatrixFile("test.txt", m);
+        // ODM.displayMatrix(m);
+        // ME.toEselonRed(m);
+        // System.out.println("-----------------");
+        // ODM.displayMatrix(m);
+        // System.out.println("-----------------");
+        // ME.SolvesSPLParametrik(m);
+        // ODM.displayMatrix(m);
     }
 }

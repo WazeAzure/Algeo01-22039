@@ -35,6 +35,7 @@ public class MyApp {
 	}
 
 	public static int menu() {
+		System.out.println("------------------------------");
 		System.out.println("MENU");
 		System.out.println("1. Sistem Persamaan Linier");
 		System.out.println("2. Determinan");
@@ -109,6 +110,7 @@ public class MyApp {
 							System.out.println("Banyaknya persamaan harus sama dengan banyaknya variabel.");
 						} else {
 							det.KaidahCramer(m);
+							choose = menu();
 						}
 					} else if (input_type == 2) { // file
 
@@ -183,6 +185,7 @@ public class MyApp {
 			} else if (choose == 5) {
 				//
 				BicubicSplineInterpolation bsi = new BicubicSplineInterpolation();
+				state = false;
 			} else if (choose == 6) {
 				//
 				RegresiLinearBerganda rlb = new RegresiLinearBerganda();

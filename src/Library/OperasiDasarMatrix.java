@@ -65,6 +65,40 @@ public class OperasiDasarMatrix {
         }
     }
 
+    public void readMatrixFileInterpolate(String filename, Matrix m, double x) {
+        System.out.println(filename);
+        try {
+
+            filename = "test/" + filename;
+            File myObj = new File(filename);
+            Scanner myReader = new Scanner(myObj);
+
+            int nCol = 0;
+            int i = 0;
+            int j = 0;
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                String[] parts = data.split(" ");
+
+                nCol = parts.length;
+
+                for (j = 0; j < parts.length; j++) {
+                    m.set_ELMT(i, j, Double.parseDouble(parts[j]));
+                }
+
+                i++;
+            }
+            myReader.close();
+            x = m.get_ELMT(i, 0);
+            m.set_ELMT(i, 0, 0);
+            m.set_COL_EFF(nCol);
+            m.set_ROW_EFF(i-1);
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
     public Matrix readSPLCramer() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Masukkan ukuran matriks A (baris): ");
