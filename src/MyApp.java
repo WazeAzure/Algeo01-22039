@@ -516,11 +516,11 @@ public class MyApp {
 				System.out.println("Persamaan hasil regresi linier berganda:");
 				String[][] persamaan;
 				persamaan = new String[2][1];
-				persamaan[0][0] = "f(x) = " + (Math.round(allConst.get_ELMT(0, 0) * 100000.0) / 100000.0);
-				System.out.printf("f(x) = %.5f", allConst.get_ELMT(0, 0));
+				persamaan[0][0] = "f(x) = " + (Math.round(allConst.get_ELMT(0, 0) * 10000.0) / 10000.0);
+				System.out.printf("f(x) = %.4f", allConst.get_ELMT(0, 0));
 				for (int i = 1; i < allConst.get_ROW_EFF(); i++){
-					persamaan[0][0] += " + " + (Math.round(allConst.get_ELMT(i, 0) * 100000.0) / 100000.0) + " x" + i;
-					System.out.printf(" + %.5f x%d", allConst.get_ELMT(i, 0), i);
+					persamaan[0][0] += " + " + (Math.round(allConst.get_ELMT(i, 0) * 10000.0) / 10000.0) + " x" + i;
+					System.out.printf(" + %.4f x%d", allConst.get_ELMT(i, 0), i);
 				}
 				
 				// Mencari taksiran nilai fungsi pada x yang diberikan
@@ -535,7 +535,7 @@ public class MyApp {
 				for (int i = 0; i < allConst.get_ROW_EFF(); i++){
 					hasil += allConst.get_ELMT(i + 1, 0) * taksir.get_ELMT(i, 0);
 				}
-				System.out.printf("Hasil taksirannya adalah %.5f\n", hasil);
+				System.out.printf("Hasil taksirannya adalah %.4f\n", hasil);
 				choose = menu();
 			} else if (choose == 7) {
 				// Keluar
