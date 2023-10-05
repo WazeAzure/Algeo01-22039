@@ -56,6 +56,18 @@ public class MatriksBalikan {
         return m1;
     }
 
+    public Matrix cropLastColOfMatrix(Matrix m){
+        /* Menghapus kolom terakhir dari sebuah matrix */
+        Matrix m1 = new Matrix();
+        ODM.createMatrix(m1, m.get_ROW_EFF(), m.get_COL_EFF() - 1);
+        for (int i = 0; i < m1.get_ROW_EFF(); i++){
+            for (int j = 0; j < m1.get_COL_EFF(); j++){
+                m1.set_ELMT(i, j, m.get_ELMT(i, j));
+            }
+        }
+        return m1;
+    }
+
     /* *** PRIMARY FUNCTIONS *** */
 
     public Matrix inverse2x2(Matrix m){
