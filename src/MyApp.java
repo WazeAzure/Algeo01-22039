@@ -177,10 +177,14 @@ public class MyApp {
 						A = MB.cropLastColOfMatrix(m); // m tanpa kolom b
 						if (!ODM.isSquare(A) || ODM.determinant(A) == 0) {
 							// Matrix tidak punya inverse
-							System.out.println("Matrix tersebut tidak dapat diselesaikan menggunakan metode matriks balikan.");
-							System.out.println("\nGunakan metode lain");
+							ODM.displayMatrix(A);
+							System.out.println("Matrix tersebut tidak punya inverse");
+							System.out.println("Matrix tidak dapat diselesaikan menggunakan metode matriks balikan.");
+							System.out.println("Gunakan metode lain");
 						} 
 						else{
+							System.out.println("Matrix Augmented:");
+							ODM.displayMatrix(m);
 							System.out.println("Solusi dari SPL adalah ");
 							m = MB.solveSPLwithInverse(m);
 							for (int i = 0; i < m.get_ROW_EFF(); i++) {
@@ -198,17 +202,24 @@ public class MyApp {
 						A = MB.cropLastColOfMatrix(m); // m tanpa kolom b
 						if (!ODM.isSquare(A) || ODM.determinant(A) == 0) {
 							// Matrix tidak punya inverse
-							System.out.println("Matrix tersebut tidak dapat diselesaikan menggunakan metode matriks balikan.");
-							System.out.println("\nGunakan metode lain");
+							ODM.displayMatrix(A);
+							System.out.println("Matrix tersebut tidak punya inverse");
+							System.out.println("Matrix tidak dapat diselesaikan menggunakan metode matriks balikan.");
+							System.out.println("Gunakan metode lain");
 						} 
 						else {
+							System.out.println("Matrix Augmented:");
+							ODM.displayMatrix(m);
+							System.out.println("Solusi dari SPL adalah ");
 							m = MB.solveSPLwithInverse(m);
+							for (int i = 0; i < m.get_ROW_EFF(); i++) {
+								System.out.println("x" + (i + 1) + " = " + m.get_ELMT(i, 0));
+							}
 							ODM.displayMatrixtoFile(m, "sol" + filename);
-							System.out.println("Hasil terdapat pada file sol" + filename);
+							System.out.println("Hasil tersimpan pada file sol" + filename);
 						}
 					} else {
 						System.out.println("Masukan input salah");
-						choose = menu();
 					}
 					choose = menu();
 				} else if (input_SPL == 4) {
@@ -330,7 +341,7 @@ public class MyApp {
 					else{
 					    System.out.println("Matriks tidak punya balikan");
 					}
-				} else { // file
+				} else if (input_type == 2) { // file
 					System.out.println("Masukkan nama file: ");
 					String filename = sc.nextLine();
 					System.out.println("------------------------------");
@@ -342,19 +353,25 @@ public class MyApp {
 						int jenis_inverse = jenis_inverse();
 						if (jenis_inverse == 1) {
 							m = MB.inverseWithGaussJordan(m);
+							System.out.println("Matriks balikannya adalah ");
+							ODM.displayMatrix(m);
 							ODM.displayMatrixtoFile(m, "sol" + filename);
-							System.out.println("Matriks balikannya terdapat pada file sol" + filename);
+							System.out.println("Matriks balikannya tersimpan pada file sol" + filename);
 							System.out.println("------------------------------");
 						} else if (jenis_inverse == 2) {
 							m = MB.inverseWithAdjoin(m);
+							System.out.println("Matriks balikannya adalah ");
+							ODM.displayMatrix(m);
 							ODM.displayMatrixtoFile(m, "sol" + filename);
-							System.out.println("Matriks balikannya terdapat pada file sol" + filename);
+							System.out.println("Matriks balikannya tersimpan pada file sol" + filename);
 							System.out.println("------------------------------");
 						}
 					}
 					else{
 					    System.out.println("Matriks tidak punya balikan");
 					}
+				} else {
+					System.out.println("Masukan input salah");
 				}
 				choose = menu();
 			} else if (choose == 4) {
@@ -403,6 +420,58 @@ public class MyApp {
 				// ------------------------------------------------------------------------------------
 				// ---------------------------------------------------------------------------------------------------------------------------------
 				RegresiLinearBerganda RLB = new RegresiLinearBerganda();
+				Matrix m = new Matrix();
+				int input_type = jenis_input();
+				int k, n;
+				if (input_type == 1){ // keyboard
+					System.out.println("Masukkan jumlah peubah x:");
+					k = sc.nextInt();
+					System.out.println("Masukkan jumlah sampel:");
+					n = sc.nextInt();
+					System.out.println("Masukkan data (dalam bentuk matriks):");
+					ODM.createMatrix(m, n, k + 1);
+					ODM.readMatrix(m, n, k + 1);
+				}
+				else if (input_type == 2){ // file
+					System.out.println("Masukkan nama file: ");
+					String filename = sc.nextLine();
+					System.out.println("------------------------------");
+					ODM.readMatrixFile(filename, m);
+					ODM.displayMatrix(m);
+				}
+				else {
+					System.out.println("Masukan input salah");
+					choose = menu();
+				}
+
+				n = m.get_ROW_EFF();
+				k = m.get_COL_EFF() - 1;
+				Matrix allConst = RLB.PersamaanHasilRegresiLinearBerganda(m);
+				// Print persamaan hasil regresi linier berganda
+				System.out.println("Persamaan hasil regresi linier berganda:");
+				String[][] persamaan;
+				persamaan = new String[2][1];
+				persamaan[0][0] = "f(x) = " + (Math.round(allConst.get_ELMT(0, 0) * 100000.0) / 100000.0);
+				System.out.printf("f(x) = %.5f", allConst.get_ELMT(0, 0));
+				for (int i = 1; i < allConst.get_ROW_EFF(); i++){
+					persamaan[0][0] += " + " + (Math.round(allConst.get_ELMT(i, 0) * 100000.0) / 100000.0) + " x" + i;
+					System.out.printf(" + %.5f x%d", allConst.get_ELMT(i, 0), i);
+				}
+				
+				// Mencari taksiran nilai fungsi pada x yang diberikan
+				System.out.println("\nTaksiran nilai fungsi:");
+				System.out.printf("Masukkan %d nilai x yang ingin ditaksir: ", k);
+				Matrix taksir = new Matrix();
+				ODM.createMatrix(taksir, k, 1);
+				for (int i = 0; i < taksir.get_ROW_EFF(); i++){
+					taksir.set_ELMT(i, 0, sc.nextDouble());
+				}
+				double hasil = allConst.get_ELMT(0, 0);
+				for (int i = 0; i < allConst.get_ROW_EFF(); i++){
+					hasil += allConst.get_ELMT(i + 1, 0) * taksir.get_ELMT(i, 0);
+				}
+				System.out.printf("Hasil taksirannya adalah %.5f\n", hasil);
+				choose = menu();
 			} else if (choose == 7) {
 				// Keluar
 				state = false;
