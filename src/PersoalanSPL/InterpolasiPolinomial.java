@@ -47,14 +47,20 @@ public class InterpolasiPolinomial {
         return inter;
     }
 
+    public Matrix constOfInterpolation(Matrix m){
+        Matrix SPL = new Matrix();
+        ME.toEselon(m);
+        SPL = ME.SolveSPLUnik(m);
+        return SPL;
+    }
+
     public double Interpolasi(Matrix m, double x) {
         // memperkirakan nilai pada titik x
         Matrix SPL = new Matrix();
-        ME.toEselon(m);
+        SPL = constOfInterpolation(m);
         double y;
         int n = ME.Gauss(m);
         if (n == 1) {
-            SPL = ME.SolveSPLUnik(m);
             int i;
             y = 0;
             for (i = 0; i < SPL.get_ROW_EFF(); i++) {

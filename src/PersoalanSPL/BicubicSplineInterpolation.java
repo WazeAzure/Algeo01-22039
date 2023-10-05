@@ -21,7 +21,6 @@ public class BicubicSplineInterpolation {
     MatriksBalikan MB = new MatriksBalikan();
 
     Scanner sc = new Scanner(System.in);
-
     // public Matrix f(int a, int b){
     //     Matrix temp = new Matrix();
     //     ODM.createMatrix(temp, 1, 16);
@@ -38,7 +37,7 @@ public class BicubicSplineInterpolation {
         int row = 0;
         for(int y=0;y<=1;y++){
             for(int x=0;x<=1;x++){
-                System.out.printf("%d %d\n", x, y);
+                // System.out.printf("%d %d\n", x, y);
                 int col = 0;
                 for(int j=0;j<4;j++){
                     for(int i=0;i<4;i++){
@@ -51,21 +50,11 @@ public class BicubicSplineInterpolation {
             }
         }
 
-        // int row = 0;
-        // for(int i=0; i<=1; i++){
-        //     for(int j=0; j<=1;j++){
-        //         Matrix x = new Matrix();
-        //         x = f(i, j);
-        //         MBesar.mem[row] = x.mem[0];
-        //         row++;
-        //     }
-        // }
-
         // Turunan terhadap x;
         row = 4;
         for(int y=0;y<=1;y++){
             for(int x=0;x<=1;x++){
-                System.out.printf("%d %d\n", x, y);
+                // System.out.printf("%d %d\n", x, y);
                 int col = 0;
                 for(int j=0;j<4;j++){
                     for(int i=0;i<4;i++){
@@ -86,7 +75,7 @@ public class BicubicSplineInterpolation {
         row = 8;
         for(int y=0;y<=1;y++){
             for(int x=0;x<=1;x++){
-                System.out.printf("%d %d\n", x, y);
+                // System.out.printf("%d %d\n", x, y);
                 int col = 0;
                 for(int j=0;j<4;j++){
                     for(int i=0;i<4;i++){
@@ -107,7 +96,7 @@ public class BicubicSplineInterpolation {
         row = 12;
         for(int y=0;y<=1;y++){
             for(int x=0;x<=1;x++){
-                System.out.printf("%d %d\n", x, y);
+                // System.out.printf("%d %d\n", x, y);
                 int col = 0;
                 for(int j=0;j<4;j++){
                     for(int i=0;i<4;i++){
@@ -125,56 +114,78 @@ public class BicubicSplineInterpolation {
         }
     }
 
-    public BicubicSplineInterpolation(){
+    public void StartBSI(int pilihan){
+        System.out.println("Selamat Datang Di Bicubic Spline Interpolation");
+        System.out.println();
+
         ODM.createMatrix(MBesar, 16, 16);
         createInitialMatrix(MBesar);
 
+        // METODE 2 TANPA INVERS
+        ODM.createMatrix(MSoal, 16, 1);
+
+        double pointX;
+        double pointY;
+        if(pilihan == 1){
+            System.out.println("Silahkan masukkan Matrix 4 x 4");
+            ODM.readMatrix(MSoal, 16, 1);
+            System.out.print("Masukkan nilai untuk di interpolasi x: ");
+            pointX = sc.nextDouble();
+            System.out.print("Masukkan nilai untuk di interpolasi y: ");
+            pointY = sc.nextDouble();
+        } else {
+            System.out.print("Masukkan Nama File: ");
+            String filename = sc.nextLine();
+            System.out.println();
+            Matrix temp = new Matrix();
+            ODM.readMatrixFile(filename, temp);
+            // ODM.displayMatrix(temp);
+
+            ODM.createMatrix(MSoal, 16, 1);
+            
+
+            int pos = 0;
+            for(int i=0; i<4;i++){
+                for(int j=0;j<4;j++){
+                    MSoal.set_ELMT(pos, 0, temp.get_ELMT(i, j));
+                    pos++;
+                }
+            }
+            // ODM.displayMatrix(MSoal);
+            pointX = temp.get_ELMT(4, 0);
+            pointY = temp.get_ELMT(4, 1);
+        }
         
-        
-        System.out.println("---------------------------");
-        ODM.displayMatrix(MBesar);
-
-        Matrix MBesarInverse = new Matrix();
-        MBesarInverse = MB.inverseWithGaussJordan(MBesar);
-
-        ODM.displayMatrixtoFile(MBesarInverse, "Matriks_Invers.txt");
-        // ODM.displayMatrix(MBesarInverse);
-
-        // ODM.createMatrix(MSoal, 16, 1);
-        // ODM.readMatrix(MSoal, 16, 1);
 
         // System.out.println("---------------------------");
-        // Matrix merged = ODM.multiplyMatrix(MBesarInverse, MSoal);
+        Matrix merged = ODM.mergeMatrix(MBesar, MSoal);
+        // ODM.displayMatrix(merged);
+        ME.toEselon(merged);
+        // System.out.println("---------------------------");
+        // ODM.displayMatrix(merged);
+        merged = ME.SolveSPLUnik(merged);
+        // System.out.println("---------------------------");
         // ODM.displayMatrix(merged);
 
-        // System.out.println("---------------------------");
+        Matrix ans = new Matrix();
+        ODM.createMatrix(ans, 16, 1);
 
-        // Matrix ans = new Matrix();
-        // ODM.createMatrix(ans, 1, 16);
+        
 
-        // double pointX = sc.nextDouble();
-        // double pointY = sc.nextDouble();
+        int row = 0;
+        for(int j=0;j<4;j++){
+            for(int i=0;i<4;i++){
+                double temp = Math.pow(pointX, i) * Math.pow(pointY, j);
+                ans.set_ELMT(row, 0, (double)temp);
+                row++;
+            }
+        }
 
-        // int col = 0;
-        // for(int j=0;j<4;j++){
-        //     for(int i=0;i<4;i++){
-        //         double temp = Math.pow(pointX, i) * Math.pow(pointY, j);
-        //         ans.set_ELMT(0, col, (double)temp);
-        //         col++;
-        //     }
-        // }
-
-        // ans = ODM.multiplyMatrix(ans, merged);
-        // System.out.println("FINAL SUBMISSION ----- " + ans.get_ELMT(0, 0));
-
-        // Matrix m = new Matrix();
-        // ODM.readMatrixFile("test.txt", m);
-        // ODM.displayMatrix(m);
-        // ME.toEselonRed(m);
-        // System.out.println("-----------------");
-        // ODM.displayMatrix(m);
-        // System.out.println("-----------------");
-        // ME.SolvesSPLParametrik(m);
-        // ODM.displayMatrix(m);
+        double finalAns = 0;
+        for(int i=0; i<16; i++){
+            finalAns += (ans.get_ELMT(i, 0) * merged.get_ELMT(i,0));
+        }
+        System.out.printf("f(%f, %f) = %f ---\n", pointX, pointY, finalAns);
+        
     }
 }

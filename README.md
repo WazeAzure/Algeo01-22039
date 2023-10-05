@@ -13,4 +13,4 @@
 - ubuntu: `./run.sh`
 
 **To Directly Run**
-- Run the `FinalApp.jar`
+- Run the file `java -jar FinalApp.jar`
