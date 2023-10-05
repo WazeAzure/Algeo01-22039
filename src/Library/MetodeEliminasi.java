@@ -137,6 +137,7 @@ public class MetodeEliminasi {
 
     public boolean isSolveable(Matrix m) {
         // boolean isSolve = true;
+        // ODM.displayMatrix(m);
         for (int i = 0; i < m.get_ROW_EFF(); i++) {
             boolean isRow = false;
             for (int j = 0; j < m.get_COL_EFF() - 1; j++) {
@@ -145,8 +146,8 @@ public class MetodeEliminasi {
                     break;
                 }
             }
-
-            if (!isRow && m.get_ELMT(i, m.get_COL_EFF()) != 0) {
+            // System.out.println(isRow + " ---- " + m.get_ELMT(i, m.get_COL_EFF()));
+            if (!isRow && m.get_ELMT(i, m.get_COL_EFF()-1) != 0) {
                 return false;
             }
 
