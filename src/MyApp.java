@@ -121,7 +121,7 @@ public class MyApp {
 						String filename = sc.nextLine();
 						System.out.println("------------------------------");
 						ODM.readMatrixFile(filename, m);
-						// ODM.displayMatrix(m);
+						ODM.displayMatrix(m);
 					} 
 					else {
 						System.out.println("Masukan input salah");
