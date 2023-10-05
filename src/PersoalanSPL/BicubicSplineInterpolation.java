@@ -206,10 +206,5 @@ public class BicubicSplineInterpolation {
         // }
         // System.out.println("FinalAns ---- " + finalAns);
         
-        Matrix m = new Matrix();
-        ODM.readMatrixFile("test.txt", m);
-        ODM.displayMatrix(m);
-        ME.toEselon(m);
-        ME.SolvesSPLParametrik(m);
     }
 }
