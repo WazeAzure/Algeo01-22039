@@ -428,7 +428,7 @@ public class MyApp {
 					System.out.println("Masukkan ukuran matriks: ");
 					int n = sc.nextInt();
 					m = ip.InputtoMatrix(n, 1);
-					System.out.print("Masukkan nilai x yang ingin diinterpolasi: ");
+					System.out.print("\nMasukkan nilai x yang ingin diinterpolasi: ");
 					x = sc.nextDouble();
 					System.out.println("\n");
 				} else {
@@ -441,12 +441,25 @@ public class MyApp {
 				}
 
 				m = ip.MatrixtoMatrixInt(m);
+				Matrix allConst = new Matrix();
+				allConst = ip.constOfInterpolation(m);
 
 				double y = ip.Interpolasi(m, x);
 				if (y == -9999.9999) {
 					System.out.println("Matriks tidak menghasilkan SPL unik, nilai interpolasi tidak didapatkan.");
 				} else {
-					System.out.println("Nilai interpolasi x = " + x + " menghasilkan nilai y = " + y);
+					// Print persamaan hasil interpolasi polinomial
+					System.out.println("Persamaan interpolasi polinomial:");
+					String[][] persamaan;
+					persamaan = new String[2][1];
+					persamaan[0][0] = "f(x) = " + (Math.round(allConst.get_ELMT(0, 0) * 10000.0) / 10000.0);
+					System.out.printf("f(x) = %.4f", allConst.get_ELMT(0, 0));
+					for (int i = 1; i < allConst.get_ROW_EFF(); i++){
+						persamaan[0][0] += " + " + (Math.round(allConst.get_ELMT(i, 0) * 10000.0) / 10000.0) + " x" + i;
+						System.out.printf(" + %.4f x^%d", allConst.get_ELMT(i, 0), i);
+					}
+					// Hasil taksiran
+					System.out.println("\nNilai interpolasi x = " + x + " menghasilkan nilai y = " + y);
 				}
 				choose = menu();
 			} else if (choose == 5) {
@@ -462,7 +475,6 @@ public class MyApp {
 				BicubicSplineInterpolation bsi = new BicubicSplineInterpolation();
 				bsi.StartBSI(pilihan);
 
-				// System.out.println("After infinite loop");
 				choose = menu();
 			} else if (choose == 6) {
 				// ---------------------------------------------------------------------------------------------------------------------------------

@@ -14,7 +14,6 @@ public class InterpolasiPolinomial {
     // Jika input dari keyboard:
     public Matrix InputtoMatrix(int n, int input) {
         // n adalah banyaknya titik yang diketahui
-        double x = 0;
         Matrix m = new Matrix();
         ODM.createMatrix(m, n, 2);
         if (input == 1) {
@@ -65,6 +64,7 @@ public class InterpolasiPolinomial {
             y = 0;
             for (i = 0; i < SPL.get_ROW_EFF(); i++) {
                 y += Math.pow(x, i) * SPL.get_ELMT(i, 0);
+                y = Math.round(y * 10000.0) / 10000.0;
             }
         } else {
             y = -9999.9999;
