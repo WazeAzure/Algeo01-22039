@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.io.FileNotFoundException; // Import this class to handle errors
 
 public class OperasiDasarMatrix {
-    static final int ROW_CAP = 100;
-    static final int COL_CAP = 100;
+    static final int ROW_CAP = 1000;
+    static final int COL_CAP = 1000;
 
     // constructor
     public void createMatrix(Matrix m, int nRows, int nCols) {
