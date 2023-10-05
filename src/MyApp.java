@@ -4,48 +4,6 @@ import PersoalanSPL.*;
 import Library.*;
 
 public class MyApp {
-	public static boolean state = false;
-
-	public static int jenis_input() {
-
-		System.out.println("Pilihan input:");
-		System.out.println("1. Input dari keyboard");
-		System.out.println("2. Input dari file");
-		Scanner sc = new Scanner(System.in);
-
-		System.out.println("\n");
-		System.out.print("Masukkan pilihan: ");
-		int x = sc.nextInt();
-		System.out.println("------------------------------");
-		return x;
-	}
-
-	public static int jenis_SPL() {
-		System.out.println("Pilihan metode SPL:");
-		System.out.println("1. Metode eliminasi Gauss");
-		System.out.println("2. Metode eliminasi Gauss-Jordan");
-		System.out.println("3. Metode matriks balikan");
-		System.out.println("4. Kaidah Cramer");
-		Scanner sc = new Scanner(System.in);
-		System.out.println("\n");
-		System.out.print("Masukkan pilihan: ");
-		int x = sc.nextInt();
-		System.out.println("\n");
-		return x;
-	}
-
-	public static int jenis_inverse() {
-		System.out.println("Pilihan metode inverse:");
-		System.out.println("1. Gauss-Jordan");
-		System.out.println("2. Adjoin Matriks");
-		Scanner sc = new Scanner(System.in);
-
-		System.out.println("\n");
-		System.out.print("Masukkan pilihan: ");
-		int x = sc.nextInt();
-		System.out.println("------------------------------");
-		return x;
-	}
 
 	public static int menu() {
 		System.out.println("------------------------------");
@@ -66,6 +24,51 @@ public class MyApp {
 		state = true;
 		return choose;
 	}
+
+	// Jika memilih 1 (SPL) di MENU
+	public static int jenis_SPL() {
+		System.out.println("Pilihan metode SPL:");
+		System.out.println("1. Metode eliminasi Gauss");
+		System.out.println("2. Metode eliminasi Gauss-Jordan");
+		System.out.println("3. Metode matriks balikan");
+		System.out.println("4. Kaidah Cramer");
+		Scanner sc = new Scanner(System.in);
+		System.out.println("\n");
+		System.out.print("Masukkan pilihan: ");
+		int x = sc.nextInt();
+		System.out.println("\n");
+		return x;
+	}
+
+	// Jika memilih 3 (Matriks Balikan) di MENU
+	public static int jenis_inverse() {
+		System.out.println("Pilihan metode inverse:");
+		System.out.println("1. Gauss-Jordan");
+		System.out.println("2. Adjoin Matriks");
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("\n");
+		System.out.print("Masukkan pilihan: ");
+		int x = sc.nextInt();
+		System.out.println("------------------------------");
+		return x;
+	}
+
+	public static int jenis_input() {
+
+		System.out.println("Pilihan input:");
+		System.out.println("1. Input dari keyboard");
+		System.out.println("2. Input dari file");
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("\n");
+		System.out.print("Masukkan pilihan: ");
+		int x = sc.nextInt();
+		System.out.println("------------------------------");
+		return x;
+	}
+
+	public static boolean state = false;
 
 	public static void main(String[] args) {
 		System.out.println("------------------------------");
@@ -169,15 +172,18 @@ public class MyApp {
 					int input_type = jenis_input();
 					if (input_type == 1) { // keyboard
 						Matrix m = new Matrix();
+						Matrix A = new Matrix();
 						m = ODM.readSPL();
-						if (m.get_ROW_EFF() + 1 != m.get_COL_EFF()) {
-							System.out.println("Matrix tersebut tidak dapat diselesaikan menggunakan matriks balikan.");
-							System.out.println(
-									"Banyaknya persamaan harus sama dengan banyaknya variabel (matriks A bukan matriks persegi).");
-						} else {
+						A = MB.cropLastColOfMatrix(m); // m tanpa kolom b
+						if (!ODM.isSquare(A) || ODM.determinant(A) == 0) {
+							// Matrix tidak punya inverse
+							System.out.println("Matrix tersebut tidak dapat diselesaikan menggunakan metode matriks balikan.");
+							System.out.println("\nGunakan metode lain");
+						} 
+						else{
+							System.out.println("Solusi dari SPL adalah ");
 							m = MB.solveSPLwithInverse(m);
-							int i;
-							for (i = 0; i < m.get_ROW_EFF(); i++) {
+							for (int i = 0; i < m.get_ROW_EFF(); i++) {
 								System.out.println("x" + (i + 1) + " = " + m.get_ELMT(i, 0));
 							}
 						}
@@ -188,11 +194,14 @@ public class MyApp {
 						System.out.println("------------------------------");
 						ODM.readMatrixFile(filename, m);
 						ODM.displayMatrix(m);
-						if (m.get_ROW_EFF() + 1 != m.get_COL_EFF()) {
-							System.out.println("Matrix tersebut tidak dapat diselesaikan menggunakan matriks balikan.");
-							System.out.println(
-									"Banyaknya persamaan harus sama dengan banyaknya variabel (matriks A bukan matriks persegi).");
-						} else {
+						Matrix A = new Matrix();
+						A = MB.cropLastColOfMatrix(m); // m tanpa kolom b
+						if (!ODM.isSquare(A) || ODM.determinant(A) == 0) {
+							// Matrix tidak punya inverse
+							System.out.println("Matrix tersebut tidak dapat diselesaikan menggunakan metode matriks balikan.");
+							System.out.println("\nGunakan metode lain");
+						} 
+						else {
 							m = MB.solveSPLwithInverse(m);
 							ODM.displayMatrixtoFile(m, "sol" + filename);
 							System.out.println("Hasil terdapat pada file sol" + filename);
@@ -293,8 +302,8 @@ public class MyApp {
 				// ---------------------------------------------------------------------------------------------------------------------------------
 				Matrix m = new Matrix();
 				int input_type = jenis_input();
-				if (input_type == 1) {
-					System.out.print("Masukkan ukuran matriks: ");
+				if (input_type == 1) { // keyboard
+					System.out.print("Masukkan n (ukuran matriks n x n): ");
 					int n = sc.nextInt();
 					System.out.println("------------------------------");
 					ODM.createMatrix(m, n, n);
@@ -302,37 +311,49 @@ public class MyApp {
 					ODM.readMatrix(m, n, n);
 					System.out.println("------------------------------");
 					ODM.displayMatrix(m);
-					int jenis_inverse = jenis_inverse();
-					if (jenis_inverse == 1) {
-						m = MB.inverseWithGaussJordan(m);
-						System.out.println("Hasil matriks balikan: ");
-						ODM.displayMatrix(m);
-						System.out.println("------------------------------");
-					} else if (jenis_inverse == 2) {
-						m = MB.inverseWithAdjoin(m);
-						System.out.println("Hasil matriks balikan: ");
-						ODM.displayMatrix(m);
-						System.out.println("------------------------------");
+					// Cek determinan matrix
+					if (ODM.determinant(m) != 0){
+						// Matrix punya balikan
+						int jenis_inverse = jenis_inverse();
+						if (jenis_inverse == 1) {
+							m = MB.inverseWithGaussJordan(m);
+							System.out.println("Matriks balikannya adalah ");
+							ODM.displayMatrix(m);
+							System.out.println("------------------------------");
+						} else if (jenis_inverse == 2) {
+							m = MB.inverseWithAdjoin(m);
+							System.out.println("Matriks balikannya adalah ");
+							ODM.displayMatrix(m);
+							System.out.println("------------------------------");
+						}
 					}
-				} else {
+					else{
+					    System.out.println("Matriks tidak punya balikan");
+					}
+				} else { // file
 					System.out.println("Masukkan nama file: ");
 					String filename = sc.nextLine();
 					System.out.println("------------------------------");
 					ODM.readMatrixFile(filename, m);
 					ODM.displayMatrix(m);
-					int jenis_inverse = jenis_inverse();
-					if (jenis_inverse == 1) {
-						m = MB.inverseWithGaussJordan(m);
-						System.out.println("Hasil matriks balikan: ");
-						ODM.displayMatrixtoFile(m, "sol" + filename);
-						System.out.println("Hasil terdapat pada file sol" + filename);
-						System.out.println("------------------------------");
-					} else if (jenis_inverse == 2) {
-						m = MB.inverseWithAdjoin(m);
-						System.out.println("Hasil matriks balikan: ");
-						ODM.displayMatrixtoFile(m, "sol" + filename);
-						System.out.println("Hasil terdapat pada file sol" + filename);
-						System.out.println("------------------------------");
+					// Cek determinan matrix
+					if (ODM.determinant(m) != 0){
+						// Matrix punya balikan
+						int jenis_inverse = jenis_inverse();
+						if (jenis_inverse == 1) {
+							m = MB.inverseWithGaussJordan(m);
+							ODM.displayMatrixtoFile(m, "sol" + filename);
+							System.out.println("Matriks balikannya terdapat pada file sol" + filename);
+							System.out.println("------------------------------");
+						} else if (jenis_inverse == 2) {
+							m = MB.inverseWithAdjoin(m);
+							ODM.displayMatrixtoFile(m, "sol" + filename);
+							System.out.println("Matriks balikannya terdapat pada file sol" + filename);
+							System.out.println("------------------------------");
+						}
+					}
+					else{
+					    System.out.println("Matriks tidak punya balikan");
 					}
 				}
 				choose = menu();
@@ -381,7 +402,7 @@ public class MyApp {
 				// ---------------------------------------- REGRESI LINIER
 				// ------------------------------------------------------------------------------------
 				// ---------------------------------------------------------------------------------------------------------------------------------
-				RegresiLinearBerganda rlb = new RegresiLinearBerganda();
+				RegresiLinearBerganda RLB = new RegresiLinearBerganda();
 			} else if (choose == 7) {
 				// Keluar
 				state = false;
