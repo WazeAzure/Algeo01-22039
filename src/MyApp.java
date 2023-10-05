@@ -445,8 +445,16 @@ public class MyApp {
 				// ---------------------------------------- BICUBIC SPLINE
 				// -------------------------------------------------------------------------
 				// ---------------------------------------------------------------------------------------------------------------------------------
+				
+				int pilihan = jenis_input();
+				while(pilihan != 1 && pilihan != 2){
+					pilihan = jenis_input();
+				}
 				BicubicSplineInterpolation bsi = new BicubicSplineInterpolation();
-				state = false;
+				bsi.StartBSI(pilihan);
+
+				// System.out.println("After infinite loop");
+				choose = menu();
 			} else if (choose == 6) {
 				// ---------------------------------------------------------------------------------------------------------------------------------
 				// ---------------------------------------- REGRESI LINIER
