@@ -34,21 +34,23 @@ public class OperasiDasarMatrix {
     }
 
     public void readMatrixFile(String filename, Matrix m) {
-        System.out.println(filename);
+        // System.out.println(filename);
         try {
 
             filename = "test/" + filename;
             File myObj = new File(filename);
             Scanner myReader = new Scanner(myObj);
 
-            int nCol = 0;
+            int nCol = -1;
             int i = 0;
             int j = 0;
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 String[] parts = data.split(" ");
 
-                nCol = parts.length;
+                if(nCol == -1){
+                    nCol = parts.length;
+                }
 
                 for (j = 0; j < parts.length; j++) {
                     m.set_ELMT(i, j, Double.parseDouble(parts[j]));
