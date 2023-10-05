@@ -130,51 +130,86 @@ public class BicubicSplineInterpolation {
         createInitialMatrix(MBesar);
 
         
-        
-        System.out.println("---------------------------");
-        ODM.displayMatrix(MBesar);
+        // METODE 1 DENGAN INVERS
+        // System.out.println("---------------------------");
+        // ODM.displayMatrix(MBesar);
 
-        Matrix MBesarInverse = new Matrix();
-        MBesarInverse = MB.inverseWithGaussJordan(MBesar);
+        // Matrix MBesarInverse = new Matrix();
+        // MBesarInverse = MB.inverseWithGaussJordan(MBesar);
 
-        ODM.displayMatrixtoFile(MBesarInverse, "Matriks_Invers.txt");
+        // ODM.displayMatrixtoFile(MBesarInverse, "Matriks_Invers.txt");
         // ODM.displayMatrix(MBesarInverse);
 
         // ODM.createMatrix(MSoal, 16, 1);
         // ODM.readMatrix(MSoal, 16, 1);
 
         // System.out.println("---------------------------");
-        // Matrix merged = ODM.multiplyMatrix(MBesarInverse, MSoal);
-        // ODM.displayMatrix(merged);
+        // Matrix result = new Matrix();
+        // result  = ODM.multiplyMatrix(MBesarInverse, MSoal);
+        // ODM.displayMatrix(result);
+        
+        // System.out.println("---------------------------");
+        // double pointX = sc.nextDouble();
+        // double pointY = sc.nextDouble();
+        
+        // Matrix interpolate = new Matrix();
+        // ODM.createMatrix(interpolate, 16, 1);
+        // int row = 0;
+        // for(int j=0;j<4;j++){
+        //     for(int i=0;i<4;i++){
+        //         double temp = Math.pow(pointX, i) * Math.pow(pointY, j);
+        //         interpolate.set_ELMT(row, 0, (double)temp);
+        //         row++;
+        //     }
+        // }
+
+        // ODM.displayMatrix(interpolate);
+        // System.out.println("---------------------------");
+        // double finalAns = 0;
+        // for(int i=0; i<16; i++){
+        //     finalAns += interpolate.get_ELMT(i, 0) * result.get_ELMT(i, 0);
+        // }
+        // System.out.println("final anss --- " + finalAns);
+
+        // METODE 2 TANPA INVERS
+        // ODM.createMatrix(MSoal, 16, 1);
+        // ODM.readMatrix(MSoal, 16, 1);
 
         // System.out.println("---------------------------");
+        // Matrix merged = ODM.mergeMatrix(MBesar, MSoal);
+        // ODM.displayMatrix(merged);
+        // ME.toEselon(merged);
+        // System.out.println("---------------------------");
+        // ODM.displayMatrix(merged);
+        // merged = ME.SolveSPLUnik(merged);
+        // System.out.println("---------------------------");
+        // ODM.displayMatrix(merged);
 
         // Matrix ans = new Matrix();
-        // ODM.createMatrix(ans, 1, 16);
+        // ODM.createMatrix(ans, 16, 1);
 
         // double pointX = sc.nextDouble();
         // double pointY = sc.nextDouble();
 
-        // int col = 0;
+        // int row = 0;
         // for(int j=0;j<4;j++){
         //     for(int i=0;i<4;i++){
         //         double temp = Math.pow(pointX, i) * Math.pow(pointY, j);
-        //         ans.set_ELMT(0, col, (double)temp);
-        //         col++;
+        //         ans.set_ELMT(row, 0, (double)temp);
+        //         row++;
         //     }
         // }
 
-        // ans = ODM.multiplyMatrix(ans, merged);
-        // System.out.println("FINAL SUBMISSION ----- " + ans.get_ELMT(0, 0));
-
-        // Matrix m = new Matrix();
-        // ODM.readMatrixFile("test.txt", m);
-        // ODM.displayMatrix(m);
-        // ME.toEselonRed(m);
-        // System.out.println("-----------------");
-        // ODM.displayMatrix(m);
-        // System.out.println("-----------------");
-        // ME.SolvesSPLParametrik(m);
-        // ODM.displayMatrix(m);
+        // double finalAns = 0;
+        // for(int i=0; i<16; i++){
+        //     finalAns += (ans.get_ELMT(i, 0) * merged.get_ELMT(i,0));
+        // }
+        // System.out.println("FinalAns ---- " + finalAns);
+        
+        Matrix m = new Matrix();
+        ODM.readMatrixFile("test.txt", m);
+        ODM.displayMatrix(m);
+        ME.toEselon(m);
+        ME.SolvesSPLParametrik(m);
     }
 }
