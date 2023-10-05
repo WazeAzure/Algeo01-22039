@@ -7,14 +7,14 @@ public class MyApp {
 
 	/* *** CREATE OBJECTS *** */
     Determinan DET = new Determinan();
+	Scanner sc = new Scanner(System.in);
 	MatriksBalikan MB = new MatriksBalikan();
     MetodeEliminasi ME = new MetodeEliminasi();
     OperasiDasarMatrix ODM = new OperasiDasarMatrix();
-    Scanner sc = new Scanner(System.in);
 
 	/* *** HELPER FUNCTIONS *** */
 
-	public int menu() {
+	public static int menu() {
 		/* Menampilkan menu utama */
 		System.out.println("------------------------------");
 		System.out.println("MENU");
@@ -26,6 +26,7 @@ public class MyApp {
 		System.out.println("6. Regresi Linier Berganda");
 		System.out.println("7. Keluar");
 		System.out.print("\nMasukkan pilihan: ");
+		Scanner sc = new Scanner(System.in);
 		int choose = sc.nextInt();
 		System.out.println("------------------------------");
 		state = true;
@@ -33,7 +34,7 @@ public class MyApp {
 	}
 
 	// Jika memilih 1 (SPL) di MENU
-	public int jenis_SPL() {
+	public static int jenis_SPL() {
 		/* Menampilkan submenu metode SPL */
 		System.out.println("Pilihan metode SPL:");
 		System.out.println("1. Metode eliminasi Gauss");
@@ -41,66 +42,59 @@ public class MyApp {
 		System.out.println("3. Metode matriks balikan");
 		System.out.println("4. Kaidah Cramer");
 		System.out.print("\nMasukkan pilihan: ");
+		Scanner sc = new Scanner(System.in);
 		int x = sc.nextInt();
 		System.out.println("\n");
 		return x;
 	}
 
 	// Jika memilih 3 (Matriks Balikan) di MENU
-	public int jenis_inverse() {
+	public static int jenis_inverse() {
 		/* Menampilkan submenu metode inverse */
 		System.out.println("Pilihan metode inverse:");
 		System.out.println("1. Gauss-Jordan");
 		System.out.println("2. Adjoin Matriks");
 		System.out.print("\nMasukkan pilihan: ");
+		Scanner sc = new Scanner(System.in);
 		int x = sc.nextInt();
 		System.out.println("------------------------------");
 		return x;
 	}
 
-	public int jenis_input() {
+	public static int jenis_input() {
 		/* Menampilkan pilihan untuk input */
 		System.out.println("Pilihan input:");
 		System.out.println("1. Input dari keyboard");
 		System.out.println("2. Input dari file");
 		System.out.print("\nMasukkan pilihan: ");
+		Scanner sc = new Scanner(System.in);
 		int x = sc.nextInt();
 		System.out.println("------------------------------");
 		return x;
 	}
 
-	public void check_input(Matrix m) {
-		/* Mengecek jenis input */
-		int input_type = jenis_input();
-		if (input_type == 1) { // keyboard
-			m = ODM.readSPL();
-		} 
-		else if (input_type == 2) { // file
-			System.out.println("Masukkan nama file: ");
-			String filename = sc.nextLine();
-			System.out.println("------------------------------");
-			ODM.readMatrixFile(filename, m);
-			ODM.displayMatrix(m);
-		} 
-		else {
-			System.out.println("Masukan input salah");
-			int choose = menu();
-		}
-	}
-
-	public int askToSaveOutput(){
+	public static int askToSaveOutput(){
 		System.out.println("Simpan output ke dalam file?");
 		System.out.println("1. Simpan");
 		System.out.println("2. Tidak");
 		System.out.print("\nMasukkan pilihan: ");
+		Scanner sc = new Scanner(System.in);
 		int x = sc.nextInt();
 		System.out.println("------------------------------");
 		return x;
 	}
 
-	public boolean state = false;
+	public static boolean state = false;
 
-	public void main(String[] args) {
+	public static void main(String[] args) {
+
+		/* *** CREATE OBJECTS *** */
+		// Determinan DET = new Determinan();
+		Scanner sc = new Scanner(System.in);
+		MatriksBalikan MB = new MatriksBalikan();
+		MetodeEliminasi ME = new MetodeEliminasi();
+		OperasiDasarMatrix ODM = new OperasiDasarMatrix();
+
 		System.out.println("------------------------------");
 		System.out.println("Selamat datang aslab tercintah");
 
@@ -129,7 +123,7 @@ public class MyApp {
 					} 
 					else {
 						System.out.println("Masukan input salah");
-						choose = menu();
+						System.exit(0);
 					}
 
 					// Lakukan Metode Gauss
