@@ -115,7 +115,7 @@ public class MetodeEliminasi {
                     // ODM.displayMatrix(m);
                 }
             }
-            ODM.displayMatrix(m);
+            // ODM.displayMatrix(m);
         }
     }
 

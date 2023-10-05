@@ -52,27 +52,27 @@ public class Determinan {
         if ((m2.get_ROW_EFF() == 2) && (m2.get_COL_EFF() == 2)) {
             Cij = determinan2x2(m2) * Math.pow((-1), (i + j));
         } else {
-            DetEkspansiKofaktor(m2); // rekursif
+            Cij = DetEkspansiKofaktor(m2); // rekursif
         }
-        System.out.println(Cij);
         return Cij;
     }
 
     public double DetEkspansiKofaktor(Matrix m) {
-        double det;
+        double det = -999.999;
         int n = m.get_COL_EFF();
-        if (n == 2) {
+        if (n == 1) {
+            det = m.get_ELMT(0, 0);
+        } else if (n == 2) {
             det = determinan2x2(m);
-        }
-        int i, j;
-        det = 0;
-        i = 0;
-        if (n > 2) {
+        } else if (n > 2) {
+            int i, j;
+            det = 0;
+            i = 0;
             for (j = 0; j < n; j++) {
                 det += m.get_ELMT(i, j) * Kofaktor(m, i, j); // menambahkan setiap perkalian kofaktor dari baris
-                                                                // pertama
-                                                                // matriks dengan element terkait untuk mendapatkan
-                                                                // determinan.
+                                                             // pertama
+                                                             // matriks dengan element terkait untuk mendapatkan
+                                                             // determinan.
             }
         }
         return det;
@@ -119,11 +119,10 @@ public class Determinan {
         Matrix result = new Matrix();
         result = Operate.copyMatrix(a);
 
-        for(int i=0; i<result.get_ROW_EFF(); i++){
+        for (int i = 0; i < result.get_ROW_EFF(); i++) {
             result.set_ELMT(i, j, b.get_ELMT(i, 0));
         }
         return result;
-   
     }
 
     public void KaidahCramer(Matrix m) {
@@ -147,13 +146,6 @@ public class Determinan {
             for (i = 0; i < a.get_ROW_EFF(); i++) {
                 Matrix Aj = new Matrix();
                 Aj = MatrixAj(c, i, b);
-                // System.out.println("---=====================---");
-                // Operate.displayMatrix(Aj);
-                // System.out.println("---=====================---");
-                // System.out.println("WOY");
-                // Operate.displayMatrix(Aj);
-                // System.out.println(detA);
-                // System.out.println(DetReduksiBaris(Aj));
                 listX[i] = (DetReduksiBaris(Aj)) / detA;
                 System.out.println("x" + (i + 1) + " = " + listX[i]);
             }

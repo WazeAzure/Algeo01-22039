@@ -42,21 +42,12 @@ public class RegresiLinearBerganda{
         return sum;
     }
 
-    /* *** CONSTRUCTOR *** */
+    /* *** PRIMARY FUNCTION *** */
 
-    public RegresiLinearBerganda(){
-        System.out.println("\nHalo aku bagian novel");
-        
-        // Input dari keyboard
-        int k, n;
-        System.out.println("Masukkan jumlah peubah x:");
-        k = sc.nextInt();
-        System.out.println("Masukkan jumlah sampel:");
-        n = sc.nextInt();
-        System.out.println("Masukkan data (dalam bentuk matriks):");
-        Matrix m = new Matrix();
-        ODM.createMatrix(m, n, k + 1);
-        ODM.readMatrix(m, n, k + 1);
+    public Matrix PersamaanHasilRegresiLinearBerganda(Matrix m){
+        /* Mendapatkan semua konstanta dari persamaan hasil regresi linear berganda */
+        int n = m.get_ROW_EFF();
+        int k = m.get_COL_EFF() - 1;
 
         // Bentuk Normal Estimation Equation dalam matrix
         Matrix NormalEqMatrix = new Matrix();
@@ -84,29 +75,6 @@ public class RegresiLinearBerganda{
             allConst = ME.SolveSPLUnik(NormalEqMatrix);
         }
 
-        // Print persamaan hasil regresi linier berganda
-        System.out.println("Persamaan hasil regresi linier berganda:");
-        String[][] persamaan;
-        persamaan = new String[2][1];
-        persamaan[0][0] = "f(x) = " + (Math.round(allConst.get_ELMT(0, 0) * 100000.0) / 100000.0);
-        System.out.printf("f(x) = %.5f", allConst.get_ELMT(0, 0));
-        for (int i = 1; i < allConst.get_ROW_EFF(); i++){
-            persamaan[0][0] += " + " + (Math.round(allConst.get_ELMT(i, 0) * 100000.0) / 100000.0) + " x" + i;
-            System.out.printf(" + %.5f x%d", allConst.get_ELMT(i, 0), i);
-        }
-        
-        // Mencari taksiran nilai fungsi pada x yang diberikan
-        System.out.println("\nTaksiran nilai fungsi:");
-        System.out.printf("Masukkan %d nilai x yang ingin ditaksir: ", k);
-        Matrix taksir = new Matrix();
-        ODM.createMatrix(taksir, k, 1);
-        for (int i = 0; i < taksir.get_ROW_EFF(); i++){
-            taksir.set_ELMT(i, 0, sc.nextDouble());
-        }
-        double hasil = allConst.get_ELMT(0, 0);
-        for (int i = 0; i < allConst.get_ROW_EFF(); i++){
-            hasil += allConst.get_ELMT(i + 1, 0) * taksir.get_ELMT(i, 0);
-        }
-        System.out.printf("Hasil taksirannya adalah %.5f", hasil);
+        return allConst;
     }
 }
