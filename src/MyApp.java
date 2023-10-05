@@ -5,7 +5,17 @@ import Library.*;
 
 public class MyApp {
 
-	public static int menu() {
+	/* *** CREATE OBJECTS *** */
+    Determinan DET = new Determinan();
+	MatriksBalikan MB = new MatriksBalikan();
+    MetodeEliminasi ME = new MetodeEliminasi();
+    OperasiDasarMatrix ODM = new OperasiDasarMatrix();
+    Scanner sc = new Scanner(System.in);
+
+	/* *** HELPER FUNCTIONS *** */
+
+	public int menu() {
+		/* Menampilkan menu utama */
 		System.out.println("------------------------------");
 		System.out.println("MENU");
 		System.out.println("1. Sistem Persamaan Linier");
@@ -15,10 +25,7 @@ public class MyApp {
 		System.out.println("5. Interpolasi Bicubic Spline");
 		System.out.println("6. Regresi Linier Berganda");
 		System.out.println("7. Keluar");
-
-		System.out.println("\n");
-		System.out.print("Masukkan pilihan: ");
-		Scanner sc = new Scanner(System.in);
+		System.out.print("\nMasukkan pilihan: ");
 		int choose = sc.nextInt();
 		System.out.println("------------------------------");
 		state = true;
@@ -26,58 +33,76 @@ public class MyApp {
 	}
 
 	// Jika memilih 1 (SPL) di MENU
-	public static int jenis_SPL() {
+	public int jenis_SPL() {
+		/* Menampilkan submenu metode SPL */
 		System.out.println("Pilihan metode SPL:");
 		System.out.println("1. Metode eliminasi Gauss");
 		System.out.println("2. Metode eliminasi Gauss-Jordan");
 		System.out.println("3. Metode matriks balikan");
 		System.out.println("4. Kaidah Cramer");
-		Scanner sc = new Scanner(System.in);
-		System.out.println("\n");
-		System.out.print("Masukkan pilihan: ");
+		System.out.print("\nMasukkan pilihan: ");
 		int x = sc.nextInt();
 		System.out.println("\n");
 		return x;
 	}
 
 	// Jika memilih 3 (Matriks Balikan) di MENU
-	public static int jenis_inverse() {
+	public int jenis_inverse() {
+		/* Menampilkan submenu metode inverse */
 		System.out.println("Pilihan metode inverse:");
 		System.out.println("1. Gauss-Jordan");
 		System.out.println("2. Adjoin Matriks");
-		Scanner sc = new Scanner(System.in);
-
-		System.out.println("\n");
-		System.out.print("Masukkan pilihan: ");
+		System.out.print("\nMasukkan pilihan: ");
 		int x = sc.nextInt();
 		System.out.println("------------------------------");
 		return x;
 	}
 
-	public static int jenis_input() {
-
+	public int jenis_input() {
+		/* Menampilkan pilihan untuk input */
 		System.out.println("Pilihan input:");
 		System.out.println("1. Input dari keyboard");
 		System.out.println("2. Input dari file");
-		Scanner sc = new Scanner(System.in);
-
-		System.out.println("\n");
-		System.out.print("Masukkan pilihan: ");
+		System.out.print("\nMasukkan pilihan: ");
 		int x = sc.nextInt();
 		System.out.println("------------------------------");
 		return x;
 	}
 
-	public static boolean state = false;
+	public void check_input(Matrix m) {
+		/* Mengecek jenis input */
+		int input_type = jenis_input();
+		if (input_type == 1) { // keyboard
+			m = ODM.readSPL();
+		} 
+		else if (input_type == 2) { // file
+			System.out.println("Masukkan nama file: ");
+			String filename = sc.nextLine();
+			System.out.println("------------------------------");
+			ODM.readMatrixFile(filename, m);
+			ODM.displayMatrix(m);
+		} 
+		else {
+			System.out.println("Masukan input salah");
+			int choose = menu();
+		}
+	}
 
-	public static void main(String[] args) {
+	public int askToSaveOutput(){
+		System.out.println("Simpan output ke dalam file?");
+		System.out.println("1. Simpan");
+		System.out.println("2. Tidak");
+		System.out.print("\nMasukkan pilihan: ");
+		int x = sc.nextInt();
+		System.out.println("------------------------------");
+		return x;
+	}
+
+	public boolean state = false;
+
+	public void main(String[] args) {
 		System.out.println("------------------------------");
 		System.out.println("Selamat datang aslab tercintah");
-
-		Scanner sc = new Scanner(System.in);
-		OperasiDasarMatrix ODM = new OperasiDasarMatrix();
-		MetodeEliminasi ME = new MetodeEliminasi();
-		MatriksBalikan MB = new MatriksBalikan();
 
 		int choose = menu();
 
@@ -87,140 +112,154 @@ public class MyApp {
 				// ---------------------------------------- SPL ------------------------------------------------------------------------------------
 				// ---------------------------------------------------------------------------------------------------------------------------------
 				int input_SPL = jenis_SPL();
+				// ---------------------------------------- METODE GAUSS ---------------------------------------------------------------------------
 				if (input_SPL == 1) {
-					// ---------------------------------------- METODE GAUSS ---------------------------------------------------------------------------
+					Matrix m = new Matrix();
 					int input_type = jenis_input();
+					// Cek input dari file atau keyboard
 					if (input_type == 1) { // keyboard
-						Matrix m = new Matrix();
 						m = ODM.readSPL();
-						ME.toEselon(m);
-						int n = ME.Gauss(m);
-						if (n == 1) {
-							Matrix result = new Matrix();
-							result = ME.SolveSPLUnik(m);
-							int i;
-							for (i = 0; i < result.get_COL_EFF(); i++) {
-								System.out.println("x" + (i + 1) + " = " + result.get_ELMT(i, 0));
-							}
-						} else if (n == 2) {
-							ME.SolvesSPLParametrik(m);
-						}
-						choose = menu();
-					} else if (input_type == 2) { // file
-						Matrix m = new Matrix();
+					} 
+					else if (input_type == 2) { // file
 						System.out.println("Masukkan nama file: ");
 						String filename = sc.nextLine();
 						System.out.println("------------------------------");
 						ODM.readMatrixFile(filename, m);
 						ODM.displayMatrix(m);
-						ME.toEselon(m);
-						int n = ME.Gauss(m);
-						if (n == 1) {
-							Matrix result = new Matrix();
-							result = ME.SolveSPLUnik(m);
-							ODM.displayMatrixtoFile(result, "sol" + filename);
-							System.out.println("Hasil terdapat pada file sol" + filename);
-						} else if (n == 2) {
-							ME.SolvesSPLParametrik(m);
-						}
-					} else {
+					} 
+					else {
 						System.out.println("Masukan input salah");
 						choose = menu();
 					}
-				} else if (input_SPL == 2) {
-					// ---------------------------------------- METODE GAUSS JORDAN ----------------------------------------------------------------------
-					int input_type = jenis_input();
-					if (input_type == 1) { // keyboard
-						Matrix m = new Matrix();
-						m = ODM.readSPL();
-						ME.toEselonRed(m);
-						int n = ME.Gauss(m);
-						if (n == 1) {
-							Matrix result = new Matrix();
-							result = ME.SolveSPLUnik(m);
-							int i;
-							for (i = 0; i < result.get_COL_EFF(); i++) {
-								System.out.println("x" + (i + 1) + " = " + result.get_ELMT(i, 0));
-							}
-						} else if (n == 2) {
-							ME.SolvesSPLParametrik(m);
+
+					// Lakukan Metode Gauss
+					ME.toEselon(m);
+					int n = ME.Gauss(m);
+					Matrix result = new Matrix();
+					// Cek jenis solusi gauss
+					if (n == 0){ // No solution
+						System.out.println("SPL tidak memiliki solusi");
+					}
+					else if (n == 1) { // Solusi unik
+						result = ME.SolveSPLUnik(m);
+						int i;
+						for (i = 0; i < result.get_COL_EFF(); i++) {
+							System.out.println("x" + (i + 1) + " = " + result.get_ELMT(i, 0));
 						}
-						choose = menu();
-					} else if (input_type == 2) { // file
-						Matrix m = new Matrix();
+					} 
+					else if (n == 2) { // Solusi banyak
+						ME.SolvesSPLParametrik(m);
+					}
+
+					// Simpan solusi SPL atau tidak
+					int save = askToSaveOutput();
+					if (save == 1) { // Simpan
+						System.out.println("Masukkan nama file: ");
+						String filename = sc.nextLine();
+						ODM.displayMatrixtoFile(result, "sol" + filename);
+						System.out.println("Hasil tersimpan pada file sol" + filename);
+					}
+					else { // Tidak simpan
+						System.out.println("Hasil tidak disimpan ke dalam file");
+					}
+
+					choose = menu();
+
+				// ---------------------------------------- METODE GAUSS JORDAN ----------------------------------------------------------------------
+				} 
+				else if (input_SPL == 2) {
+					Matrix m = new Matrix();
+					int input_type = jenis_input();
+					// Cek input dari file atau keyboard
+					if (input_type == 1) { // keyboard
+						m = ODM.readSPL();
+					} 
+					else if (input_type == 2) { // file
 						System.out.println("Masukkan nama file: ");
 						String filename = sc.nextLine();
 						System.out.println("------------------------------");
 						ODM.readMatrixFile(filename, m);
 						ODM.displayMatrix(m);
-						ME.toEselon(m);
-						int n = ME.Gauss(m);
-						if (n == 1) {
-							Matrix result = new Matrix();
-							result = ME.SolveSPLUnik(m);
-							ODM.displayMatrixtoFile(result, "sol" + filename);
-							System.out.println("Hasil terdapat pada file sol" + filename);
-						} else if (n == 2) {
-							ME.SolvesSPLParametrik(m);
-						}
-					} else {
+					} 
+					else {
 						System.out.println("Masukan input salah");
 						choose = menu();
 					}
-				} else if (input_SPL == 3) {
-					// ---------------------------------------- METODE MATRIKS BALIKAN ---------------------------------------------------------------------------
-					int input_type = jenis_input();
-					if (input_type == 1) { // keyboard
-						Matrix m = new Matrix();
-						Matrix A = new Matrix();
-						m = ODM.readSPL();
-						A = MB.cropLastColOfMatrix(m); // m tanpa kolom b
-						if (!ODM.isSquare(A) || ODM.determinant(A) == 0) {
-							// Matrix tidak punya inverse
-							ODM.displayMatrix(A);
-							System.out.println("Matrix tersebut tidak punya inverse");
-							System.out.println("Matrix tidak dapat diselesaikan menggunakan metode matriks balikan.");
-							System.out.println("Gunakan metode lain");
-						} 
-						else{
-							System.out.println("Matrix Augmented:");
-							ODM.displayMatrix(m);
-							System.out.println("Solusi dari SPL adalah ");
-							m = MB.solveSPLwithInverse(m);
-							for (int i = 0; i < m.get_ROW_EFF(); i++) {
-								System.out.println("x" + (i + 1) + " = " + m.get_ELMT(i, 0));
-							}
+					
+					// Lakukan Metode Gauss Jordan
+					ME.toEselonRed(m);
+					int n = ME.Gauss(m);
+					Matrix result = new Matrix();
+					// Cek jenis solusi gauss
+					if (n == 0){ // No solution
+						System.out.println("SPL tidak memiliki solusi");
+					}
+					else if (n == 1) {
+						result = ME.SolveSPLUnik(m);
+						int i;
+						for (i = 0; i < result.get_COL_EFF(); i++) {
+							System.out.println("x" + (i + 1) + " = " + result.get_ELMT(i, 0));
 						}
-					} else if (input_type == 2) { // file
-						Matrix m = new Matrix();
+					} 
+					else if (n == 2) {
+						ME.SolvesSPLParametrik(m);
+					}
+
+					// Simpan solusi SPL atau tidak
+					int save = askToSaveOutput();
+					if (save == 1) { // Simpan
+						System.out.println("Masukkan nama file: ");
+						String filename = sc.nextLine();
+						ODM.displayMatrixtoFile(result, "sol" + filename);
+						System.out.println("Hasil tersimpan pada file sol" + filename);
+					}
+					else { // Tidak simpan
+						System.out.println("Hasil tidak disimpan ke dalam file");
+					}
+
+					choose = menu(); 
+
+				// ---------------------------------------- METODE MATRIKS BALIKAN ---------------------------------------------------------------------------
+				} 
+				else if (input_SPL == 3) {
+					Matrix m = new Matrix();
+					Matrix A = new Matrix();
+					int input_type = jenis_input();
+					// Cek input dari file atau keyboard
+					if (input_type == 1) { // keyboard
+						m = ODM.readSPL();
+					} 
+					else if (input_type == 2) { // file
 						System.out.println("Masukkan nama file: ");
 						String filename = sc.nextLine();
 						System.out.println("------------------------------");
 						ODM.readMatrixFile(filename, m);
 						ODM.displayMatrix(m);
-						Matrix A = new Matrix();
-						A = MB.cropLastColOfMatrix(m); // m tanpa kolom b
-						if (!ODM.isSquare(A) || ODM.determinant(A) == 0) {
-							// Matrix tidak punya inverse
-							ODM.displayMatrix(A);
-							System.out.println("Matrix tersebut tidak punya inverse");
-							System.out.println("Matrix tidak dapat diselesaikan menggunakan metode matriks balikan.");
-							System.out.println("Gunakan metode lain");
-						} 
-						else {
-							System.out.println("Matrix Augmented:");
-							ODM.displayMatrix(m);
-							System.out.println("Solusi dari SPL adalah ");
-							m = MB.solveSPLwithInverse(m);
-							for (int i = 0; i < m.get_ROW_EFF(); i++) {
-								System.out.println("x" + (i + 1) + " = " + m.get_ELMT(i, 0));
-							}
-							ODM.displayMatrixtoFile(m, "sol" + filename);
-							System.out.println("Hasil tersimpan pada file sol" + filename);
-						}
-					} else {
+					} 
+					else {
 						System.out.println("Masukan input salah");
+						choose = menu();
 					}
+
+					// Lakukan Metode Matriks Balikan
+					A = MB.cropLastColOfMatrix(m); // m tanpa kolom b
+					if (!ODM.isSquare(A) || ODM.determinant(A) == 0) {
+						// Matrix tidak punya inverse
+						ODM.displayMatrix(A);
+						System.out.println("Matrix tersebut tidak punya inverse");
+						System.out.println("Matrix tidak dapat diselesaikan menggunakan metode matriks balikan.");
+						System.out.println("Gunakan metode lain");
+					} 
+					else{
+						System.out.println("Matrix Augmented:");
+						ODM.displayMatrix(m);
+						System.out.println("Solusi dari SPL adalah ");
+						m = MB.solveSPLwithInverse(m);
+						for (int i = 0; i < m.get_ROW_EFF(); i++) {
+							System.out.println("x" + (i + 1) + " = " + m.get_ELMT(i, 0));
+						}
+					}
+
 					choose = menu();
 				} else if (input_SPL == 4) {
 					// ---------------------------------------- METODE KAIDAH CRAMER ---------------------------------------------------------------------------
