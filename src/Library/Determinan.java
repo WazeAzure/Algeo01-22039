@@ -125,7 +125,7 @@ public class Determinan {
         return result;
     }
 
-    public void KaidahCramer(Matrix m) {
+    public Matrix KaidahCramer(Matrix m) {
         Matrix a = new Matrix();
         Matrix b = new Matrix();
         Operate.createMatrix(a, m.get_ROW_EFF(), m.get_COL_EFF() - 1);
@@ -138,18 +138,21 @@ public class Determinan {
 
         // asumsi banyaknya persamaan memenuhi persayaratan agar dapat diselesaikan
         double detA = DetReduksiBaris(a);
+        Matrix listX = new Matrix();
         if (detA == 0) {
             System.out.println("Determinan matriks = 0");
+            Operate.createMatrix(listX, 0, 0);
+            return listX;
         } else {
             int i = 0;
-            double[] listX = new double[a.get_ROW_EFF()];
+            Operate.createMatrix(listX, a.get_ROW_EFF(), 1);
             for (i = 0; i < a.get_ROW_EFF(); i++) {
                 Matrix Aj = new Matrix();
                 Aj = MatrixAj(c, i, b);
-                listX[i] = (DetReduksiBaris(Aj)) / detA;
-                System.out.println("x" + (i + 1) + " = " + listX[i]);
+                listX.set_ELMT(i, 0, (DetReduksiBaris(Aj)) / detA);
+                // System.out.println("x" + (i + 1) + " = " + listX[i]);
             }
+            return listX;
         }
-
     }
 }
